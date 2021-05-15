@@ -1,4 +1,13 @@
-### AI Stock Bot
+# Quant.dev
 
+In this summer project, [Josh Cunningham](https://github.com/jcun-umich) and I will attempt to build an end-to-end stock trading bot. This may take longer than the summer to complete, and may be much more challenging than we're anticipating, however we'd like to create an application that scrapes the web for financial news and data related to the stock market, performs analysis on this information and data using machine learning drivers, and then intelligently purchases / sells stock on it's own in order to derive a profit.
 
-##### We create a stock trading bot that utilizes a big brokerages API to buy/sell stock, based on a backend AI driver that is classifying news regarding the stocks and determining whether to buy/sell based on it. Will use time series analysis, potentially also sentiment analysis to do so.
+In the process of pursuing this goal, we aim to learn and use:
+* Web Scraping
+* Time series analysis
+* Sentiment Analysis
+* Various analytics libraries in Python
+* Various API's and front-end technologies
+
+Notes:
+* If this all goes smoothly (highly unlikely) it would be cool to create a polished website that shows the bots trading (live) and maybe some of the analysis it conducts
