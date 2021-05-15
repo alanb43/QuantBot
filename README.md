@@ -1,4 +1,4 @@
-# Quant.dev
+# QuantBot.io
 
 In this summer project, [Josh Cunningham](https://github.com/jcun-umich) and I will attempt to build an end-to-end stock trading bot. This may take longer than the summer to complete, and may be much more challenging than we're anticipating, however we'd like to create an application that scrapes the web for financial news and data related to the stock market, performs analysis on this information and data using machine learning drivers, and then intelligently purchases / sells stock on it's own in order to derive a profit.
 
