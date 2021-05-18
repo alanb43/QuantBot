@@ -1,19 +1,23 @@
-import time
+from polygon import RESTClient
+import calendar
 
-from polygon import WebSocketClient, STOCKS_CLUSTER
+yy = 2021
+mm = 5
 
-def process_message(message):
-  print("process message", message)
+print(calendar.month(yy,mm))
+
 
 def main():
-  key = 'jqefTczMc7eaKLIu848AE5przJk1wVjw'
-  my_client = WebSocketClient(STOCKS_CLUSTER, key, process_message)
-  my_client.run_async()
+    key = "jqefTczMc7eaKLIu848AE5przJk1wVjw"
 
-  my_client.subscribe("T.AAPL")
-  time.sleep(1)
+    # RESTClient can be used as a context manager to facilitate closing the underlying http session
+    # https://requests.readthedocs.io/en/master/user/advanced/#session-objects
+    with RESTClient(key) as client:
 
-  my_client.close_connection()
+        
+        resp = client.stocks_equities_daily_open_close("AAPL", "2021-05-15")
+        print(f"On: {resp.from_} Apple opened at {resp.open} and closed at {resp.close}")
 
-if __name__ == "__main__":
-  main()
+
+if __name__ == '__main__':
+    main()
