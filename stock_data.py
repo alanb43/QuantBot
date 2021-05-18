@@ -15,7 +15,7 @@ def main():
     with RESTClient(key) as client:
 
         
-        resp = client.stocks_equities_daily_open_close("AAPL", "2021-05-15")
+        resp = client.stocks_equities_daily_open_close("AAPL", "2018-04-15")
         print(f"On: {resp.from_} Apple opened at {resp.open} and closed at {resp.close}")
 
 
