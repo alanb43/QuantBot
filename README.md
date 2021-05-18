@@ -10,4 +10,5 @@ In the process of pursuing this goal, we aim to learn and use:
 * Various API's and front-end technologies
 
 Notes:
-* If this all goes smoothly (highly unlikely) it would be cool to create a polished website that shows the bots trading (live) and maybe some of the analysis it conducts
+* If this all goes smoothly (highly unlikely) it would be cool to create a polished website that shows the bots trading (live) and maybe some of the analysis it 
+

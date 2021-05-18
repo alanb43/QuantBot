@@ -4,3 +4,4 @@ https://realpython.com/python-web-scraping-practical-introduction/
 https://towardsdatascience.com/the-complete-guide-to-time-series-analysis-and-forecasting-70d476bfe775
 https://towardsdatascience.com/sentiment-analysis-concept-analysis-and-applications-6c94d6f58c17
 https://towardsdatascience.com/nlp-from-a-time-series-perspective-39c37bc18156
+big pp
