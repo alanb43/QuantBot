@@ -1,2 +1,2 @@
-language = "bash"
-run = ""
+lang="python"
+run="python3 trader.py"
