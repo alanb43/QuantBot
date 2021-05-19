@@ -12,3 +12,6 @@ In the process of pursuing this goal, we aim to learn and use:
 Notes:
 * If this all goes smoothly (highly unlikely) it would be cool to create a polished website that shows the bots trading (live) and maybe some of the analysis it 
 
+Dependencies being used so far:
+* [Alpaca Trade API (Python)](https://pypi.org/project/alpaca-trade-api-fixed/)
+
