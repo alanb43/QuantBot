@@ -19,5 +19,5 @@ def create_order(symbol, qty, side, type, time_in_force):
 api = tradeapi.REST(API_KEY, SECRET_KEY, BASE_URL, api_version='v2')
 
 account = api.get_account()
-print(account.status)
+print(account)
 
