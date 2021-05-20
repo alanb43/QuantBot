@@ -24,7 +24,7 @@ def create_order(symbol, qty, side, type, time_in_force):
     "type": type,
     "time_in_force":time_in_force
   }
-
+  #print(len(data))
   r = requests.post(ORDERS_URL, json=data, headers=HEADERS)
   return json.loads(r.content)
 
@@ -35,4 +35,4 @@ def get_orders():
 account = api.get_account()
 my_orders = get_orders()
 
-
+create_order("AAPL", 10, "buy", "market", "day")
