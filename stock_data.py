@@ -1,11 +1,4 @@
 from polygon import RESTClient
-import calendar
-
-yy = 2021
-mm = 5
-
-print(calendar.month(yy,mm))
-
 
 def main():
     key = "jqefTczMc7eaKLIu848AE5przJk1wVjw"
