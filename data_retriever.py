@@ -9,6 +9,7 @@ import time
 #           entered timerange and stores it in a csv file on the repo.
 # EXAMPLES OF TIME RANGES: '1w' '2y' '6m' 
 def get_prices(ticker, time_range, interval = '1d'): 
+  path = 'data_retriever_storage/prices'
   if time_range[1] == 'w':
     period = int(time_range[0]) * int(31536000 / 52)
   elif time_range[1] == 'm':
@@ -20,10 +21,10 @@ def get_prices(ticker, time_range, interval = '1d'):
   period2 = int(time.time())
   period1 = period2 - period
   download_url = f'https://query1.finance.yahoo.com/v7/finance/download/{ticker}?period1={period1}&period2={period2}&interval={interval}&events=history&includeAdjustedClose=true'
-  download_path = f'./{ticker}_{time_range}_prices.csv'
+  download_path = f'./{path}/{ticker}_prices.csv'
   urllib.request.urlretrieve(download_url, download_path)
 
-
+get_prices('AAPL', '1y')
 #################################################################
 #                                                               #
 #             FOR WEB SCRAPING NEWS ARTICLES:                   #
@@ -43,7 +44,7 @@ def scrape_news():
   url = 'https://www.marketwatch.com/'
   response = requests.get(url)
   soup = BeautifulSoup(response.text, 'html.parser')
-  storage_path = 'data_retriever_storage/'
+  storage_path = 'data_retriever_storage/news/'
   # Remove the last links present for fresh data (might be overkill)
   if os.path.exists(storage_path + "mw_a_tags.txt"):
     os.remove(storage_path + "mw_a_tags.txt")
@@ -87,7 +88,7 @@ def scrape_news():
   path_to_good_links = storage_path + 'mw_links.txt'
   return path_to_good_links
 
-
+scrape_news()
 
 # FOR LATER REFERENCE FOR USING DATETIME
 # import time, datetime
