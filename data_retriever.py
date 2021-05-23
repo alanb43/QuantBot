@@ -1,14 +1,14 @@
 import urllib.request
 import time
 
-# REQUIRES: string representing stock / crypto in CAPS (ex : 'TSLA'), string
+# REQUIRES: string representing stock symbol in CAPS (ex : 'TSLA'), string
 #           representing a time range in this format : #w, #m, #y where # is
 #           the number of weeks, months, or years of data you want leading up
 #           to today's data.
 # EFFECTS:  obtains the stock's price history from today to today minus the
 #           entered timerange and stores it in a csv file on the repo.
 # EXAMPLES OF TIME RANGES: '1w' '2y' '6m' 
-def get_prices(ticker, time_range): 
+def get_prices(ticker, time_range, interval = '1d'): 
   if time_range[1] == 'w':
     period = int(time_range[0]) * int(31536000 / 52)
   elif time_range[1] == 'm':
@@ -19,18 +19,16 @@ def get_prices(ticker, time_range):
     return "ERROR: Invalid time_range entered. See examples"
   period2 = int(time.time())
   period1 = period2 - period
-  download_url = f'https://query1.finance.yahoo.com/v7/finance/download/{ticker}?period1={period1}&period2={period2}&interval=1d&events=history&includeAdjustedClose=true'
+  download_url = f'https://query1.finance.yahoo.com/v7/finance/download/{ticker}?period1={period1}&period2={period2}&interval={interval}&events=history&includeAdjustedClose=true'
   download_path = f'./{ticker}_{time_range}_prices.csv'
   urllib.request.urlretrieve(download_url, download_path)
 
-
+get_prices('BTC', '1w')
 
 # FOR LATER REFERENCE FOR USING DATETIME
 # import time, datetime
 # period1 = int(time.mktime(datetime.datetime(2018, 5, 22, 23, 59).timetuple()))
 # period2 = int(time.mktime(datetime.datetime(2019, 5, 22, 23, 59).timetuple()))
-
-
 
 ##########################################################
 #                                                        #
