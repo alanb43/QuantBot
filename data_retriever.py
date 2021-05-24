@@ -101,16 +101,17 @@ scrape_news_links('aapl')
 
 def scrape_news_data(url):
   soup = create_soup(url)
-  #input = "/data_retriever_storage/news/mw_links.txt"
-  file = open('input.txt', 'w')
+  storage_path = '/data_retriever_storage/news/'
+  input = storage_path + 'input.txt'
+  file = open(input, 'w')
   file.write(soup.get_text())
-  input = 'input.txt'
-  output = 'real_output.txt'
+  output = storage_path + 'real_output.txt'
   file.close()
   file1 = open(input, 'r')
   file2 = open(output, 'w')
   remove_duplicate_lines(file1, file2)
 
+scrape_news_data()
 
 # FOR LATER REFERENCE FOR USING DATETIME
 # import time, datetime
