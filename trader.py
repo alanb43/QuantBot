@@ -4,6 +4,7 @@ import alpaca_trade_api as tradeapi
 from config import *
 from data_retriever import *
 
+
 api = tradeapi.REST(API_KEY, SECRET_KEY, BASE_URL, api_version='v2')
 account = api.get_account()
 
@@ -46,3 +47,8 @@ def place_order(data):
 def get_orders():
   r = requests.get(ORDERS_URL, headers=HEADERS)
   return json.loads(r.content)
+
+
+get_prices('AAPL', '1y')
+
+scrape_news_links('AAPL')
