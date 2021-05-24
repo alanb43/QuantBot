@@ -10,10 +10,10 @@ In the process of pursuing this goal, we aim to learn and use:
 * Various API's and front-end technologies
 
 Notes:
-* If this all goes smoothly (highly unlikely) it would be cool to create a polished website that shows the bots trading (live) and maybe some of the analysis it 
+* If this all goes smoothly (highly unlikely) it would be cool to create a polished website that shows the bots trading (live) and maybe some of the analysis it performs. 
 
-Dependencies being used so far ~~(abandoned)~~:
+Dependencies being used so far:
 * [Alpaca Trade API (Python)](https://pypi.org/project/alpaca-trade-api-fixed/)
-* ~~[Beautiful Soup](https://pypi.org/project/beautifulsoup4/)~~
+* [Beautiful Soup](https://pypi.org/project/beautifulsoup4/)~~
 * [Requests](https://pypi.org/project/requests/)
 * [urllib3](https://pypi.org/project/urllib3/#description)
