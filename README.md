@@ -14,6 +14,6 @@ Notes:
 
 Dependencies being used so far:
 * [Alpaca Trade API (Python)](https://pypi.org/project/alpaca-trade-api-fixed/)
-* [Beautiful Soup](https://pypi.org/project/beautifulsoup4/)~~
+* [Beautiful Soup](https://pypi.org/project/beautifulsoup4/)
 * [Requests](https://pypi.org/project/requests/)
 * [urllib3](https://pypi.org/project/urllib3/#description)
