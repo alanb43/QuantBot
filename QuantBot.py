@@ -9,4 +9,5 @@ app = Flask(__name__)
 @app.route('/')
 
 def main():
+  get_stock_news('aapl')
   return "<h1>QuantBot.io</h1>"
