@@ -1,9 +1,13 @@
 # Where the actual bot will live and operate
 
 from data_retriever import DataRetriever
-from trader import *
-import http.server
+from trader import Trader
 from flask import Flask
+
+class QuantBot:
+  def __init__(self):
+    pass
+
 
 app = Flask(__name__)
 

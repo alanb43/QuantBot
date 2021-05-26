@@ -2,7 +2,6 @@ import requests, json
 import alpaca_trade_api as tradeapi
 from config import *
 
-
 class Trader:
   '''
 
