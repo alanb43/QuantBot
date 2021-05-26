@@ -11,13 +11,12 @@ class DataRetriever:
   finance and MarketWatch for the respective subjects. May be updated to include
   more financial data in the near future.
 
-  0. Init
   1. Simple Helper Functions
   2. Scraping/Implementation Helpers
   3. Functions the Bot should use / access 
 
   NOTE: Helper functions start with '__' to make them private to the class
-        Create an instance : DR = DataRetriever(), use this instance to call
+  NOTE: Create an instance : DR = DataRetriever(), use this instance to call
         functions many times.
 
   '''
@@ -25,9 +24,7 @@ class DataRetriever:
   def __init__(self) -> None:
     return
 
-
   ''' 1. Simple Helper Functions '''
-
 
   def __remove_files(self, file_list, path = './') -> None:
     '''
@@ -67,9 +64,7 @@ class DataRetriever:
 
     file_out.close()
 
-
   ''' 2. Scraping/Implementation Helpers'''
-
 
   def __scrape_news_links(self, ticker):
     '''
@@ -145,9 +140,7 @@ class DataRetriever:
     file1.close()
     self.__remove_files([input], pathname)
 
-
   ''' 3. Functions the Bot should use / access'''
-  
   
   def get_stock_prices(self, ticker, time_range, interval = '1d'):
     '''
