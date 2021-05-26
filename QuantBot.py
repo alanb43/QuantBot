@@ -1,6 +1,6 @@
 # Where the actual bot will live and operate
 
-from data_retriever import *
+from data_retriever import DataRetriever
 from trader import *
 import http.server
 from flask import Flask

@@ -22,8 +22,8 @@ class DataRetriever:
 
   '''
 
-  def __init__(self, name = "DataRetriever") -> None:
-    self.name = name
+  def __init__(self) -> None:
+    return
 
 
   ''' 1. Simple Helper Functions '''
@@ -197,3 +197,8 @@ class DataRetriever:
     for link in links_file:
       self.__scrape_news_data(link, link_number, ticker)
       link_number += 1
+
+''' Example '''
+DR = DataRetriever()
+DR.get_stock_news('AAPL')
+DR.get_stock_prices('NHI', '1y')
