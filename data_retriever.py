@@ -46,7 +46,7 @@ def remove_duplicate_lines(input, output, path):
 # EFFECTS:  obtains the stock's price history from today to today minus the
 #           entered timerange and stores it in a csv file on the repo.
 # EXAMPLES OF TIME RANGES: '1w' '2y' '6m' 
-def get_prices(ticker, time_range, interval = '1d'): 
+def get_stock_prices(ticker, time_range, interval = '1d'): 
   path = 'data_retriever_storage/prices'
   if time_range[1] == 'w':
     period = int(time_range[0]) * int(31536000 / 52)
@@ -110,8 +110,7 @@ def scrape_news_links(ticker):
   remove_duplicate_lines(files[1], files[2], path)
   files_to_remove = [files[0], files[1]]
   remove_files(files_to_remove, path)
-  
-  return path + files[2]
+
 
 # REQUIRES: string of article link, int number associated with output
 #           file name, string ticker representing associated stock
@@ -121,14 +120,16 @@ def scrape_news_links(ticker):
 #           that we want, storing it in a file at the path.
 def scrape_news_data(url, article_num, ticker):
   soup = create_soup(url)
-  path = './data_retriever_storage/news/news_article_contents/'
+  pathname = f'./data_retriever_storage/news/news_article_contents/{ticker}/'
+  if not os.path.exists(pathname):
+    os.mkdir(pathname)
   input = url[37:url.rfind('-')]
-  file = open(path + input, 'w')
+  file = open(pathname + input, 'w')
   file.write(soup.get_text())
   output = ticker + str(article_num) + '.txt'
   file.close()
-  file = open(path + input, 'r')
-  file1 = open(path + output, 'w')
+  file = open(pathname + input, 'r')
+  file1 = open(pathname + output, 'w')
   line_num, advertisement_count = 0, 0
   for line in file:
     line_num += 1
@@ -141,7 +142,7 @@ def scrape_news_data(url, article_num, ticker):
       file1.write(line)
 
   file1.close()
-  remove_files([input], path)
+  remove_files([input], pathname)
 
 #######################################################################
 ## THIS FUNCTION IS THE ONE THE BOT WILL USE, ABSTRACTS DETAILS AWAY ##
@@ -167,10 +168,6 @@ def get_stock_news(ticker):
   for link in links_file:
     scrape_news_data(link, link_number, ticker)
     link_number += 1
-
-get_stock_news('tsla')
-
-
 
 
 # FOR LATER REFERENCE IF USING DATETIME
