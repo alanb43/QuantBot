@@ -14,3 +14,6 @@ https://www.youtube.com/watch?v=SIBr28sJFc8&t=575s
 sentiment
 https://monkeylearn.com/blog/sentiment-analysis-with-python/
 https://monkeylearn.com/sentiment-analysis/
+
+following this
+https://www.digitalocean.com/community/tutorials/how-to-perform-sentiment-analysis-in-python-3-using-the-natural-language-toolkit-nltk
