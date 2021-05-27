@@ -9,3 +9,8 @@ How I continued trader.py
 https://www.youtube.com/watch?v=GsGeLHTOGAg&t=303s
 
 https://www.youtube.com/watch?v=SIBr28sJFc8&t=575s
+
+
+sentiment
+https://monkeylearn.com/blog/sentiment-analysis-with-python/
+https://monkeylearn.com/sentiment-analysis/

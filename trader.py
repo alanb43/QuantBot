@@ -103,12 +103,10 @@ class Trader:
 
 
 ''' Example '''
-tradyBoi = Trader()
-data = tradyBoi.create_market_order_data('TSLA', 10, 'buy', 'market', 'gtc')
-response = tradyBoi.place_order(data)
-for i in range(5):
-  tradyBoi.place_order(data)
+T = Trader()
+data = T.create_market_order_data('TSLA', 1, 'buy', 'market', 'day', True, 650, 610)
+order_info = T.place_order(data)
 
-cancel_r = tradyBoi.cancel_all_orders()
-#print(response)
-print(cancel_r)
+string = order_info['id']
+print(string)
+#T.cancel_order(string)

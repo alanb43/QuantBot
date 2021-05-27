@@ -6,7 +6,7 @@ import os
 
 class DataRetriever:
   '''
-
+  
   Data Retrieval tool for both price history and stock news, utilizing yahoo
   finance and MarketWatch for the respective subjects. May be updated to include
   more financial data in the near future.
@@ -194,4 +194,4 @@ class DataRetriever:
 ''' Example '''
 DR = DataRetriever()
 DR.get_stock_news('AAPL')
-DR.get_stock_prices('NHI', '1y')
+DR.get_stock_prices('NHI', '2m')
