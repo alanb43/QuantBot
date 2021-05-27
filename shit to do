@@ -1,0 +1,15 @@
+-remove non-alphanumerics from articles
+-break the articles down by word to feed into sentiment analysis
+-sentiment analysis algorithm
+-get bot server live, always running
+-create rules we want the bot to have (stop/sell %s)
+-time analysis algorithm
+-distinguish between time's shares and sentiment's shares
+  -sentiment in the morning, time in the afternoon
+
+LOGO
+  - Q, inside is a robot that blinks into money signs
+  - Quant with a robot next to it if Q is too small
+
+WEBSITE IDEAS
+  - news articles, "this article made us buy 10 shares of..."
