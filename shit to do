@@ -7,6 +7,11 @@
 -distinguish between time's shares and sentiment's shares
   -sentiment in the morning, time in the afternoon
 
+- filter articles by number of times ticker is mentioned
+      -> if AAPL is mentioned 1 time, the article isn't actually talking about it.
+         we want to analyze articles that actually are specific to a stock, not just
+         mentioning (maybe make it where we only keep articles with 3-4 + mentions)
+
 LOGO
   - Q, inside is a robot that blinks into money signs
   - Quant with a robot next to it if Q is too small
