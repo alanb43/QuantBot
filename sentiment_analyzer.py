@@ -11,19 +11,22 @@ path = 'data_retriever_storage/news/news_article_contents/AAPL/AAPL4.txt'
 file = open(path, 'r')
 
 
-# keep_skipping = True
-# article_words = []
+keep_skipping = True
+article_words = []
 
-# for line in file:
-#   if len(line.split()) > 2:
-#     keep_skipping = False
-#   if keep_skipping or len(line.split()) == 0:
-#     continue
-#   a = list(line.split())
-#   article_words += a
+for line in file:
+  if len(line.split()) > 2:
+    keep_skipping = False
+  if keep_skipping or len(line.split()) == 0:
+    continue
+  a = list(line.split())
+  article_words += a
 
-# for word in article_words:
-#   print(word)
+
+punctuation = '''#@,();:.?/|\^$'''
+for word in article_words:
+  if word.find('%') != -1:
+    print(word)
 
 
 class SentimentAnalyzer:
