@@ -2,7 +2,7 @@ import urllib.request
 import time
 import requests
 from bs4 import BeautifulSoup
-import os
+import os, shutil
 
 class DataRetriever:
   '''
@@ -79,7 +79,9 @@ class DataRetriever:
     path = 'data_retriever_storage/news/news_links/'
     files = ['mw_a_tags.txt', 'mw_unrefined_links.txt', f'mw_{ticker}_links.txt']
     self.__remove_files(files, path)
-
+    pathname = f'./data_retriever_storage/news/news_article_contents/{ticker}/'
+    if os.path.exists(pathname):
+      shutil.rmtree(pathname)
     # Where we'll store the <a> html elements
     all_a_tags = open(path + files[0], 'w')
     for a_tag in soup.findAll('a'):
