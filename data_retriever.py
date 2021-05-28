@@ -138,9 +138,13 @@ class DataRetriever:
         if line[:9] == 'Read Next':
           break
         file1.write(line)
-
     file1.close()
-    self.__remove_files([input], pathname)
+    file1 = open(pathname + output, 'r')
+    remove = [input]
+    if len(file1.readlines()) < 7:
+      remove.append(output)
+    file1.close()
+    self.__remove_files(remove, pathname)
 
   ''' 3. Functions the Bot should use / access'''
   
