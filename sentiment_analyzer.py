@@ -1,3 +1,5 @@
+from nltk import FreqDist
+import os
 
 
 class SentimentAnalyzer:
@@ -11,12 +13,24 @@ class SentimentAnalyzer:
   
   
   '''
-  def __init__(self) -> None:
+  def __init__(self, ticker) -> None:
+    self.__ticker = ticker
+    self.__path = f'data_retriever_storage/news/news_article_contents/{ticker}/'
     self.__tickers = {
       'AAPL' : ['aapl', 'apple', 'tim', 'cook', 'iphone'], 
       'AMZN' : ['amzn', 'amazon', 'jeff', 'bezos'], 
       'TSLA' : ['tsla', 'elon', 'tesla', 'roadster', 'musk', 'meme', 'doge']
     }
+
+
+  def __number_of_articles(self): 
+    '''
+    EFFECTS: returns the number of articles for the ticker the class object is 
+             instantiated with, as well as a list of the filenames
+    '''
+    list = os.listdir(self.__path)
+    return (len(list), list)
+
 
   def update_tickers(self, ticker, common_phrases):
     '''
@@ -27,7 +41,7 @@ class SentimentAnalyzer:
     self.__tickers[ticker] = common_phrases
 
 
-  def tokenize(self, path):
+  def __tokenize(self, path):
     '''
     REQUIRES: str representing valid path (filename included!) to article data file,
     EFFECTS:  creates, populates, and returns list of words from the file (unrefined)
@@ -44,7 +58,7 @@ class SentimentAnalyzer:
       words += a
     return words
 
-  def remove_noise(self, words, ticker):
+  def __remove_noise(self, words, ticker):
     '''
     REQUIRES: list representing unrefined words from article, string (ALL CAPS) 
               representing ticker
@@ -61,7 +75,7 @@ class SentimentAnalyzer:
     newWords = []
     for word in words:
       word = word.lower()
-      if '%' not in word:
+      if '%' not in word: # if it's not a percentage
         if "’s" in word:
           word = word.replace("’s", "")
         elif "'s" in word:
@@ -69,7 +83,7 @@ class SentimentAnalyzer:
         for ch in word:
           if ch in punctuation:
             word = word.replace(ch, "")
-        if word.isdigit():
+        if word.isdigit(): # non percentage related nums are ignored
           continue
       if word in self.__tickers[ticker]:
         mentions += 1
@@ -79,46 +93,6 @@ class SentimentAnalyzer:
 
 
 
-
-SA = SentimentAnalyzer()
-data = SA.tokenize('data_retriever_storage/news/news_article_contents/AAPL/AAPL1.txt')
-newWords, mentions = SA.remove_noise(data, 'AAPL')
-
-print(newWords)
-#path = 'data_retriever_storage/news/news_article_contents/AAPL/AAPL4.txt'
-
-
-# file2 = open('wordlists2.txt', 'w')
-# SA = SentimentAnalyzer()
-# for i in range(1, 20):
-#   file2.write("File " + str(i) + "\n")
-#   path = f'data_retriever_storage/news/news_article_contents/TSLA/TSLA{i}.txt'
-#   ticker = path[path.rindex('/') + 1 : path.rindex("A") + 1]
-#   words = SA.tokenize(path)
-#   newWords, mentions = SA.remove_noise(words, ticker)
-#   freq = word_freq(newWords)
-#   FREQUENT = []
-#   sorted_values = sorted(freq.values())
-#   for key in freq.keys():
-#     if freq[key] > 9:
-#       file2.write(key + ': ' + str(freq[key]) + ' occurences')
-#       file2.write('\n')
-# file2.close()
-
-# path = 'wordlists2.txt'
-# file3 = open(path, 'r')
-# freqs = {}
-# for line in file3:
-#   list1 = line.split()
-#   if list1[0] == "File":
-#     continue
-#   if list1[0] in freqs.keys():
-#     freqs[list1[0]] += 1
-#   else:
-#     freqs[list1[0]] = 1
-# words_to_ditch = []
-# for key, value in freqs.items():
-#   if value > 5:
-#     words_to_ditch.append(key)
-
-# print(words_to_ditch)
+# data = SA.tokenize('data_retriever_storage/news/news_article_contents/AAPL/AAPL1.txt')
+# newWords, mentions = SA.remove_noise(data, 'AAPL')
+# freq_dist = FreqDist(newWords)
