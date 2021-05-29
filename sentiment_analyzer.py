@@ -11,7 +11,13 @@ class SentimentAnalyzer:
     the actual model
     testing the model
   
-  
+    RIGHT NOW WE INITIALIZE:
+      initialize with a ticker
+      we tokenize from a file,
+      and remove the noise from the tokens.
+
+      need to build dataset and find prices after articles come out
+      to determine positive / negative effects of article sentiments / words
   '''
   def __init__(self, ticker) -> None:
     self.__ticker = ticker
@@ -91,8 +97,3 @@ class SentimentAnalyzer:
         newWords.append(word)
     return (newWords, mentions)
 
-
-
-# data = SA.tokenize('data_retriever_storage/news/news_article_contents/AAPL/AAPL1.txt')
-# newWords, mentions = SA.remove_noise(data, 'AAPL')
-# freq_dist = FreqDist(newWords)
