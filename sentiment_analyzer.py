@@ -27,7 +27,7 @@ class SentimentAnalyzer:
     self.__tickers[ticker] = common_phrases
 
 
-  def retrieve_words(self, path):
+  def tokenize(self, path):
     '''
     REQUIRES: str representing valid path (filename included!) to article data file,
     EFFECTS:  creates, populates, and returns list of words from the file (unrefined)
@@ -44,17 +44,20 @@ class SentimentAnalyzer:
       words += a
     return words
 
-  def tokenize(self, words, ticker):
+  def remove_noise(self, words, ticker):
     '''
     REQUIRES: list representing unrefined words from article, string (ALL CAPS) 
               representing ticker
     MODIFIES: tokenizes the data. removes punctuation, makes all words lowercase,
-              maintains percentages, removes numbers if not part of a percentage
+              maintains percentages, removes numbers if not part of a percentage,
+              removes words that don't add anything (determined these words by 
+              analyzing AAPL, AMZN, and TSLA articles for words excessively used)
     EFFECTS:  returns tuple containing tokenized words and the number of mentions
               of the desired ticker
     '''
     punctuation = '''#@,();:?/-|—.\^$'''
     mentions = 0
+    words_to_ditch = ['the', 'that', 'to', 'for', 'on', 'and', 'of', 'a', 'in', 'is']
     newWords = []
     for word in words:
       word = word.lower()
@@ -70,14 +73,52 @@ class SentimentAnalyzer:
           continue
       if word in self.__tickers[ticker]:
         mentions += 1
-      newWords.append(word)
+      if word not in words_to_ditch:
+        newWords.append(word)
     return (newWords, mentions)
 
 
-path = 'data_retriever_storage/news/news_article_contents/AAPL/AAPL4.txt'
-ticker = path[path.rindex('/') + 1 : path.rindex(".") - 1]
+
 
 SA = SentimentAnalyzer()
-words = SA.retrieve_words(path)
-newWords, mentions = SA.tokenize(words, ticker)
+data = SA.tokenize('data_retriever_storage/news/news_article_contents/AAPL/AAPL1.txt')
+newWords, mentions = SA.remove_noise(data, 'AAPL')
+
 print(newWords)
+#path = 'data_retriever_storage/news/news_article_contents/AAPL/AAPL4.txt'
+
+
+# file2 = open('wordlists2.txt', 'w')
+# SA = SentimentAnalyzer()
+# for i in range(1, 20):
+#   file2.write("File " + str(i) + "\n")
+#   path = f'data_retriever_storage/news/news_article_contents/TSLA/TSLA{i}.txt'
+#   ticker = path[path.rindex('/') + 1 : path.rindex("A") + 1]
+#   words = SA.tokenize(path)
+#   newWords, mentions = SA.remove_noise(words, ticker)
+#   freq = word_freq(newWords)
+#   FREQUENT = []
+#   sorted_values = sorted(freq.values())
+#   for key in freq.keys():
+#     if freq[key] > 9:
+#       file2.write(key + ': ' + str(freq[key]) + ' occurences')
+#       file2.write('\n')
+# file2.close()
+
+# path = 'wordlists2.txt'
+# file3 = open(path, 'r')
+# freqs = {}
+# for line in file3:
+#   list1 = line.split()
+#   if list1[0] == "File":
+#     continue
+#   if list1[0] in freqs.keys():
+#     freqs[list1[0]] += 1
+#   else:
+#     freqs[list1[0]] = 1
+# words_to_ditch = []
+# for key, value in freqs.items():
+#   if value > 5:
+#     words_to_ditch.append(key)
+
+# print(words_to_ditch)
