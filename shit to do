@@ -18,3 +18,5 @@ LOGO
 
 WEBSITE IDEAS
   - news articles, "this article made us buy 10 shares of..."
+  - webscrape alpaca, store values needed for website in a python file,
+    link the python to the html

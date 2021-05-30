@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<head>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Ubuntu&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="nav-bar">
+    <a href="#top">
+    <video disableRemotePlayback autoplay muted loop id="myVideo">
+      <source src="logo.mp4" type="video/mp4">
+    </video>
+  </a>
+    <ul class="nav-buttons">
+      <li class="button color"><a style = "text-decoration: none; color: inherit" href="#top">Portfolio</a></li>
+      <li class="button color "><a style = "text-decoration: none; color: inherit" href="#news">News</a></li>
+      <li class="button color"><a style = "text-decoration: none; color: inherit" href="#contact">Contact Us</a></li>
+    </ul>
+  </div>
+  <div class="side-bar">
+    <ul class="shares">
+      <li class="share">
+        <ul class="share-details">
+          <li>AAPL</li>
+          <li class="value"><p>$12345.67</p><p class="per">+%12.00</p></li>
+        </ul>
+      </li>
+      <li class="share">
+        <ul class="share-details">
+          <li>GOOGL</li>
+          <li class="value"><p>$987.65</p><p class="per">+%10.00</p></li>
+        </ul>
+      </li>
+      <li class="share">
+        <ul class="share-details">
+          <li>TSLA</li>
+          <li class="value"><p>$696969.69</p><p class="per">+%69.69</p></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <div class="body">
+    <h1 id="top">$69,420</h1>
+    <h2 class="color">+$10,000 (+20.00%) Today</h2>
+    <img src="fakegraph.png" alt="graph" class="fakegraph">
+    <div class="buyingpower">
+        <p class="buy">Buying Power</p>
+        <p class="buy2">$100000.00</p>
+    </div>
+    <div class="summary">
+      <p class="color">What is Quantbot?</p>
+      <p class="des">Quantbot is a Python Bot that utilizes a combination of machine learning, time analysis, and sentiment analysis to automatically buy and sell stocks. The bot uses a web scraper that periodically checks for new articles regarding a company and analyzes the content in the article. If the bot deems the article particularly positive or negative for that company, the bot will either buy or sell the shares we have.</p>
+    </div>
+    <div class="news-head" id="news"><p>News the Bot Used to Buy/Sell</p></div>
+    <div class="news">
+      <ul class="news-list">
+        <li class="article">
+          <ul class="inner-article">
+            <li>
+              <img src="a.png" alt="graph" class="article-img">
+            </li>
+            <li class="article-words">
+              <p class="article-summary color">This article led to the bot buying 10 shares of AAPL.</p>
+              <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
+            </li>
+          </ul>
+        </li>
+        <li class="article">
+          <ul class="inner-article">
+            <li>
+              <img src="a.png" alt="graph" class="article-img">
+            </li>
+            <li class="article-words">
+              <p class="article-summary color">This article led to the bot selling 20 shares of GOOGL.</p>
+              <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
+            </li>
+          </ul>
+        </li>
+        <li class="article">
+          <ul class="inner-article">
+            <li>
+              <img src="a.png" alt="graph" class="article-img">
+            </li>
+            <li class="article-words">
+              <p class="article-summary color">This article led to the bot buying 15 shares of TSLA.</p>
+              <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="contact color" id="contact">
+      <h3 style="margin-bottom: -10px; font-size: 18px;">Contact Us</h3>
+      <p style="margin-bottom: -10px; font-size: 15px;">Josh Cunningham || jcun@umich.edu || LinkedIn</p>
+      <p style="font-size: 15px">Alan Bergsneider || bera@umich.edu || LinkedIn</p>
+    </div>
+  </div>
+
+</body>
