@@ -1,2 +1,2 @@
 lang="python"
-run="python3 trader.py"
+run="cd webpage python3 alpaca_scraper.py"
