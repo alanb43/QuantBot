@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Ubuntu&display=swap" rel="stylesheet">
   <title>Quantbot</title>
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
-  <script src="alpaca_scraper.js"></script>
 </head>
 <body>
   <div class="nav-bar">
@@ -27,30 +26,30 @@
       <li class="share">
         <ul class="share-details">
           <li>AAPL</li>
-          <li class="value"><p>$12345.67</p><p class="per">+%12.00</p></li>
-        </ul>
-      </li>
-      <li class="share">
-        <ul class="share-details">
-          <li>GOOGL</li>
-          <li class="value"><p>$987.65</p><p class="per">+%10.00</p></li>
+          <li class="value"><p>{{aapl}}</p><p class="per">{{aapl_per}}%</p></li>
         </ul>
       </li>
       <li class="share">
         <ul class="share-details">
           <li>TSLA</li>
-          <li class="value"><p>$696969.69</p><p class="per">+%69.69</p></li>
+          <li class="value"><p>{{p.tsla}}</p><p class="per">{{tsla_per}}%</p></li>
+        </ul>
+      </li>
+      <li class="share">
+        <ul class="share-details">
+          <li>GOOGL</li>
+          <li class="value"><p>$696969.69</p><p class="per">69.69%</p></li>
         </ul>
       </li>
     </ul>
   </div>
   <div class="body">
-    <h1 id="top">$69,420</h1>
-    <h2 class="color">+$10,000 (+20.00%) Today</h2>
+    <h1 id="top">$<{{equity}}></h1>
+    <h2 class="color">{{daily_change}} ({{perchange}}%) Today</h2>
     <img src="fakegraph.png" alt="graph" class="fakegraph">
     <div class="buyingpower">
         <p class="buy">Buying Power</p>
-        <p class="buy2">$100000.00</p>
+        <p class="buy2">${{buypower}}</p>
     </div>
     <div class="summary">
       <p class="color">What is Quantbot?</p>
