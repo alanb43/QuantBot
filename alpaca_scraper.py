@@ -1,19 +1,21 @@
 from trader import *
 
-T = Trader()
-data = T.get_account()
+api = tradeapi.REST(API_KEY, SECRET_KEY, BASE_URL, api_version='v2')
 
-EQUITY = data[]
-DAILY_CHANGE = data[]
-BUYING_POWER = data[]
-PERCHANGE = data[]
+# Get our account information.
+account = api.get_account()
 
-AAPL_VALUE = data[]
-AAPL_PERCHANGE = data[]
+aapl_position = api.get_position('AAPL')
+tsla_position = api.get_position('TSLA')
 
-TSLA_VALUE = data[]
-TSLA_PERCHANGE = data[]
+EQUITY = account.equity
+DAILY_CHANGE = str(float(account.equity) - float(account.last_equity))
+BUYING_POWER = account.buying_power
+PERCHANGE = str(((float(account.equity) - float(account.last_equity)) / float(account.last_equity)) * 100)
 
+AAPL_VALUE = aapl_position.market_value
+AAPL_PERCHANGE = str(((float(aapl_position.current_price) - float(aapl_position.lastday_price)) / (aapl_position.lastday_price)) * 100)
 
+TSLA_VALUE = tsla_position.market_value
+TSLA_PERCHANGE = str(((float(tsla_position.current_price) - float(tsla_position.lastday_price)) / (tsla_position.lastday_price)) * 100)
 
-print(data)

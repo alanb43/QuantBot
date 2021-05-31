@@ -8,6 +8,7 @@
   <title>Quantbot</title>
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
   <script src="alpaca_scraper.js"></script>
+  <% import alpaca_trader %>
 </head>
 <body>
   <div class="nav-bar">
@@ -45,7 +46,7 @@
     </ul>
   </div>
   <div class="body">
-    <h1 id="top">$69,420</h1>
+    <h1 id="top">$<%EQUITY%></h1>
     <h2 class="color">+$10,000 (+20.00%) Today</h2>
     <img src="fakegraph.png" alt="graph" class="fakegraph">
     <div class="buyingpower">
