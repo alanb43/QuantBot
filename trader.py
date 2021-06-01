@@ -102,11 +102,13 @@ class Trader:
     return json.loads(r.content)
 
 
-''' Example '''
+''' Example 
 T = Trader()
 data = T.create_market_order_data('TSLA', 1, 'buy', 'market', 'day', True, 650, 610)
 order_info = T.place_order(data)
 
 string = order_info['id']
 print(string)
-#T.cancel_order(string)
+T.cancel_order(string)
+
+'''

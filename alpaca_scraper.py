@@ -53,9 +53,9 @@ class Main:
 @application.route("/", methods=['GET'])
 def home():
     return render_template('index.html',     
-    equity = EQUITY,
-    daily_change = DAILY_CHANGE, 
-    perchange = PERCHANGE,
+    equity=EQUITY,
+    daily_change=DAILY_CHANGE, 
+    perchange=PERCHANGE,
     buyingpower = BUYING_POWER,
     aapl_per = AAPL_PERCHANGE,
     aapl = AAPL_VALUE,
