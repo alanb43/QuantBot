@@ -21,8 +21,23 @@ def create_server_connection(host_name, user_name, user_password):
     )
     print('MySQL Database connection successful')
   except Error as error:
-    print(f'Error message: {error}')
+    print(f"Error message: '{error}'")
 
   return connection
 
 connection = create_server_connection('localhost', DATABASE_TEST_USER, DATABASE_TEST_PASS)
+
+def create_database(connection, query):
+  '''
+  REQUIRES: connection from create_server_connection
+  EFFECTS:  attempts to create a database, returns message on success / error
+  '''
+  cursor = connection.cursor()
+  try:
+    cursor.execute(query)
+    print("Database created successfully!")
+  except Error as error:
+    print(f"Error: '{error}'")
+
+create_database_query = "CREATE DATABASE school"
+create_database(connection, create_database_query)
