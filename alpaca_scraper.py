@@ -27,7 +27,7 @@ if float(AAPL_VALUE) < 0:
     AAPL_VALUE = "-$" + AAPL_VALUE[1:]
 else:
     AAPL_VALUE = "+$" + AAPL_VALUE
-AAPL_PERCHANGE = str(((float(aapl_position.current_price) - float(aapl_position.lastday_price)) / (aapl_position.lastday_price)) * 100)
+AAPL_PERCHANGE = str(((float(aapl_position.current_price) - float(aapl_position.lastday_price)) / float(aapl_position.lastday_price)) * 100)
 if float(AAPL_PERCHANGE) > 0:
     AAPL_PERCHANGE = "+" + AAPL_PERCHANGE
 
@@ -36,7 +36,7 @@ if float(TSLA_VALUE) < 0:
     TSLA_VALUE = "-$" + TSLA_VALUE[1:]
 else:
     TSLA_VALUE = "+$" + TSLA_VALUE
-TSLA_PERCHANGE = str(((float(tsla_position.current_price) - float(tsla_position.lastday_price)) / (tsla_position.lastday_price)) * 100)
+TSLA_PERCHANGE = str(((float(tsla_position.current_price) - float(tsla_position.lastday_price)) / float(tsla_position.lastday_price)) * 100)
 if float(TSLA_PERCHANGE) > 0:
     TSLA_PERCHANGE = "+" + TSLA_PERCHANGE
 
@@ -53,7 +53,7 @@ class Main:
 @application.route("/", methods=['GET'])
 def home():
     return render_template('index.html',     
-    equity=EQUITY
+    equity=EQUITY,
     daily_change=DAILY_CHANGE, 
     perchange=PERCHANGE,
     buyingpower = BUYING_POWER,
