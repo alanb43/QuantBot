@@ -84,7 +84,7 @@ html_content = f"""<!DOCTYPE html>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Ubuntu&display=swap" rel="stylesheet">
-  <title>Quantbot</title>
+  <title>QuantBot</title>
   <link rel="shortcut icon" href="favicon.ico">
 </head>
 <body>
