@@ -1,4 +1,83 @@
-<!DOCTYPE html>
+from trader import *
+import webbrowser
+import time
+
+api = tradeapi.REST(API_KEY, SECRET_KEY, BASE_URL, api_version='v2')
+
+# Get our account information.
+account = api.get_account()
+
+EQUITY = float(account.equity)
+EQUITY = "{:,.2f}".format(EQUITY)
+
+aapl_position = api.get_position('AAPL')
+tsla_position = api.get_position('TSLA')
+googl_position = api.get_position('GOOGL')
+
+DAILY_CHANGE = float(account.equity) - float(account.last_equity)
+DAILY_CHANGE = "{:,.2f}".format(DAILY_CHANGE)
+if DAILY_CHANGE[0] == "-":
+    DAILY_CHANGE = str(DAILY_CHANGE)
+    DAILY_CHANGE = "-$" + DAILY_CHANGE[1:]
+else:
+    DAILY_CHANGE = "+$" + DAILY_CHANGE
+
+BUYING_POWER = float(account.buying_power)
+BUYING_POWER = "{:,.2f}".format(BUYING_POWER)
+PERCHANGE = ((float(account.equity) - float(account.last_equity)) / float(account.last_equity)) * 100
+PERCHANGE = "{:.2f}".format(PERCHANGE)
+if float(PERCHANGE) > 0:
+    PERCHANGE = "+" + PERCHANGE
+
+AAPL_VALUE = float(aapl_position.market_value)
+AAPL_VALUE = "{:,.2f}".format(AAPL_VALUE)
+if AAPL_VALUE[0] == "-":
+  AAPL_VALUE = "-$" + AAPL_VALUE[1:]
+else:
+  AAPL_VALUE = "$" + AAPL_VALUE
+
+AAPL_PERCHANGE = ((float(aapl_position.current_price) - float(aapl_position.lastday_price)) / float(aapl_position.lastday_price)) * 100
+AAPL_PERCHANGE = "{:.2f}".format(AAPL_PERCHANGE)
+if AAPL_PERCHANGE[0] == "-":
+  AAPL_COLOR = "red"
+elif float(AAPL_PERCHANGE) > 0:
+  AAPL_COLOR = "red"
+else:
+  AAPL_COLOR = "white"
+
+TSLA_VALUE = float(tsla_position.market_value)
+TSLA_VALUE = "{:,.2f}".format(TSLA_VALUE)
+if TSLA_VALUE[0] == "-":
+    TSLA_VALUE = "-$" + TSLA_VALUE[1:]
+else:
+    TSLA_VALUE = "$" + TSLA_VALUE
+
+TSLA_PERCHANGE = ((float(tsla_position.current_price) - float(tsla_position.lastday_price)) / float(tsla_position.lastday_price)) * 100
+TSLA_PERCHANGE = "{:.2f}".format(TSLA_PERCHANGE)
+if TSLA_PERCHANGE[0] == "-":
+  TSLA_COLOR = "red"
+elif float(TSLA_PERCHANGE) > 0:
+  TSLA_COLOR = "red"
+else:
+  TSLA_COLOR = "white"
+
+GOOGL_VALUE = float(googl_position.market_value)
+GOOGL_VALUE = "{:,.2f}".format(GOOGL_VALUE)
+if GOOGL_VALUE[0] == "-":
+    GOOGL_VALUE = "-$" + GOOGL_VALUE[1:]
+else:
+    GOOGL_VALUE = "$" + GOOGL_VALUE
+
+GOOGL_PERCHANGE = ((float(googl_position.current_price) - float(googl_position.lastday_price)) / float(googl_position.lastday_price)) * 100
+GOOGL_PERCHANGE = "{:.2f}".format(GOOGL_PERCHANGE)
+if GOOGL_PERCHANGE[0] == "-":
+  GOOGL_COLOR = "red"
+elif float(GOOGL_PERCHANGE) > 0:
+  GOOGL_COLOR = "red"
+else:
+  GOOGL_COLOR = "white"
+
+html_content = f"""<!DOCTYPE html>
 <head>
   <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -26,30 +105,30 @@
       <li class="share">
         <ul class="share-details">
           <li>AAPL</li>
-          <li class="value"><p>$75,676.60</p><p class="per" style="color: red">-0.18%</p></li>
+          <li class="value"><p>{AAPL_VALUE}</p><p class="per" style="color: {AAPL_COLOR}">{AAPL_PERCHANGE}%</p></li>
         </ul>
       </li>
       <li class="share">
         <ul class="share-details">
           <li>TSLA</li>
-          <li class="value"><p>$240,597.90</p><p class="per" style="color: red">-0.35%</p></li>
+          <li class="value"><p>{TSLA_VALUE}</p><p class="per" style="color: {TSLA_COLOR}">{TSLA_PERCHANGE}%</p></li>
         </ul>
       </li>
       <li class="share">
         <ul class="share-details">
           <li>GOOGL</li>
-          <li class="value"><p>$2,381.18</p><p class="per" style="color: white">0.00%</p></li>
+          <li class="value"><p>{GOOGL_VALUE}</p><p class="per" style="color: {GOOGL_COLOR}">{GOOGL_PERCHANGE}%</p></li>
         </ul>
       </li>
     </ul>
   </div>
   <div class="body">
-    <h1 id="top">$174,514.02</h1>
-    <h2 class="color">-$1,715.73 (-0.97%) Today</h2>
+    <h1 id="top">${EQUITY}</h1>
+    <h2 class="color">{DAILY_CHANGE} ({PERCHANGE}%) Today</h2>
     <img src="fakegraph.png" alt="graph" class="fakegraph">
     <div class="buyingpower">
         <p class="buy">Buying Power</p>
-        <p class="buy2">$287,273.90</p>
+        <p class="buy2">${BUYING_POWER}</p>
     </div>
     <div class="summary">
       <p class="color">What is Quantbot?</p>
@@ -100,4 +179,9 @@
     </div>
   </div>
 
-</body>
+</body>"""
+
+with open("webpage/index.html", "w") as html_file:
+    html_file.write(html_content)
+
+time.sleep(2)
