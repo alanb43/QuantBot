@@ -29,7 +29,7 @@ PERCHANGE = "{:.2f}".format(PERCHANGE)
 if float(PERCHANGE) > 0:
     PERCHANGE = "+" + PERCHANGE
 
-AAPL_VALUE = float(aapl_position.market_value)
+AAPL_VALUE = float(aapl_position.current_price)
 AAPL_VALUE = "{:,.2f}".format(AAPL_VALUE)
 if AAPL_VALUE[0] == "-":
   AAPL_VALUE = "-$" + AAPL_VALUE[1:]
@@ -45,7 +45,7 @@ elif float(AAPL_PERCHANGE) > 0:
 else:
   AAPL_COLOR = "white"
 
-TSLA_VALUE = float(tsla_position.market_value)
+TSLA_VALUE = float(tsla_position.current_price)
 TSLA_VALUE = "{:,.2f}".format(TSLA_VALUE)
 if TSLA_VALUE[0] == "-":
     TSLA_VALUE = "-$" + TSLA_VALUE[1:]
@@ -61,7 +61,7 @@ elif float(TSLA_PERCHANGE) > 0:
 else:
   TSLA_COLOR = "white"
 
-GOOGL_VALUE = float(googl_position.market_value)
+GOOGL_VALUE = float(googl_position.current_price)
 GOOGL_VALUE = "{:,.2f}".format(GOOGL_VALUE)
 if GOOGL_VALUE[0] == "-":
     GOOGL_VALUE = "-$" + GOOGL_VALUE[1:]
