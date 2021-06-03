@@ -14,7 +14,7 @@ aapl_position = api.get_position('AAPL')
 tsla_position = api.get_position('TSLA')
 googl_position = api.get_position('GOOGL')
 
-DAILY_CHANGE = float(account.equity) - float(account.last_equity)
+DAILY_CHANGE = float(googl_position.unrealized_intraday_pl) + float(tsla_position.unrealized_intraday_pl) + float(aapl_position.unrealized_intraday_pl)
 DAILY_CHANGE = "{:,.2f}".format(DAILY_CHANGE)
 if DAILY_CHANGE[0] == "-":
     DAILY_CHANGE = str(DAILY_CHANGE)
