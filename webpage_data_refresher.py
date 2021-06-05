@@ -1,3 +1,4 @@
+from alpaca_trade_api.rest import Positions
 from trader import *
 import time
 
@@ -9,7 +10,7 @@ class Stock:
 
   '''
   def __init__(self, symbol, qty, current_price, lastday_price, market_value, 
-              unrealized_intraday_pl, unrealized_intraday_plpc) -> None:
+            unrealized_intraday_pl, unrealized_intraday_plpc) -> None:
     self.symbol = symbol
     self.qty = qty
     self.current_price = current_price
@@ -19,11 +20,25 @@ class Stock:
     self.intraday_plpc = unrealized_intraday_plpc
 
 
+  def __str__(self):
+    ''' Returns a paragraph blurb listing all of the data the object holds. '''
+    string = f'''{self.symbol}\nQty: {self.qty}\nCurrent Price: {self.current_price}\n'''
+    string += f'''Yesterday's Close: {self.lastday_price}\nMarket Value: {self.market_value}\n'''
+    string += f'''Today's P/L: {self.intraday_pl}\nToday's P/L % Change: {self.intraday_plpc}\n'''
+    return string
+    
+
+  def __lt__(self, other_stock):
+    ''' Overloaded less than operator, for alphabetical sorting of stocks based on symbol '''
+    return self.symbol < other_stock.symbol
+
+
 class WebpageDataRefresher:
   '''
 
   Webpage Data Refresher tool to supply QuantBot.io with latest information regarding
-  equities, positions, profits & losses, and more. 
+  equities, positions, profits & losses, and more. Generally returns tuples containing
+  the float for a particular case and it's formatted string.
 
   NOTE: functionality for sidebar refreshing needs to be added
   NOTE: this class can / maybe will be used in conjunction with a server that runs it
@@ -34,10 +49,6 @@ class WebpageDataRefresher:
     self.api = tradeapi.REST(API_KEY, SECRET_KEY, BASE_URL, api_version='v2')
     self.account = self.api.get_account()
     self.positions = self.api.list_positions()
-
-
-  def __str__(self):
-    return f'''{self.symbol}\nQty: {self.qty}\nCurrent Price: {self.current_price}\nYesterday's Close: {self.lastday_price}\nMarket Value: {self.market_value}\nToday's P/L: {self.unrealized_intraday_pl}\nToday's P/L % Change: {self.unrealized_intraday_plpc}\n'''
 
 
   def __number_float_to_string(self, float) -> str:
@@ -82,7 +93,7 @@ class WebpageDataRefresher:
     return positions_array
 
 
-  def get_daily_change(self) -> tuple((float, str)):
+  def get_account_daily_change(self) -> tuple((float, str)):
     daily_change = 0
     positions = self.__get_account_positions()
     for position in positions:
@@ -91,7 +102,7 @@ class WebpageDataRefresher:
     return tuple((daily_change, self.__format_dollars_to_string(daily_change)))
 
 
-  def get_percent_change(self) -> tuple((float, str)):
+  def get_account_percent_change(self) -> tuple((float, str)):
     percent_change = 0
     positions = self.__get_account_positions()
     equity = (self.get_equity())[0]
@@ -99,6 +110,17 @@ class WebpageDataRefresher:
       percent_change += float( position.intraday_plpc ) * ( ( float(position.market_value) * float(position.qty) ) / equity )
 
     return tuple((percent_change, self.__format_percentage_to_string(percent_change)))
+
+
+  def print_stock_price_alphabetical(self):
+    ''' for debugging, so you can see what your handling '''
+    positions = self.__get_account_positions()
+    for position in sorted(positions):
+      print(position)
+
+
+WDR = WebpageDataRefresher()
+WDR.print_stock_price_alphabetical()
 
 
 # AAPL_VALUE = float(aapl_position.current_price)
