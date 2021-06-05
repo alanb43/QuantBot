@@ -41,7 +41,7 @@ AAPL_PERCHANGE = "{:.2f}".format(AAPL_PERCHANGE)
 if AAPL_PERCHANGE[0] == "-":
   AAPL_COLOR = "red"
 elif float(AAPL_PERCHANGE) > 0:
-  AAPL_COLOR = "red"
+  AAPL_COLOR = "green"
 else:
   AAPL_COLOR = "white"
 
@@ -57,7 +57,7 @@ TSLA_PERCHANGE = "{:.2f}".format(TSLA_PERCHANGE)
 if TSLA_PERCHANGE[0] == "-":
   TSLA_COLOR = "red"
 elif float(TSLA_PERCHANGE) > 0:
-  TSLA_COLOR = "red"
+  TSLA_COLOR = "green"
 else:
   TSLA_COLOR = "white"
 
@@ -73,7 +73,7 @@ GOOGL_PERCHANGE = "{:.2f}".format(GOOGL_PERCHANGE)
 if GOOGL_PERCHANGE[0] == "-":
   GOOGL_COLOR = "red"
 elif float(GOOGL_PERCHANGE) > 0:
-  GOOGL_COLOR = "red"
+  GOOGL_COLOR = "green"
 else:
   GOOGL_COLOR = "white"
 
