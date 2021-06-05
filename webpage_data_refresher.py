@@ -26,7 +26,7 @@ class Stock:
     string += f'''Yesterday's Close: {self.lastday_price}\nMarket Value: {self.market_value}\n'''
     string += f'''Today's P/L: {self.intraday_pl}\nToday's P/L % Change: {self.intraday_plpc}\n'''
     return string
-    
+
 
   def __lt__(self, other_stock):
     ''' Overloaded less than operator, for alphabetical sorting of stocks based on symbol '''
@@ -40,6 +40,8 @@ class WebpageDataRefresher:
   equities, positions, profits & losses, and more. Generally returns tuples containing
   the float for a particular case and it's formatted string.
 
+  NOTE: initializing an instance connects us to the api and sets class up with account
+        and positions info
   NOTE: functionality for sidebar refreshing needs to be added
   NOTE: this class can / maybe will be used in conjunction with a server that runs it
         to update the site periodically
@@ -52,10 +54,12 @@ class WebpageDataRefresher:
 
 
   def __number_float_to_string(self, float) -> str:
+    ''' Turns a float into a formatted string '''
     return f'{float :,.2f}'
 
 
   def __format_dollars_to_string(self, float) -> str:
+    ''' Formats a dollar string with dollar signs and direction '''
     string = self.__number_float_to_string(float)
     if str(float)[0] == '-':
       return "-$" + string[1:]
@@ -63,37 +67,52 @@ class WebpageDataRefresher:
 
 
   def __format_percentage_to_string(self, percentage) -> str:
+    ''' Formats a percentage string with direction '''
     if percentage >= 0:
       return '+' + self.__number_float_to_string(percentage)
     return '-' + self.__number_float_to_string(percentage)
 
 
   def get_equity(self) -> tuple((float, str)):
+    '''
+    Returns a tuple containing the float value for account equity and
+    a formatted string of this value.
+    '''
     return tuple((float(self.account.equity), self.__number_float_to_string(float(self.account.equity))))
 
 
   def get_buying_power(self) -> tuple((float, str)):
+    '''
+    Returns a tuple containing the float value for buying power and a
+    formatted string of this value.
+    '''
     buying_power = float(self.account.buying_power)
     return tuple((buying_power, self.__number_float_to_string(buying_power)))  
 
 
   def __get_account_positions(self) -> list:
-    positions = self.api.list_positions()
-    positions_array = []
+    '''
+    Goes through positions received from Alpaca, initializes Stock objects with
+    relevant info, adds them to an array which is eventually returned.
+    '''
+    positions = self.positions
+    stock_array = []
     for position in positions:
-      symbol = position.symbol
-      qty = position.qty
-      price = position.current_price
-      lastday_price = position.lastday_price
-      market_val = position.market_value
-      intraday_pl = position.unrealized_intraday_pl
-      intraday_plpc = position.unrealized_intraday_plpc
-      positions_array.append(Stock(symbol, qty, price, lastday_price, market_val, intraday_pl, intraday_plpc))
-    
-    return positions_array
+      stock_array.append(
+        Stock(
+          position.symbol, position.qty, position.current_price, 
+          position.lastday_price, position.market_value, 
+          position.unrealized_intraday_pl, position.unrealized_intraday_plpc
+        )
+      )
+    return stock_array
 
 
   def get_account_daily_change(self) -> tuple((float, str)):
+    '''
+    Returns a tuple containing the float value for the account's daily change 
+    and a formatted string of this value.
+    '''
     daily_change = 0
     positions = self.__get_account_positions()
     for position in positions:
@@ -103,6 +122,10 @@ class WebpageDataRefresher:
 
 
   def get_account_percent_change(self) -> tuple((float, str)):
+    '''
+    Returns a tuple containing the float value for the account's daily percent 
+    change and a formatted string of this value.
+    '''
     percent_change = 0
     positions = self.__get_account_positions()
     equity = (self.get_equity())[0]
@@ -111,7 +134,7 @@ class WebpageDataRefresher:
 
     return tuple((percent_change, self.__format_percentage_to_string(percent_change)))
 
-
+  
   def print_stock_price_alphabetical(self):
     ''' for debugging, so you can see what your handling '''
     positions = self.__get_account_positions()
