@@ -8,13 +8,23 @@ api = tradeapi.REST(API_KEY, SECRET_KEY, BASE_URL, api_version='v2')
 account = api.get_account()
 
 EQUITY = float(account.equity)
-EQUITY = "{:,.2f}".format(EQUITY)
+EQUITY_STR = "{:,.2f}".format(EQUITY)
 
 aapl_position = api.get_position('AAPL')
 tsla_position = api.get_position('TSLA')
 googl_position = api.get_position('GOOGL')
 
 DAILY_CHANGE = float(googl_position.unrealized_intraday_pl) + float(tsla_position.unrealized_intraday_pl) + float(aapl_position.unrealized_intraday_pl)
+
+
+
+google_daily_weighted = float( googl_position.unrealized_intraday_plpc ) * ( ( float(googl_position.market_value) * float(googl_position.qty) ) / EQUITY ) 
+apple_daily_weighted = float( aapl_position.unrealized_intraday_plpc ) * ( ( float(aapl_position.market_value) * float(aapl_position.qty) ) / EQUITY ) 
+tsla_daily_weighted = float( tsla_position.unrealized_intraday_plpc ) * ( ( float(tsla_position.market_value) * float(tsla_position.qty) ) / EQUITY ) 
+
+# .0191
+PERCHANGE = google_daily_weighted + apple_daily_weighted + tsla_daily_weighted
+
 DAILY_CHANGE = "{:,.2f}".format(DAILY_CHANGE)
 if DAILY_CHANGE[0] == "-":
     DAILY_CHANGE = str(DAILY_CHANGE)
@@ -24,10 +34,10 @@ else:
 
 BUYING_POWER = float(account.buying_power)
 BUYING_POWER = "{:,.2f}".format(BUYING_POWER)
-PERCHANGE = ((float(account.equity) - float(account.last_equity)) / float(account.last_equity)) * 100
-PERCHANGE = "{:.2f}".format(PERCHANGE)
+#PERCHANGE = ((float(account.equity) - float(account.last_equity)) / float(account.last_equity)) * 100
+PERCHANGE_STR = "{:.2f}".format(PERCHANGE)
 if float(PERCHANGE) > 0:
-    PERCHANGE = "+" + PERCHANGE
+    PERCHANGE_STR = "+" + PERCHANGE_STR
 
 AAPL_VALUE = float(aapl_position.current_price)
 AAPL_VALUE = "{:,.2f}".format(AAPL_VALUE)
@@ -123,8 +133,8 @@ html_content = f"""<!DOCTYPE html>
     </ul>
   </div>
   <div class="body">
-    <h1 id="top">${EQUITY}</h1>
-    <h2 class="color">{DAILY_CHANGE} ({PERCHANGE}%) Today</h2>
+    <h1 id="top">${EQUITY_STR}</h1>
+    <h2 class="color">{DAILY_CHANGE} ({PERCHANGE_STR}%) Today</h2>
     <img src="fakegraph.png" alt="graph" class="fakegraph">
     <div class="buyingpower">
         <p class="buy">Buying Power</p>
