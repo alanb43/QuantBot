@@ -23,6 +23,7 @@ TOP_OF_PAGE = '''
       </ul>
     </div>
     <div class="side-bar">
+      <p class="holdings">Current Holdings</p>
       <ul class="shares">
 '''
 

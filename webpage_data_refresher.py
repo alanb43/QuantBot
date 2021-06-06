@@ -13,7 +13,6 @@ class Stock:
   
   Stock object to store key information regarding a stock for the purpose of
   supplying QuantBot.io with correct info. Used with WebpageDataRefresher. 
-
   '''
   def __init__(self, symbol, qty, current_price, lastday_price, market_value, 
             unrealized_intraday_pl, unrealized_intraday_plpc) -> None:
@@ -41,17 +40,14 @@ class Stock:
 
 class WebpageDataRefresher:
   '''
-
   Webpage Data Refresher tool to supply QuantBot.io with latest information regarding
   equities, positions, profits & losses, and more. Generally returns tuples containing
   the float for a particular case and it's formatted string.
-
   NOTE: initializing an instance connects us to the api and sets class up with account
         and positions info
   NOTE: functionality for sidebar refreshing needs to be added
   NOTE: this class can / maybe will be used in conjunction with a server that runs it
         to update the site periodically
-
   '''
   def __init__(self) -> None:
     self.api = tradeapi.REST(API_KEY, SECRET_KEY, BASE_URL, api_version='v2')
@@ -274,7 +270,3 @@ class WebpageDataRefresher:
 WDR = WebpageDataRefresher()
 WDR.create_site_html()
 # WDR.print_stock_price_alphabetical()
-
-
-
-
