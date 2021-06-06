@@ -4,6 +4,9 @@ import time
 import matplotlib.pyplot as plt # side-stepping mpl backend
 import numpy as np
 import plotly.graph_objects as go
+from webpage import constants
+from datetime import date, datetime
+
 
 class Stock:
   '''
@@ -93,7 +96,7 @@ class WebpageDataRefresher:
     return tuple((buying_power, self.__number_float_to_string(buying_power)))  
 
 
-  def get_account_positions(self) -> list:
+  def __get_account_positions(self) -> list:
     '''
     Goes through positions received from Alpaca, initializes Stock objects with
     relevant info, adds them to an array which is eventually returned.
@@ -117,7 +120,7 @@ class WebpageDataRefresher:
     and a formatted string of this value.
     '''
     daily_change = 0
-    positions = self.get_account_positions()
+    positions = self.__get_account_positions()
     for position in positions:
       daily_change += float(position.intraday_pl)
 
@@ -130,7 +133,7 @@ class WebpageDataRefresher:
     change and a formatted string of this value.
     '''
     percent_change = 0
-    positions = self.get_account_positions()
+    positions = self.__get_account_positions()
     equity = (self.get_equity())[0]
     for position in positions:
       percent_change += float( position.intraday_plpc ) * ( ( float(position.market_value) * float(position.qty) ) / equity )
@@ -140,141 +143,138 @@ class WebpageDataRefresher:
   
   def print_stock_price_alphabetical(self):
     ''' for debugging, so you can see what your handling '''
-    positions = self.get_account_positions()
+    positions = self.__get_account_positions()
     for position in sorted(positions):
       print(position)
 
 
-WDR = WebpageDataRefresher()
-positions = WDR.get_account_positions()
-colors = {}
-for x in range(len(positions)):
-  if float(positions[x].intraday_plpc) > 0:
-    colors[positions[x].symbol] = "green"
-  elif float(positions[x].intraday_plpc) < 0:
-    colors[positions[x].symbol] = "red"
-  else:
-    colors[positions[x].symbol] = "white"
+  def get_position_colors(self) -> dict:
+    positions = self.__get_account_positions()
+    colors = {}
+    for x in range(len(positions)):
+      if float(positions[x].intraday_plpc) >= 0:
+        colors[positions[x].symbol] = "green"
+      else:
+        colors[positions[x].symbol] = "red"
+    return colors
 
-equity_data = WDR.api.get_portfolio_history(date_start=None, date_end=None, period="1D", timeframe="5Min", extended_hours=None).equity
-timestamps_data = WDR.api.get_portfolio_history(date_start=None, date_end=None, period="1D", timeframe="5Min", extended_hours=None).timestamp
-fig = go.Figure([go.Scatter(x=timestamps_data, y=equity_data, line=dict(color="yellow"))])
-fig.layout.xaxis.color = 'yellow'
-fig.layout.yaxis.visible = False
-fig.layout.paper_bgcolor = 'rgba(0, 0, 0, 0)'
-fig.layout.plot_bgcolor='black'
-fig.update_layout(xaxis_showgrid=False, yaxis_showgrid=False)
-with open('graph.html', 'w') as f:
-    f.write(fig.to_html(include_plotlyjs='cdn', default_width = "90%", config={"displayModeBar": False}))
-with open('graph.html', 'r') as graph:
-  graph.readline()
-  graph.readline()
-  graph.readline()
-  graph_div = graph.readline()
-  graph_div += graph.readline()
 
-with open("webpage/index.html", "w") as html_file:
-  html_content = f"""<!DOCTYPE html>
-  <head>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Ubuntu&display=swap" rel="stylesheet">
-    <title>QuantBot</title>
-    <link rel="shortcut icon" href="favicon.ico">
-  </head>
-  <body>
-    <div class="nav-bar">
-      <a href="#top">
-      <video disableRemotePlayback autoplay muted loop id="myVideo">
-        <source src="logo.mp4" type="video/mp4">
-      </video>
-    </a>
-      <ul class="nav-buttons">
-        <li class="button color"><a style = "text-decoration: none; color: inherit" href="#top">Portfolio</a></li>
-        <li class="button color "><a style = "text-decoration: none; color: inherit" href="#news">News</a></li>
-        <li class="button color"><a style = "text-decoration: none; color: inherit" href="#contact">Contact Us</a></li>
-      </ul>
-    </div>
-    <div class="side-bar">
-      <ul class="shares">"""
+  def __convert_timestamps(self) -> list:
+    timestamps = self.api.get_portfolio_history(date_start=None, date_end=None, period="1D", timeframe="5Min", extended_hours=None).timestamp
+    dt_array = []
+    for stamp in timestamps:
+      dt = datetime.fromtimestamp(stamp)
+      dt = str(dt)[11:-3]
+      dt_array.append(dt)
+    return dt_array
 
-  html_file.write(html_content)
-  for x in range(len(positions)):
-    price = "{:.2f}".format(float(positions[x].current_price))
-    percent = "{:.2f}".format(float(positions[x].intraday_plpc))
-    html_content = f"""        
-        <li class="share">
-          <ul class="share-details">
-            <li>{positions[x].symbol}</li>
-            <li class="value"><p>${price}</p><p class="per" style="color: {colors[positions[x].symbol]}">{percent}%</p></li>
+  
+  def create_plot_html(self) -> str:
+    equity_data = self.api.get_portfolio_history(date_start=None, date_end=None, period="1D", timeframe="5Min", extended_hours=None).equity
+    dt_data = self.__convert_timestamps()
+    fig = go.Figure([go.Scatter(x=dt_data, y=equity_data, line=dict(color="yellow"))])
+    fig.layout.xaxis.color = 'yellow'
+    fig.layout.yaxis.visible = False
+    fig.layout.paper_bgcolor = 'rgba(0, 0, 0, 0)'
+    fig.layout.plot_bgcolor='black'
+    fig.layout.xaxis.fixedrange = True
+    fig.layout.yaxis.fixedrange = True
+    fig.update_layout(
+      xaxis = dict(
+          dtick = 12
+      )
+    )
+    fig.update_layout(xaxis_showgrid=False, yaxis_showgrid=False)
+    with open('./webpage/graph.html', 'w') as f:
+      f.write(fig.to_html(include_plotlyjs='cdn', default_width="90%", config={"displayModeBar": False}))
+    with open('./webpage/graph.html', 'r') as graph:
+      graph.readline()
+      graph.readline()
+      graph.readline()
+      graph_div = graph.readline()
+      graph_div += graph.readline()
+    return graph_div
+  
+
+  def create_site_html(self) -> str:
+    graph_div = self.create_plot_html()
+    with open("webpage/index.html", "w") as html_file:
+      html_top = constants.TOP_OF_PAGE
+      html_file.write(html_top)
+      positions = self.__get_account_positions()
+      for x in range(len(positions)):
+        price = "{:,.2f}".format(float(positions[x].current_price))
+        percent = "{:.2f}".format(float(positions[x].intraday_plpc) * 100)
+        html_content = f"""        
+            <li class="share">
+              <ul class="share-details">
+                <li>{positions[x].symbol}</li>
+                <li class="value"><p>${price}</p><p class="per" style="color: {self.get_position_colors()[positions[x].symbol]}; font-weight: bold">{percent}%</p></li>
+              </ul>
+            </li> """
+        html_file.write(html_content)
+
+      html_content = f"""
           </ul>
-        </li> """
-    html_file.write(html_content)
-
-  html_content = f"""
-      </ul>
-    </div>
-    <div class="body">
-      <h1 id="top">${WDR.get_equity()[1]}</h1>
-      <h2 class="color">{WDR.get_account_daily_change()[1]} ({WDR.get_account_percent_change()[1]}%) Today</h2>
-      {graph_div}
-      <div class="buyingpower">
-          <p class="buy">Buying Power</p>
-          <p class="buy2">${WDR.get_buying_power()[1]}</p>
-      </div>
-      <div class="summary">
-        <p class="color">What is Quantbot?</p>
-        <p class="des">Quantbot is a Python Bot that utilizes a combination of machine learning, time analysis, and sentiment analysis to automatically buy and sell stocks. The bot uses a web scraper that periodically checks for new articles regarding a company and analyzes the content in the article. If the bot deems the article particularly positive or negative for that company, the bot will either buy or sell the shares we have.</p>
-      </div>
-      <div class="news-head" id="news"><p>News the Bot Used to Buy/Sell</p></div>
-      <div class="news">
-        <ul class="news-list">
-          <li class="article">
-            <ul class="inner-article">
-              <li>
-                <img src="a.png" alt="graph" class="article-img">
+        </div>
+        <div class="body">
+          <h1 id="top">${self.get_equity()[1]}</h1>
+          <h2 class="color">{self.get_account_daily_change()[1]} ({self.get_account_percent_change()[1]}%) Today</h2>
+          {graph_div}
+          <div class="buyingpower">
+              <p class="buy">Buying Power</p>
+              <p class="buy2">${self.get_buying_power()[1]}</p>
+          </div>
+          <div class="summary">
+            <p class="color">What is Quantbot?</p>
+            <p class="des">Quantbot is a Python Bot that utilizes a combination of machine learning, time analysis, and sentiment analysis to automatically buy and sell stocks. The bot uses a web scraper that periodically checks for new articles regarding a company and analyzes the content in the article. If the bot deems the article particularly positive or negative for that company, the bot will either buy or sell the shares we have.</p>
+          </div>
+          <div class="news-head" id="news"><p>News the Bot Used to Buy/Sell</p></div>
+          <div class="news">
+            <ul class="news-list">
+              <li class="article">
+                <ul class="inner-article">
+                  <li>
+                    <img src="a.png" alt="graph" class="article-img">
+                  </li>
+                  <li class="article-words">
+                    <p class="article-summary color">This article led to the bot buying 10 shares of AAPL.</p>
+                    <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
+                  </li>
+                </ul>
               </li>
-              <li class="article-words">
-                <p class="article-summary color">This article led to the bot buying 10 shares of AAPL.</p>
-                <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
+              <li class="article">
+                <ul class="inner-article">
+                  <li>
+                    <img src="a.png" alt="graph" class="article-img">
+                  </li>
+                  <li class="article-words">
+                    <p class="article-summary color">This article led to the bot selling 20 shares of GOOGL.</p>
+                    <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
+                  </li>
+                </ul>
               </li>
-            </ul>
-          </li>
-          <li class="article">
-            <ul class="inner-article">
-              <li>
-                <img src="a.png" alt="graph" class="article-img">
-              </li>
-              <li class="article-words">
-                <p class="article-summary color">This article led to the bot selling 20 shares of GOOGL.</p>
-                <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
-              </li>
-            </ul>
-          </li>
-          <li class="article">
-            <ul class="inner-article">
-              <li>
-                <img src="a.png" alt="graph" class="article-img">
-              </li>
-              <li class="article-words">
-                <p class="article-summary color">This article led to the bot buying 15 shares of TSLA.</p>
-                <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
+              <li class="article">
+                <ul class="inner-article">
+                  <li>
+                    <img src="a.png" alt="graph" class="article-img">
+                  </li>
+                  <li class="article-words">
+                    <p class="article-summary color">This article led to the bot buying 15 shares of TSLA.</p>
+                    <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
+                  </li>
+                </ul>
               </li>
             </ul>
-          </li>
-        </ul>
-      </div>
-      <div class="contact color" id="contact">
-        <h3 style="margin-bottom: -10px; font-size: 18px;">Contact Us</h3>
-        <p style="margin-bottom: -10px; font-size: 15px;">Josh Cunningham || jcun@umich.edu || LinkedIn</p>
-        <p style="font-size: 15px">Alan Bergsneider || bera@umich.edu || LinkedIn</p>
-      </div>
-    </div>
+          </div>
+        """
+      html_file.write(html_content)
+      html_file.write(constants.BOTTOM_OF_PAGE)
 
-    </body>"""
+WDR = WebpageDataRefresher()
+WDR.create_site_html()
+# WDR.print_stock_price_alphabetical()
 
-  html_file.write(html_content)
+
 
 
