@@ -6,7 +6,7 @@ import numpy as np
 import plotly.graph_objects as go
 from webpage import constants
 from datetime import date, datetime
-
+import os
 
 class Stock:
   '''
@@ -184,6 +184,7 @@ class WebpageDataRefresher:
       graph.readline()
       graph_div = graph.readline()
       graph_div += graph.readline()
+    os.remove('./webpage/graph.html')
     return graph_div
   
 
