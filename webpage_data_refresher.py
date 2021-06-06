@@ -10,7 +10,6 @@ from datetime import date, datetime
 
 class Stock:
   '''
-  
   Stock object to store key information regarding a stock for the purpose of
   supplying QuantBot.io with correct info. Used with WebpageDataRefresher. 
   '''
@@ -72,7 +71,7 @@ class WebpageDataRefresher:
     ''' Formats a percentage string with direction '''
     if percentage >= 0:
       return '+' + self.__number_float_to_string(percentage)
-    return '-' + self.__number_float_to_string(percentage)
+    return self.__number_float_to_string(percentage)[0] + ' ' + self.__number_float_to_string(percentage)[1:]
 
 
   def get_equity(self) -> tuple((float, str)):
@@ -168,18 +167,14 @@ class WebpageDataRefresher:
   def create_plot_html(self) -> str:
     equity_data = self.api.get_portfolio_history(date_start=None, date_end=None, period="1D", timeframe="5Min", extended_hours=None).equity
     dt_data = self.__convert_timestamps()
-    fig = go.Figure([go.Scatter(x=dt_data, y=equity_data, line=dict(color="yellow"))])
-    fig.layout.xaxis.color = 'yellow'
+    fig = go.Figure([go.Scatter(x=dt_data, y=equity_data,line=dict(color="yellow"))])
+    fig.layout.xaxis.color = 'white'
     fig.layout.yaxis.visible = False
     fig.layout.paper_bgcolor = 'rgba(0, 0, 0, 0)'
     fig.layout.plot_bgcolor='black'
     fig.layout.xaxis.fixedrange = True
     fig.layout.yaxis.fixedrange = True
-    fig.update_layout(
-      xaxis = dict(
-          dtick = 12
-      )
-    )
+    fig.update_layout( xaxis = dict(dtick = 12) )
     fig.update_layout(xaxis_showgrid=False, yaxis_showgrid=False)
     with open('./webpage/graph.html', 'w') as f:
       f.write(fig.to_html(include_plotlyjs='cdn', default_width="90%", config={"displayModeBar": False}))
@@ -200,12 +195,12 @@ class WebpageDataRefresher:
       positions = self.__get_account_positions()
       for x in range(len(positions)):
         price = "{:,.2f}".format(float(positions[x].current_price))
-        percent = "{:.2f}".format(float(positions[x].intraday_plpc) * 100)
+        percent = self.__format_percentage_to_string(float(positions[x].intraday_plpc) * 100)
         html_content = f"""        
             <li class="share">
               <ul class="share-details">
                 <li>{positions[x].symbol}</li>
-                <li class="value"><p>${price}</p><p class="per" style="color: {self.get_position_colors()[positions[x].symbol]}; font-weight: bold">{percent}%</p></li>
+                <li class="value"><p class="num">${price}</p><p class="per num" style="color: {self.get_position_colors()[positions[x].symbol]}; font-weight: bold">{percent}%</p></li>
               </ul>
             </li> """
         html_file.write(html_content)
@@ -214,16 +209,25 @@ class WebpageDataRefresher:
           </ul>
         </div>
         <div class="body">
-          <h1 id="top">${self.get_equity()[1]}</h1>
-          <h2 class="color">{self.get_account_daily_change()[1]} ({self.get_account_percent_change()[1]}%) Today</h2>
+          <h1 id="top" class="num">${self.get_equity()[1]}</h1>
+          <h2 class="color num">{self.get_account_daily_change()[1]} ({self.get_account_percent_change()[1]}%)</h2>
           {graph_div}
           <div class="buyingpower">
               <p class="buy">Buying Power</p>
-              <p class="buy2">${self.get_buying_power()[1]}</p>
+              <p class="buy2 num">${self.get_buying_power()[1]}</p>
           </div>
           <div class="summary">
-            <p class="color">What is Quantbot?</p>
-            <p class="des">Quantbot is a Python Bot that utilizes a combination of machine learning, time analysis, and sentiment analysis to automatically buy and sell stocks. The bot uses a web scraper that periodically checks for new articles regarding a company and analyzes the content in the article. If the bot deems the article particularly positive or negative for that company, the bot will either buy or sell the shares we have.</p>
+            <p class="color" style="font-weight: bold">What is Quantbot?</p>
+            <p class="des">QuantBot is a completely automated bot that makes use of artificial intelligence to trade 
+              the stock market for its founders, <a class="us" href="https://bergsneider.dev" target="_blank">Alan</a> and 
+              <a class="us" href="https://joshcunningham.net" target="_blank">Josh</a>. We've programmed the bot using Python 
+              to scrape the web to find data it desires regarding different assets, perform machine learning (both time series 
+              and sentiment analyses with price and news data respectively), and finally decide to buy/sell using the Alpaca 
+              API and brokerage based on the conclusions of the analyses when compared against each other. This project is 
+              being completed over Summer 2021 outside of our professional endeavours, and we are learning all of these concepts
+              (web scraping, time series analysis, sentiment analysis / Natural Language Processing, financial reporting, etc) on
+              our own from scratch. 
+            </p>
           </div>
           <div class="news-head" id="news"><p>News the Bot Used to Buy/Sell</p></div>
           <div class="news">

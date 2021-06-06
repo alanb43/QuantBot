@@ -1,7 +1,15 @@
 body {
     background: black;
-    font-family: 'Ubuntu', sans-serif;
+    font-family: "Aileron", sans-serif;
     font-size: 20px;
+}
+
+.us {
+  color: yellow;
+}
+
+.num {
+  font-family: "Ubuntu", sans-serif;
 }
 
 .nav-bar {
@@ -99,6 +107,8 @@ h2 {
     position: relative;
     width: 85%;
     margin-left: 20px;
+    line-height: 22px;
+    word-spacing: 2px;
 }
 
 .des {
@@ -172,7 +182,7 @@ h2 {
 
 .side-bar {
     position: fixed;
-    background-color: #1d1d22;
+    background-color: #1e2124;
     border: 0.5px solid rgb(82, 82, 82);
     right: 20%;
     top: 15%;
@@ -210,10 +220,10 @@ h2 {
 }
 
 .value {
-    position: absolute;
-    right: 0;
-    text-align: right;
-    top: -100%;
+  position: absolute;
+  right: 0;
+  text-align: right;
+  top: -100%;
 }
 
 .per {
@@ -225,3 +235,4 @@ h2 {
 .color {
     color: #f0e813; /* orange: #ff6200 yellow: #f0e813 purple: #9427e3 teal: #329da8 */    
 }
+
