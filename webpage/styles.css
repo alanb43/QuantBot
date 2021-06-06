@@ -114,6 +114,7 @@ h2 {
 .des {
     font-size: 16px;
     margin-bottom: 25px;
+    font-weight: 300;
 }
 
 .news-head {
@@ -210,8 +211,9 @@ h2 {
     text-align: center;
     margin-bottom: 25px;
     width: 125%;
-    font-size: 17px;
+    font-size: 19px;
     left: -12.5%;
+    font-weight: 700;
 }
 .share-details {
     list-style: none;
