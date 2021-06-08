@@ -4,7 +4,7 @@ import time
 import matplotlib.pyplot as plt # side-stepping mpl backend
 import numpy as np
 import plotly.graph_objects as go
-from webpage import constants
+from templates import constants
 from datetime import date, datetime
 import os
 
@@ -176,21 +176,21 @@ class WebpageDataRefresher:
     fig.layout.yaxis.fixedrange = True
     fig.update_layout( xaxis = dict(dtick = 12) )
     fig.update_layout(xaxis_showgrid=False, yaxis_showgrid=False)
-    with open('./webpage/graph.html', 'w') as f:
+    with open('./templates/graph.html', 'w') as f:
       f.write(fig.to_html(include_plotlyjs='cdn', default_width="90%", config={"displayModeBar": False}))
-    with open('./webpage/graph.html', 'r') as graph:
+    with open('./templates/graph.html', 'r') as graph:
       graph.readline()
       graph.readline()
       graph.readline()
       graph_div = graph.readline()
       graph_div += graph.readline()
-    os.remove('./webpage/graph.html')
+    os.remove('./templates/graph.html')
     return graph_div
   
 
   def create_site_html(self) -> str:
     graph_div = self.create_plot_html()
-    with open("webpage/index.html", "w") as html_file:
+    with open("templates/index.html", "w") as html_file:
       html_top = constants.TOP_OF_PAGE
       html_file.write(html_top)
       positions = self.__get_account_positions()
@@ -237,7 +237,7 @@ class WebpageDataRefresher:
               <li class="article">
                 <ul class="inner-article">
                   <li>
-                    <img src="a.png" alt="graph" class="article-img">
+                    <img src="resources/a.png" alt="graph" class="article-img">
                   </li>
                   <li class="article-words">
                     <p class="article-summary color">This article led to the bot buying 10 shares of AAPL.</p>
@@ -248,7 +248,7 @@ class WebpageDataRefresher:
               <li class="article">
                 <ul class="inner-article">
                   <li>
-                    <img src="a.png" alt="graph" class="article-img">
+                    <img src="resources/a.png" alt="graph" class="article-img">
                   </li>
                   <li class="article-words">
                     <p class="article-summary color">This article led to the bot selling 20 shares of GOOGL.</p>
@@ -259,7 +259,7 @@ class WebpageDataRefresher:
               <li class="article">
                 <ul class="inner-article">
                   <li>
-                    <img src="a.png" alt="graph" class="article-img">
+                    <img src="resources/a.png" alt="graph" class="article-img">
                   </li>
                   <li class="article-words">
                     <p class="article-summary color">This article led to the bot buying 15 shares of TSLA.</p>

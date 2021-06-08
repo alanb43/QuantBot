@@ -8,13 +8,13 @@ TOP_OF_PAGE = '''
     <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Ubuntu&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.typekit.net/oxi4xqh.css">
     <title>QuantBot</title>
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="resources/favicon.ico">
   </head>
   <body>
     <div class="nav-bar">
       <a href="QuantBot.io">
       <video disableRemotePlayback autoplay muted loop id="myVideo">
-        <source src="logo.mp4" type="video/mp4">
+        <source src="resources/logo.mp4" type="video/mp4">
       </video>
     </a>
       <ul class="nav-buttons">
