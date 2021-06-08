@@ -200,9 +200,10 @@ class WebpageDataRefresher:
         html_content = f"""        
             <li class="share">
               <ul class="share-details">
-                <li>{positions[x].symbol}</li>
+                <li ><p style="margin-bottom: -10px; top: -40%;">{positions[x].symbol}</p><p class="quantity">{positions[x].qty} Shares</p></li>
                 <li class="value"><p class="num">${price}</p><p class="per num" style="color: {self.get_position_colors()[positions[x].symbol]}; font-weight: bold">{percent}%</p></li>
               </ul>
+              
             </li> """
         html_file.write(html_content)
 

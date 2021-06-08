@@ -196,12 +196,12 @@ h2 {
 
 .shares {
     list-style: none;
+    margin-top: -20px;
 }
 
 .share {
     position: relative;
     left: -32.5%;
-    margin-bottom: 40px;
     width: 125%;
     font-size: 17px;
 }
@@ -225,12 +225,11 @@ h2 {
   position: absolute;
   right: 0;
   text-align: right;
-  top: -100%;
 }
 
 .per {
     position: relative;
-    margin-top: -15%;
+    margin-top: -19%;
     font-size: 13px;
 }
 
@@ -238,3 +237,9 @@ h2 {
     color: #f0e813; /* orange: #ff6200 yellow: #f0e813 purple: #9427e3 teal: #329da8 */    
 }
 
+.quantity {
+    font-size: 12px;
+    position: relative;
+    left: 5%;
+    top: 8%;
+}
