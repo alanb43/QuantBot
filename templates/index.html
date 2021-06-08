@@ -1,0 +1,121 @@
+
+  <!DOCTYPE html>
+  <head>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Ubuntu&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.typekit.net/oxi4xqh.css">
+    <title>QuantBot</title>
+    <link rel="shortcut icon" href="resources/favicon.ico">
+  </head>
+  <body>
+    <div class="nav-bar">
+      <a href="QuantBot.io">
+      <video disableRemotePlayback autoplay muted loop id="myVideo">
+        <source src="resources/logo.mp4" type="video/mp4">
+      </video>
+    </a>
+      <ul class="nav-buttons">
+        <li class="button color"><a style = "text-decoration: none; color: inherit" href="#top">Portfolio</a></li>
+        <li class="button color "><a style = "text-decoration: none; color: inherit" href="#news">News</a></li>
+        <li class="button color"><a style = "text-decoration: none; color: inherit" href="#contact">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="side-bar">
+      <p class="holdings">Current Holdings</p>
+      <ul class="shares">
+        
+            <li class="share">
+              <ul class="share-details">
+                <li ><p style="margin-bottom: -10px; top: -40%;">TSLA</p><p class="quantity">387 Shares</p></li>
+                <li class="value"><p class="num">$600.00</p><p class="per num" style="color: red; font-weight: bold">- 0.85%</p></li>
+              </ul>
+              
+            </li>         
+            <li class="share">
+              <ul class="share-details">
+                <li ><p style="margin-bottom: -10px; top: -40%;">GOOGL</p><p class="quantity">1 Shares</p></li>
+                <li class="value"><p class="num">$2,404.97</p><p class="per num" style="color: green; font-weight: bold">+0.11%</p></li>
+              </ul>
+              
+            </li>         
+            <li class="share">
+              <ul class="share-details">
+                <li ><p style="margin-bottom: -10px; top: -40%;">AAPL</p><p class="quantity">610 Shares</p></li>
+                <li class="value"><p class="num">$125.96</p><p class="per num" style="color: green; font-weight: bold">+0.05%</p></li>
+              </ul>
+              
+            </li> 
+          </ul>
+        </div>
+        <div class="body">
+          <h1 id="top" class="num">$166,585.91</h1>
+          <h2 class="color num">-$1,946.04 (- 4.44%)</h2>
+              <div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>                <div id="00d978d4-33f9-42d0-961d-6ca888ff9e84" class="plotly-graph-div" style="height:100%; width:90%;"></div>            <script type="text/javascript">                                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("00d978d4-33f9-42d0-961d-6ca888ff9e84")) {                    Plotly.newPlot(                        "00d978d4-33f9-42d0-961d-6ca888ff9e84",                        [{"line": {"color": "yellow"}, "type": "scatter", "x": ["09:30", "09:35", "09:40", "09:45", "09:50", "09:55", "10:00", "10:05", "10:10", "10:15", "10:20", "10:25", "10:30", "10:35", "10:40", "10:45", "10:50", "10:55", "11:00", "11:05", "11:10", "11:15", "11:20", "11:25", "11:30", "11:35", "11:40", "11:45", "11:50", "11:55", "12:00", "12:05", "12:10", "12:15", "12:20", "12:25", "12:30", "12:35", "12:40", "12:45", "12:50", "12:55", "13:00", "13:05", "13:10", "13:15", "13:20", "13:25", "13:30", "13:35", "13:40", "13:45", "13:50", "13:55", "14:00", "14:05", "14:10", "14:15", "14:20", "14:25", "14:30", "14:35", "14:40", "14:45", "14:50", "14:55", "15:00", "15:05", "15:10", "15:15", "15:20", "15:25", "15:30", "15:35", "15:40", "15:45", "15:50", "15:55", "16:00"], "y": [163457.56, 162438.52, 162304.37, 162366.1, 162748.53, 161112.08, 161724.89, 160323.64, 160617.81, 160667.95, 160029.42, 160855.53, 161453.04, 161158.01, 161013.42, 160669.87, 159884.43, 159673.78, 160107.43, 159631.21, 160483.46, 160735.32, 160790.72, 160310.47, 159757.45, 159838.92, 160495.96, 160396.82, 160567.65, 161185.9, 161353.03, 161225.57, 162383.45, 162433.29, 162491.1, 163457.21, 162986.59, 162766.43, 162798.14, 162781.11, 162819.86, 162252.88, 162108.21, 162187.89, 161827.59, 161286.87, 161274.22, 161302.17, 161033.52, 161006.83, 161483.48, 161936.9, 162261.53, 162391.73, 161903.03, 162524.83, 163426.13, 163076.68, 163108.22, 165214.25, 164913.19, 165066.56, 164687.2, 164520.52, 164653.12, 166723.04, 166947.11, 167163.69, 167496.6, 167810.22, 168624.9, 169211.18, 168787.87, 169087.75, 168360.77, 168574.08, 168510.63, 168909.57, 168488.53]}],                        {"paper_bgcolor": "rgba(0, 0, 0, 0)", "plot_bgcolor": "black", "template": {"data": {"bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}}, "type": "bar"}], "barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}}, "type": "barpolar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "histogram": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "histogram"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "xaxis": {"color": "white", "dtick": 12, "fixedrange": true, "showgrid": false}, "yaxis": {"fixedrange": true, "showgrid": false, "visible": false}},                        {"displayModeBar": false, "responsive": true}                    )                };                            </script>        </div>
+
+          <div class="buyingpower">
+              <p class="buy">Buying Power</p>
+              <p class="buy2 num">$291,434.06</p>
+          </div>
+          <div class="summary">
+            <p class="color" style="font-weight: bold">What is Quantbot?</p>
+            <p class="des">QuantBot is a completely automated bot that makes use of artificial intelligence to trade 
+              the stock market for its founders, <a class="us" href="https://bergsneider.dev" target="_blank">Alan</a> and 
+              <a class="us" href="https://joshcunningham.net" target="_blank">Josh</a>. We've programmed the bot using Python 
+              to scrape the web to find data it desires regarding different assets, perform machine learning (both time series 
+              and sentiment analyses with price and news data respectively), and finally decide to buy/sell using the Alpaca 
+              API and brokerage based on the conclusions of the analyses when compared against each other. This project is 
+              being completed over Summer 2021 outside of our professional endeavours, and we are learning all of these concepts
+              (web scraping, time series analysis, sentiment analysis / Natural Language Processing, financial reporting, etc) on
+              our own from scratch. 
+            </p>
+          </div>
+          <div class="news-head" id="news"><p>News the Bot Used to Buy/Sell</p></div>
+          <div class="news">
+            <ul class="news-list">
+              <li class="article">
+                <ul class="inner-article">
+                  <li>
+                    <img src="resources/a.png" alt="graph" class="article-img">
+                  </li>
+                  <li class="article-words">
+                    <p class="article-summary color">This article led to the bot buying 10 shares of AAPL.</p>
+                    <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
+                  </li>
+                </ul>
+              </li>
+              <li class="article">
+                <ul class="inner-article">
+                  <li>
+                    <img src="resources/a.png" alt="graph" class="article-img">
+                  </li>
+                  <li class="article-words">
+                    <p class="article-summary color">This article led to the bot selling 20 shares of GOOGL.</p>
+                    <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
+                  </li>
+                </ul>
+              </li>
+              <li class="article">
+                <ul class="inner-article">
+                  <li>
+                    <img src="resources/a.png" alt="graph" class="article-img">
+                  </li>
+                  <li class="article-words">
+                    <p class="article-summary color">This article led to the bot buying 15 shares of TSLA.</p>
+                    <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        
+    <div class="contact color" id="contact">
+          <h3 style="margin-bottom: -10px; font-size: 18px;">Contact Us</h3>
+          <p style="margin-bottom: -10px; font-size: 15px;">Josh Cunningham || jcun@umich.edu || LinkedIn</p>
+          <p style="font-size: 15px">Alan Bergsneider || bera@umich.edu || LinkedIn</p>
+    </div>
+  </div>
+</body>
