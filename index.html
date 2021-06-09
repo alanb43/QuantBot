@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<head>
+  <summary>
+    <!-- Brython scripts (allow Python in HTML) -->
+  </summary>
+  <script type="text/javascript" src="brython.js"></script>
+  <script type="text/javascript" src="brython_modules.js"></script>
+  <title>QuantBot</title>
+</head>
+<body onload="brython()">
+  
+  <ul class="share-details">
+    <p id="symbol"></p>
+    <span id="Qty"></span>
+    <span id="Price"></span>
+    <span id="Percent"></span>
+    <script type="text/python">
+      from browser import document
+      
+      document["symbol"].textContent = "HelloWorld"
+    </script>
+  </ul>
+  
+</body>
