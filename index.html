@@ -9,15 +9,20 @@
 </head>
 <body onload="brython()">
   
-  <ul class="share-details">
-    <p id="symbol"></p>
-    <span id="Qty"></span>
-    <span id="Price"></span>
-    <span id="Percent"></span>
+  <ul id="share-details">
     <script type="text/python">
-      from browser import document
-      
-      document["symbol"].textContent = "HelloWorld"
+      from browser import document, html
+      element = document.getElementById("share-details")
+      myList = ["AAPL", "TSLA", "GOOGL", "11", "11","AAPL", "TSLA", "GOOGL", "11", "11","AAPL", "TSLA", "GOOGL", "11", "11","AAPL", "TSLA", "GOOGL", "11", "11","AAPL", "TSLA", "GOOGL", "11", "11"]
+      for symbol in myList:
+         
+        elt = document.createElement("li")
+        elt2 = document.createElement("p")
+        txt = document.createTextNode(f"{symbol} is le epic swag")
+        elt2.appendChild(txt)
+        elt.appendChild(elt2)
+        element.appendChild(elt)
+
     </script>
   </ul>
   
