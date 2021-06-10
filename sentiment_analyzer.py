@@ -31,6 +31,8 @@ class SentimentAnalyzer:
       'AMZN' : ['amzn', 'amazon', 'jeff', 'bezos', 'delivery', 'space'], 
       'TSLA' : ['tsla', 'elon', 'tesla', 'roadster', 'musk', 'meme', 'doge', 'electric', 'model']
     }
+    self.freq_dict = {}
+    self.num_articles = 0
 
   def __number_of_articles(self): 
     '''
@@ -119,9 +121,36 @@ class SentimentAnalyzer:
       for token in tokens:
         yield token
 
+  def __read_in_freq_dict(self):
+    path = f"data_retriever_storage/news/sentiment_data/{self.__ticker}_sentiment_data.txt"
+    with open(path, 'r') as f:
+      junk = f.readline() # come back when doing math
+      Lines = f.readlines()
+      for line in Lines:
+        line_split = line.split()
+        self.freq_dict[line_split[0]] = line_split[1]
+    
+  def __write_to_freq_dict(self):
+    path = f"data_retriever_storage/news/sentiment_data/{self.__ticker}_sentiment_data.txt"
+    with open(path, 'w') as f:
+      f.write(str(self.num_articles) + "\n")
+      for key in self.freq_dict.keys():
+        line = key + " " + str(self.freq_dict[key]) + "\n"
+        f.write(line)
+  
+  def __update_freq_dict(self, freq_dist):
+    for key in freq_dist:
+      freq = freq_dist.get(key)
+      if key in self.freq_dict.keys():
+        self.freq_dict[key] += int(freq) - 1
+      else:
+        self.freq_dict[key] = 1
+
   def put_all_tg(self):
     # number of articles for a stock, file names for the article data
     num, article_files = self.__number_of_articles()
+    self.num_articles += int(num)
+    self.__read_in_freq_dict()
     for file_name in article_files:
       file_path = f"data_retriever_storage/news/news_article_contents/{self.__ticker}/{file_name}"
       # tokenizes
@@ -131,19 +160,14 @@ class SentimentAnalyzer:
       # gets all words in the generator object
       all_words = self.get_all_words(cleaned_tokens_list)
       # maps word to freq
-      freq_dist_pos = FreqDist(all_words)
-      print(freq_dist_pos.most_common(20))
+      freq_dist = FreqDist(all_words)
+      self.__update_freq_dict(freq_dist)  
   
-      break
+    self.__write_to_freq_dict()
 
-  
-
-
-  
 
 
 
 
 SA = SentimentAnalyzer('TSLA')
 SA.put_all_tg()
-

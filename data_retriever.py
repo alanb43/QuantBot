@@ -199,5 +199,5 @@ class DataRetriever:
 
 ''' Example '''
 DR = DataRetriever()
-DR.get_stock_news('AAPL')
+DR.get_stock_news('TSLA')
 DR.get_stock_prices('NHI', '2m')
