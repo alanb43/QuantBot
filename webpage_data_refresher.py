@@ -22,6 +22,8 @@ class Stock:
     self.market_value = market_value
     self.intraday_pl = unrealized_intraday_pl
     self.intraday_plpc = unrealized_intraday_plpc
+    self.market_value = current_price * qty
+
 
 
   def __str__(self):
@@ -35,6 +37,7 @@ class Stock:
   def __lt__(self, other_stock):
     ''' Overloaded less than operator, for alphabetical sorting of stocks based on symbol '''
     return self.symbol < other_stock.symbol
+
 
 
 class WebpageDataRefresher:
@@ -51,8 +54,8 @@ class WebpageDataRefresher:
   def __init__(self) -> None:
     self.api = tradeapi.REST(API_KEY, SECRET_KEY, BASE_URL, api_version='v2')
     self.account = self.api.get_account()
-    self.positions = self.api.list_positions()
-
+    self.__api_positions = self.api.list_positions()
+    self.positions = self.__get_account_positions(self.__api_positions)
 
   def __number_float_to_string(self, float) -> str:
     ''' Turns a float into a formatted string '''
@@ -74,12 +77,16 @@ class WebpageDataRefresher:
     return self.__number_float_to_string(percentage)[0] + ' ' + self.__number_float_to_string(percentage)[1:]
 
 
-  def get_equity(self) -> tuple((float, str)):
+  def get_stock_equity(self) -> tuple((float, str)):
     '''
     Returns a tuple containing the float value for account equity and
     a formatted string of this value.
     '''
-    return tuple((float(self.account.equity), self.__number_float_to_string(float(self.account.equity))))
+    equity = 0
+    for position in self.positions:
+      equity += position.market_value
+    
+    return tuple((float(equity), self.__number_float_to_string(float(equity))))
 
 
   def get_buying_power(self) -> tuple((float, str)):
@@ -87,18 +94,17 @@ class WebpageDataRefresher:
     Returns a tuple containing the float value for buying power and a
     formatted string of this value.
     '''
-    buying_power = float(self.account.buying_power)
+    buying_power = float(self.account.buying_power) - 1500000
     return tuple((buying_power, self.__number_float_to_string(buying_power)))  
 
 
-  def __get_account_positions(self) -> list:
+  def __get_account_positions(self, api_positions) -> list:
     '''
     Goes through positions received from Alpaca, initializes Stock objects with
     relevant info, adds them to an array which is eventually returned.
     '''
-    positions = self.positions
     stock_array = []
-    for position in positions:
+    for position in api_positions:
       stock_array.append(
         Stock(
           position.symbol, position.qty, position.current_price, 
@@ -115,11 +121,18 @@ class WebpageDataRefresher:
     and a formatted string of this value.
     '''
     daily_change = 0
-    positions = self.__get_account_positions()
-    for position in positions:
+    for position in self.positions:
       daily_change += float(position.intraday_pl)
 
     return tuple((daily_change, self.__format_dollars_to_string(daily_change)))
+
+
+  def get_lastday_equity(self) -> tuple((float, str)):
+    
+    lastday_equity = 0
+    for position in self.__get_account_positions():
+      lastday_equity += ( float(position.lastday_price) * float(position.qty) ) 
+    return tuple((lastday_equity, self.__number_float_to_string(lastday_equity))) 
 
 
   def get_account_percent_change(self) -> tuple((float, str)):
@@ -128,9 +141,8 @@ class WebpageDataRefresher:
     change and a formatted string of this value.
     '''
     percent_change = 0
-    positions = self.__get_account_positions()
-    equity = (self.get_equity())[0]
-    for position in positions:
+    equity = self.get_stock_equity()[0]
+    for position in self.positions:
       percent_change += float( position.intraday_plpc ) * ( ( float(position.market_value) * float(position.qty) ) / equity )
 
     return tuple((percent_change, self.__format_percentage_to_string(percent_change)))
@@ -138,36 +150,49 @@ class WebpageDataRefresher:
   
   def print_stock_price_alphabetical(self):
     ''' for debugging, so you can see what your handling '''
-    positions = self.__get_account_positions()
-    for position in sorted(positions):
+    for position in sorted(self.positions):
       print(position)
 
 
   def get_position_colors(self) -> dict:
-    positions = self.__get_account_positions()
     colors = {}
-    for x in range(len(positions)):
-      if float(positions[x].intraday_plpc) >= 0:
-        colors[positions[x].symbol] = "green"
+    for x in range(len(self.positions)):
+      if float(self.positions[x].intraday_plpc) >= 0:
+        colors[self.positions[x].symbol] = "green"
       else:
-        colors[positions[x].symbol] = "red"
+        colors[self.positions[x].symbol] = "red"
     return colors
 
 
-  def __convert_timestamps(self) -> list:
-    timestamps = self.api.get_portfolio_history(date_start=None, date_end=None, period="1D", timeframe="5Min", extended_hours=None).timestamp
-    dt_array = []
+  def __convert_timestamps_from_api(self, portfolio_object) -> list:
+    timestamps = portfolio_object.timestamp
+    time_array = []
     for stamp in timestamps:
       dt = datetime.fromtimestamp(stamp)
-      dt = str(dt)[11:-3]
-      dt_array.append(dt)
-    return dt_array
-
+      time = str(dt)[11:-3]
+      time_array.append(time)
+    
+    return time_array
   
+
+  def __convert_equities_from_api(self, portfolio_object) -> list:
+    converted_equity_values = []
+    for equity in portfolio_object.equity:
+      converted_equity_values.append('$' + self.__number_float_to_string(equity - 500000))
+    
+    return converted_equity_values
+
+
+  def __get_equities_and_times(self):
+    portfolio_object = self.api.get_portfolio_history(date_start=None, date_end=None, period="1D", timeframe="5Min", extended_hours=None)
+    equity_data = self.__convert_equities_from_api(portfolio_object)
+    time_data = self.__convert_timestamps_from_api(portfolio_object)
+    return tuple((equity_data, time_data))
+
+
   def create_plot_html(self) -> str:
-    equity_data = self.api.get_portfolio_history(date_start=None, date_end=None, period="1D", timeframe="5Min", extended_hours=None).equity
-    dt_data = self.__convert_timestamps()
-    fig = go.Figure([go.Scatter(x=dt_data, y=equity_data,line=dict(color="yellow"))])
+    equity_data, time_data = self.__get_equities_and_times()
+    fig = go.Figure([go.Scatter(x=time_data, y=equity_data,line=dict(color="yellow"))])
     fig.layout.xaxis.color = 'white'
     fig.layout.yaxis.visible = False
     fig.layout.paper_bgcolor = 'rgba(0, 0, 0, 0)'
@@ -193,15 +218,14 @@ class WebpageDataRefresher:
     with open("templates/index.html", "w") as html_file:
       html_top = constants.TOP_OF_PAGE
       html_file.write(html_top)
-      positions = self.__get_account_positions()
-      for x in range(len(positions)):
-        price = "{:,.2f}".format(float(positions[x].current_price))
-        percent = self.__format_percentage_to_string(float(positions[x].intraday_plpc) * 100)
+      for x in range(len(self.positions)):
+        price = "{:,.2f}".format(float(self.positions[x].current_price))
+        percent = self.__format_percentage_to_string(float(self.positions[x].intraday_plpc) * 100)
         html_content = f"""        
             <li class="share">
               <ul class="share-details">
-                <li ><p style="margin-bottom: -10px; top: -40%;">{positions[x].symbol}</p><p class="quantity">{positions[x].qty} Shares</p></li>
-                <li class="value"><p class="num">${price}</p><p class="per num" style="color: {self.get_position_colors()[positions[x].symbol]}; font-weight: bold">{percent}%</p></li>
+                <li ><p style="margin-bottom: -10px; top: -40%;">{self.positions[x].symbol}</p><p class="quantity">{self.positions[x].qty} Shares</p></li>
+                <li class="value"><p class="num">${price}</p><p class="per num" style="color: {self.get_position_colors()[self.positions[x].symbol]}; font-weight: bold">{percent}%</p></li>
               </ul>
               
             </li> """
@@ -211,7 +235,7 @@ class WebpageDataRefresher:
           </ul>
         </div>
         <div class="body">
-          <h1 id="top" class="num">${self.get_equity()[1]}</h1>
+          <h1 id="top" class="num">${self.get_stock_equity()[1]}</h1>
           <h2 class="color num">{self.get_account_daily_change()[1]} ({self.get_account_percent_change()[1]}%)</h2>
           {graph_div}
           <div class="buyingpower">
