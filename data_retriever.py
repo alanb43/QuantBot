@@ -1,5 +1,6 @@
 import urllib.request
 import time
+from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 import os, shutil
@@ -21,7 +22,10 @@ class DataRetriever:
 
   '''
 
+
   def __init__(self) -> None:
+    self.STORY = 'https://www.marketwatch.com/story/'
+    self.ARTICLE = 'https://www.marketwatch.com/articles/'
     return
 
   ''' 1. Simple Helper Functions '''
@@ -66,6 +70,41 @@ class DataRetriever:
 
   ''' 2. Scraping/Implementation Helpers'''
 
+  def __get_timestamp(self, news_soup):
+    dt = str(news_soup.find('time', class_='timestamp timestamp--pub'))
+    dt = dt[dt.find(": ") + 2: dt.find(" at")]
+    dt = dt[dt.index(' ') + 1: dt.index(',')] + ' ' + dt[:dt.index(' ')] + ',' + dt[dt.rindex(' '):]
+    d8time = datetime.strptime(dt, "%d %B, %Y")
+    return d8time
+    
+
+  def __compare_timestamp(self, ticker, timestamp) -> bool:
+    path = f"./data_retriever_storage/news/sentiment_data/{ticker}_sentiment_data.txt"
+    sentiment_data = open(path, 'r')
+    sentiment_data.readline()
+    latest_timestamp = sentiment_data.readline()
+    if timestamp > latest_timestamp:
+      return True
+    return False
+
+  def __compare_links(self, soup, path, files):
+    a_tags = []
+    duplicate_links = []
+    for a_tag in soup.findAll('a'):
+      a_tags.append(str(a_tag))
+    for tag in a_tags:
+      if tag.find('href') != -1:
+        link_start = tag.find('href') + 6
+        link_end = tag.find('>', link_start)
+        link = tag[link_start: link_end - 1]
+        if link[:34] == self.STORY or link[:37] == self.ARTICLE:
+          for old_link in open(path + files[2], 'r'):
+            if link == old_link[:-1]:
+              duplicate_links.append(link)
+    
+    return duplicate_links
+
+
   def __scrape_news_links(self, ticker):
     '''
     REQUIRES: a string representing a stock ticker
@@ -78,6 +117,7 @@ class DataRetriever:
     soup = self.__create_soup(f'https://www.marketwatch.com/investing/stock/{ticker}?mod=quote_search')
     path = 'data_retriever_storage/news/news_links/'
     files = ['mw_a_tags.txt', 'mw_unrefined_links.txt', f'mw_{ticker}_links.txt']
+    links_to_ignore = self.__compare_links(soup, path, files)
     self.__remove_files(files, path)
     pathname = f'./data_retriever_storage/news/news_article_contents/{ticker}/'
     if os.path.exists(pathname):
@@ -97,10 +137,9 @@ class DataRetriever:
         link_start = line.find('href') + 6
         link_end = line.find('>', link_start)
         link = line[link_start: link_end - 1]
-        if link[:34] == 'https://www.marketwatch.com/story/':
-          temp_links.write(link + '\n')
-        elif link[:37] == 'https://www.marketwatch.com/articles/':
-          temp_links.write(link + '\n')
+        if link[:34] == self.STORY or link[:37] == self.ARTICLE:
+          if link not in links_to_ignore:
+            temp_links.write(link + '\n')
 
     temp_links.close()
     self.__remove_duplicate_lines(files[1], files[2], path)
@@ -187,17 +226,23 @@ class DataRetriever:
           storage simplicity.
     '''
     self.__scrape_news_links(ticker)
-    path = './data_retriever_storage/news/news_links/'
-    if os.path.exists(path + f'mw_{ticker}_links.txt'):
-      links_file = open(path + f'mw_{ticker}_links.txt')
-    else:
-      return "Links haven't been scraped. Use scrape_news_links"
-    link_number = 1
-    for link in links_file:
-      self.__scrape_news_data(link, link_number, ticker)
-      link_number += 1
+    path = f'./data_retriever_storage/news/news_links/mw_{ticker}_links.txt'
+    sent_path = f'./data_retriever_storage/news/sentiment_data/{ticker}_sentiment_data.txt'
+    try:
+      links_file = open(path)
+      link_number = 1
+      sent_file = open(sent_path)
+      num_articles = int(sent_file.readline())
+      for link in links_file[num_articles + 1]:
+        self.__scrape_news_data(link, link_number, ticker)
+        link_number += 1
+    except IndexError:
+      print("No new articles since last scan")
+    except:
+      print("Error: File Not Found")
+    
 
 ''' Example '''
 DR = DataRetriever()
 DR.get_stock_news('TSLA')
-DR.get_stock_prices('NHI', '2m')
+# DR.get_stock_prices('NHI', '2m')
