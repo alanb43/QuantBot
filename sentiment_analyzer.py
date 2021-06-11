@@ -124,19 +124,27 @@ class SentimentAnalyzer:
   def __read_in_freq_dict(self):
     path = f"data_retriever_storage/news/sentiment_data/{self.__ticker}_sentiment_data.txt"
     with open(path, 'r') as f:
-      junk = f.readline() # come back when doing math
+      potential_num_files = f.readline() # come back when doing math
+      if len(potential_num_files):
+        self.num_articles = int(potential_num_files)
+      else:
+        self.num_articles = 0
+      
       Lines = f.readlines()
       for line in Lines:
         line_split = line.split()
-        self.freq_dict[line_split[0]] = line_split[1]
+        if len(line_split) < 2:
+          pass
+        else:
+          self.freq_dict[line_split[0]] = int(line_split[1])
     
   def __write_to_freq_dict(self):
     path = f"data_retriever_storage/news/sentiment_data/{self.__ticker}_sentiment_data.txt"
-    with open(path, 'w') as f:
-      f.write(str(self.num_articles) + "\n")
-      for key in self.freq_dict.keys():
-        line = key + " " + str(self.freq_dict[key]) + "\n"
-        f.write(line)
+    f = open(path, 'w')
+    f.write(str(self.num_articles) + "\n")
+    for key in self.freq_dict.keys():
+      line = key + " " + str(self.freq_dict[key]) + "\n"
+      f.write(line)
   
   def __update_freq_dict(self, freq_dist):
     for key in freq_dist:
@@ -148,9 +156,9 @@ class SentimentAnalyzer:
 
   def put_all_tg(self):
     # number of articles for a stock, file names for the article data
+    self.__read_in_freq_dict()
     num, article_files = self.__number_of_articles()
     self.num_articles += int(num)
-    self.__read_in_freq_dict()
     for file_name in article_files:
       file_path = f"data_retriever_storage/news/news_article_contents/{self.__ticker}/{file_name}"
       # tokenizes
@@ -162,7 +170,7 @@ class SentimentAnalyzer:
       # maps word to freq
       freq_dist = FreqDist(all_words)
       self.__update_freq_dict(freq_dist)  
-  
+      #print(cleaned_tokens_list)
     self.__write_to_freq_dict()
 
 
