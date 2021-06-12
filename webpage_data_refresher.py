@@ -14,7 +14,7 @@ class Stock:
   supplying QuantBot.io with correct info. Used with WebpageDataRefresher. 
   '''
   def __init__(self, symbol, qty, current_price, lastday_price, market_value, 
-            unrealized_intraday_pl, unrealized_intraday_plpc) -> None:
+            unrealized_intraday_pl, unrealized_intraday_plpc, change_today) -> None:
     self.symbol = symbol
     self.qty = qty
     self.current_price = current_price
@@ -23,7 +23,7 @@ class Stock:
     self.intraday_pl = unrealized_intraday_pl
     self.intraday_plpc = unrealized_intraday_plpc
     self.market_value = float(current_price) * float(qty)
-
+    self.change_today = change_today
 
 
   def __str__(self):
@@ -109,7 +109,8 @@ class WebpageDataRefresher:
         Stock(
           position.symbol, position.qty, position.current_price, 
           position.lastday_price, position.market_value, 
-          position.unrealized_intraday_pl, position.unrealized_intraday_plpc
+          position.unrealized_intraday_pl, position.unrealized_intraday_plpc,
+          position.change_today
         )
       )
     return stock_array
@@ -143,7 +144,7 @@ class WebpageDataRefresher:
     percent_change = 0
     equity = self.get_stock_equity()[0]
     for position in self.positions:
-      percent_change += float( position.intraday_plpc ) * ( ( float(position.market_value) * float(position.qty) ) / equity )
+      percent_change += float( position.change_today ) * ( ( float(position.market_value) * float(position.qty) ) / equity )
 
     return tuple((percent_change, self.__format_percentage_to_string(percent_change)))
 
@@ -157,7 +158,7 @@ class WebpageDataRefresher:
   def get_position_colors(self) -> dict:
     colors = {}
     for x in range(len(self.positions)):
-      if float(self.positions[x].intraday_plpc) >= 0:
+      if float(self.positions[x].intraday_pl) >= 0:
         colors[self.positions[x].symbol] = "green"
       else:
         colors[self.positions[x].symbol] = "red"
@@ -178,8 +179,8 @@ class WebpageDataRefresher:
   def __convert_equities_from_api(self, portfolio_object) -> list:
     converted_equity_values = []
     for equity in portfolio_object.equity:
-      converted_equity_values.append(equity)
-    
+      converted_equity_values.append(round(equity - float(self.account.cash), 2))
+
     return converted_equity_values
 
 
@@ -192,7 +193,7 @@ class WebpageDataRefresher:
 
   def create_plot_html(self) -> str:
     equity_data, time_data = self.__get_equities_and_times()
-    print(equity_data)
+    
     fig = go.Figure([go.Scatter(x=time_data, y=equity_data, line=dict(color="yellow"))])
     fig.layout.xaxis.color = 'white'
     fig.layout.yaxis.visible = False
@@ -299,5 +300,5 @@ class WebpageDataRefresher:
       html_file.write(constants.BOTTOM_OF_PAGE)
 
 WDR = WebpageDataRefresher()
-WDR.create_plot_html()
+WDR.create_site_html()
 # WDR.print_stock_price_alphabetical()
