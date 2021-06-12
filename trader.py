@@ -22,7 +22,7 @@ class Trader:
 
   ''' 1. Debug functions '''
 
-  def get_account():
+  def get_account(self):
     '''
     EFFECTS: loads account status
     NOTE: really shouldn't be used unless troubleshooting
@@ -31,7 +31,7 @@ class Trader:
     return json.loads(r.content)
 
 
-  def get_orders():
+  def get_orders(self):
     '''
     EFFECTS: prints all orders placed in a dictionary.
     NOTE: really shouldn't be used unless troubleshooting
