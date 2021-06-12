@@ -22,7 +22,7 @@ class Stock:
     self.market_value = market_value
     self.intraday_pl = unrealized_intraday_pl
     self.intraday_plpc = unrealized_intraday_plpc
-    self.market_value = current_price * qty
+    self.market_value = float(current_price) * float(qty)
 
 
 
@@ -178,13 +178,13 @@ class WebpageDataRefresher:
   def __convert_equities_from_api(self, portfolio_object) -> list:
     converted_equity_values = []
     for equity in portfolio_object.equity:
-      converted_equity_values.append('$' + self.__number_float_to_string(equity - 500000))
+      converted_equity_values.append(equity)
     
     return converted_equity_values
 
 
   def __get_equities_and_times(self):
-    portfolio_object = self.api.get_portfolio_history(date_start=None, date_end=None, period="1D", timeframe="5Min", extended_hours=None)
+    portfolio_object = self.api.get_portfolio_history(date_start=None, date_end=None, period="1D", timeframe="5Min", extended_hours=True)
     equity_data = self.__convert_equities_from_api(portfolio_object)
     time_data = self.__convert_timestamps_from_api(portfolio_object)
     return tuple((equity_data, time_data))
@@ -192,7 +192,8 @@ class WebpageDataRefresher:
 
   def create_plot_html(self) -> str:
     equity_data, time_data = self.__get_equities_and_times()
-    fig = go.Figure([go.Scatter(x=time_data, y=equity_data,line=dict(color="yellow"))])
+    print(equity_data)
+    fig = go.Figure([go.Scatter(x=time_data, y=equity_data, line=dict(color="yellow"))])
     fig.layout.xaxis.color = 'white'
     fig.layout.yaxis.visible = False
     fig.layout.paper_bgcolor = 'rgba(0, 0, 0, 0)'
@@ -298,5 +299,5 @@ class WebpageDataRefresher:
       html_file.write(constants.BOTTOM_OF_PAGE)
 
 WDR = WebpageDataRefresher()
-WDR.create_site_html()
+WDR.create_plot_html()
 # WDR.print_stock_price_alphabetical()
