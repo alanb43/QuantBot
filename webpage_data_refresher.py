@@ -97,11 +97,11 @@ class WebpageDataRefresher(AccountDataRetriever):
         color = self.get_position_colors()[position.symbol]
         holding = constants.create_holding(position.symbol, position.qty, price, color, percent)
         html_file.write(holding)
+      
       equity = '{:,.2f}'.format(self.get_stock_equity())
       dailychange = self.__format_dollars_to_string(self.get_account_daily_change())
       percentchange = self.__format_percentage_to_string(self.get_account_percent_change())
-      buyingpower = self.__format_dollars_to_string(self.get_buying_power())
-
+      buyingpower = '{:,.2f}'.format(self.get_buying_power())
       rest = constants.middle_page(equity, dailychange, percentchange, graph_div, buyingpower)
       html_file.write(rest)
       
