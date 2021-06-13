@@ -1,8 +1,5 @@
-from alpaca_trade_api.rest import Positions
 from trader import *
-import time
 import matplotlib.pyplot as plt # side-stepping mpl backend
-import numpy as np
 import plotly.graph_objects as go
 from templates import constants
 from datetime import date, datetime
@@ -14,7 +11,7 @@ class Stock:
   supplying QuantBot.io with correct info. Used with WebpageDataRefresher. 
   '''
   def __init__(self, symbol, qty, current_price, lastday_price, market_value, 
-            unrealized_intraday_pl, unrealized_intraday_plpc, change_today) -> None:
+            unrealized_intraday_pl, unrealized_intraday_plpc, change_today, pl, plpc) -> None:
     self.symbol = symbol
     self.qty = qty
     self.current_price = current_price
@@ -24,6 +21,8 @@ class Stock:
     self.intraday_plpc = unrealized_intraday_plpc
     self.market_value = float(current_price) * float(qty)
     self.change_today = change_today
+    self.pl = pl
+    self.plpc = plpc
 
 
   def __str__(self):
@@ -31,6 +30,7 @@ class Stock:
     string = f'''{self.symbol}\nQty: {self.qty}\nCurrent Price: {self.current_price}\n'''
     string += f'''Yesterday's Close: {self.lastday_price}\nMarket Value: {self.market_value}\n'''
     string += f'''Today's P/L: {self.intraday_pl}\nToday's P/L % Change: {self.intraday_plpc}\n'''
+    string += f"Market value: {self.market_value}\nOverall PL: {self.pl}\nOverall PLPC: {self.plpc}\n"
     return string
 
 
@@ -110,7 +110,7 @@ class WebpageDataRefresher:
           position.symbol, position.qty, position.current_price, 
           position.lastday_price, position.market_value, 
           position.unrealized_intraday_pl, position.unrealized_intraday_plpc,
-          position.change_today
+          position.change_today, position.unrealized_pl, position.unrealized_plpc
         )
       )
     return stock_array
@@ -144,7 +144,7 @@ class WebpageDataRefresher:
     percent_change = 0
     equity = self.get_stock_equity()[0]
     for position in self.positions:
-      percent_change += float( position.change_today ) * ( ( float(position.market_value) * float(position.qty) ) / equity )
+      percent_change += float( position.change_today ) * ( ( float(position.market_value) ) / equity )
 
     return tuple((percent_change, self.__format_percentage_to_string(percent_change)))
 
@@ -300,5 +300,5 @@ class WebpageDataRefresher:
       html_file.write(constants.BOTTOM_OF_PAGE)
 
 WDR = WebpageDataRefresher()
-WDR.create_site_html()
+WDR.print_stock_price_alphabetical()
 # WDR.print_stock_price_alphabetical()
