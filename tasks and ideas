@@ -30,3 +30,24 @@ market value that we're holding, p/l, etc), as well as the most recent decision 
 reasoning (news article, time series analysis). This way it makes it more original (no more ripping from 
 robinhood) and i feel like it would be super clean and make the website seem more populated with relevant info
 / complete
+
+
+https://towardsdatascience.com/how-to-web-scrape-with-python-in-4-minutes-bc49186a8460
+https://realpython.com/beautiful-soup-web-scraper-python/
+https://realpython.com/python-web-scraping-practical-introduction/
+https://towardsdatascience.com/the-complete-guide-to-time-series-analysis-and-forecasting-70d476bfe775
+https://towardsdatascience.com/sentiment-analysis-concept-analysis-and-applications-6c94d6f58c17
+https://towardsdatascience.com/nlp-from-a-time-series-perspective-39c37bc18156
+
+How I continued trader.py
+https://www.youtube.com/watch?v=GsGeLHTOGAg&t=303s
+
+https://www.youtube.com/watch?v=SIBr28sJFc8&t=575s
+
+
+sentiment
+https://monkeylearn.com/blog/sentiment-analysis-with-python/
+https://monkeylearn.com/sentiment-analysis/
+
+following this
+https://www.digitalocean.com/community/tutorials/how-to-perform-sentiment-analysis-in-python-3-using-the-natural-language-toolkit-nltk

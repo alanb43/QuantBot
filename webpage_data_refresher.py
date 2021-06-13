@@ -65,7 +65,6 @@ class WebpageDataRefresher(AccountDataRetriever):
 
   def create_plot_html(self) -> str:
     equity_data, time_data = self.__get_equities_and_times()
-    
     fig = go.Figure([go.Scatter(x=time_data, y=equity_data, line=dict(color="yellow"))])
     fig.layout.xaxis.color = 'white'
     fig.layout.yaxis.visible = False
