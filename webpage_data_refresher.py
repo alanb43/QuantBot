@@ -42,6 +42,12 @@ class WebpageDataRefresher(AccountDataRetriever):
     for stamp in timestamps:
       dt = datetime.fromtimestamp(stamp)
       time = str(dt)[11:-3]
+      if int(time[0:2]) > 12:
+        time = str ( int(time[0:2]) % 12 ) + time[2:] + "P"
+      elif int(time[0:2]) == 12:
+        time += "P"
+      else:
+        time = str ( int(time[0:2])) + time[2:] + "A"
       time_array.append(time)
     
     return time_array
