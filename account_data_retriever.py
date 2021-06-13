@@ -21,7 +21,7 @@ class AccountDataRetriever:
       positions.append(
         Stock(
           [
-            position.symbol, float(position.qty), float(position.current_price), 
+            position.symbol, int(position.qty), float(position.current_price), 
             float(position.lastday_price), float(position.market_value), 
             float(position.unrealized_intraday_pl), float(position.unrealized_intraday_plpc),
             float(position.change_today), float(position.unrealized_pl), 

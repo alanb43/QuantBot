@@ -28,31 +28,84 @@ TOP_OF_PAGE = '''
       <ul class="shares">
 '''
 
-MIDDLE_PAGE = '''
-</ul>
-  </div>
-  <div class="body">
-    <h1 id="top" class="num">${self.get_equity()[1]}</h1>
-    <h2 class="color num">{self.get_account_daily_change()[1]} ({self.get_account_percent_change()[1]}%)</h2>
-    {graph_div}
-    <div class="buyingpower">
-        <p class="buy">Buying Power</p>
-        <p class="buy2 num">${self.get_buying_power()[1]}</p>
-    </div>
-    <div class="summary">
-      <p class="color" style="font-weight: bold">What is Quantbot?</p>
-      <p class="des">Quantbot is a Python Bot that utilizes a combination of machine learning, time analysis, and sentiment analysis to automatically buy and sell stocks. The bot uses a web scraper that periodically checks for new articles regarding a company and analyzes the content in the article. If the bot deems the article particularly positive or negative for that company, the bot will either buy or sell the shares we have.</p>
-    </div>
-    <div class="news-head" id="news"><p>News the Bot Used to Buy/Sell</p></div>
-    <div class="news">
-'''
+def create_holding(symbol, qty, price, color, percent):
+  return f'''
+    <li class="share">
+      <ul class="share-details">
+        <li ><p style="margin-bottom: -10px; top: -40%;">{symbol}</p><p class="quantity">{qty} Shares</p></li>
+        <li class="value"><p class="num">${price}</p><p class="per num" style="color: {color}; font-weight: bold">{percent}%</p></li>
+      </ul>
+    </li>
+  '''
 
-BOTTOM_OF_PAGE = '''
-    <div class="contact color" id="contact">
-          <h3 style="margin-bottom: -10px; font-size: 18px;">Contact Us</h3>
-          <p style="margin-bottom: -10px; font-size: 15px;">Josh Cunningham || jcun@umich.edu || LinkedIn</p>
-          <p style="font-size: 15px">Alan Bergsneider || bera@umich.edu || LinkedIn</p>
-    </div>
+def middle_page(equity, dailychange, percentchange, graph, buyingpower):
+  return f'''
+    </ul>
   </div>
-</body>
+      <div class="body">
+        <h1 id="top" class="num">${equity}</h1>
+        <h2 class="color num">{dailychange} ({percentchange}%)</h2>
+        {graph}
+        <div class="buyingpower">
+            <p class="buy">Buying Power</p>
+            <p class="buy2 num">${buyingpower}</p>
+        </div>
+      <div class="summary">
+        <p class="color" style="font-weight: bold">What is Quantbot?</p>
+        <p class="des">QuantBot is a completely automated bot that makes use of artificial intelligence to trade 
+          the stock market for its founders, <a class="us" href="https://bergsneider.dev" target="_blank">Alan</a> and 
+          <a class="us" href="https://joshcunningham.net" target="_blank">Josh</a>. We've programmed the bot using Python 
+          to scrape the web to find data it desires regarding different assets, perform machine learning (both time series 
+          and sentiment analyses with price and news data respectively), and finally decide to buy/sell using the Alpaca 
+          API and brokerage based on the conclusions of the analyses when compared against each other. This project is 
+          being completed over Summer 2021 outside of our professional endeavours, and we are learning all of these concepts
+          (web scraping, time series analysis, sentiment analysis / Natural Language Processing, financial reporting, etc) on
+          our own from scratch. 
+        </p>
+      </div>
+      <div class="news-head" id="news"><p>News the Bot Used to Buy/Sell</p></div>
+        <div class="news">
+          <ul class="news-list">
+            <li class="article">
+              <ul class="inner-article">
+                <li>
+                  <img src="resources/a.png" alt="graph" class="article-img">
+                </li>
+                <li class="article-words">
+                  <p class="article-summary color">This article led to the bot buying 10 shares of AAPL.</p>
+                  <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
+                </li>
+              </ul>
+            </li>
+            <li class="article">
+              <ul class="inner-article">
+                <li>
+                  <img src="resources/a.png" alt="graph" class="article-img">
+                </li>
+                <li class="article-words">
+                  <p class="article-summary color">This article led to the bot selling 20 shares of GOOGL.</p>
+                  <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
+                </li>
+              </ul>
+            </li>
+            <li class="article">
+              <ul class="inner-article">
+                <li>
+                  <img src="resources/a.png" alt="graph" class="article-img">
+                </li>
+                <li class="article-words">
+                  <p class="article-summary color">This article led to the bot buying 15 shares of TSLA.</p>
+                  <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      <div class="contact color" id="contact">
+        <h3 style="margin-bottom: -10px; font-size: 18px;">Contact Us</h3>
+        <p style="margin-bottom: -10px; font-size: 15px;">Josh Cunningham || jcun@umich.edu || LinkedIn</p>
+        <p style="font-size: 15px">Alan Bergsneider || bera@umich.edu || LinkedIn</p>
+      </div>
+    </div>
+  </body>
 '''

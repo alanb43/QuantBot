@@ -91,84 +91,20 @@ class WebpageDataRefresher(AccountDataRetriever):
     with open("templates/index.html", "w") as html_file:
       html_top = constants.TOP_OF_PAGE
       html_file.write(html_top)
-      for x in range(len(self.positions)):
-        price = "{:,.2f}".format(float(self.positions[x].current_price))
-        percent = self.__format_percentage_to_string(float(self.positions[x].intraday_plpc) * 100)
-        html_content = f"""        
-            <li class="share">
-              <ul class="share-details">
-                <li ><p style="margin-bottom: -10px; top: -40%;">{self.positions[x].symbol}</p><p class="quantity">{self.positions[x].qty} Shares</p></li>
-                <li class="value"><p class="num">${price}</p><p class="per num" style="color: {self.get_position_colors()[self.positions[x].symbol]}; font-weight: bold">{percent}%</p></li>
-              </ul>
-              
-            </li> """
-        html_file.write(html_content)
+      for position in self.positions:
+        price = "{:,.2f}".format(position.current_price)
+        percent = self.__format_percentage_to_string(position.intraday_plpc * 100)
+        color = self.get_position_colors()[position.symbol]
+        holding = constants.create_holding(position.symbol, position.qty, price, color, percent)
+        html_file.write(holding)
+      equity = '{:,.2f}'.format(self.get_stock_equity())
+      dailychange = self.__format_dollars_to_string(self.get_account_daily_change())
+      percentchange = self.__format_percentage_to_string(self.get_account_percent_change())
+      buyingpower = self.__format_dollars_to_string(self.get_buying_power())
 
-      html_content = f"""
-          </ul>
-        </div>
-        <div class="body">
-          <h1 id="top" class="num">${self.get_stock_equity()}</h1>
-          <h2 class="color num">{self.get_account_daily_change()} ({self.get_account_percent_change()}%)</h2>
-          {graph_div}
-          <div class="buyingpower">
-              <p class="buy">Buying Power</p>
-              <p class="buy2 num">${self.get_buying_power()}</p>
-          </div>
-          <div class="summary">
-            <p class="color" style="font-weight: bold">What is Quantbot?</p>
-            <p class="des">QuantBot is a completely automated bot that makes use of artificial intelligence to trade 
-              the stock market for its founders, <a class="us" href="https://bergsneider.dev" target="_blank">Alan</a> and 
-              <a class="us" href="https://joshcunningham.net" target="_blank">Josh</a>. We've programmed the bot using Python 
-              to scrape the web to find data it desires regarding different assets, perform machine learning (both time series 
-              and sentiment analyses with price and news data respectively), and finally decide to buy/sell using the Alpaca 
-              API and brokerage based on the conclusions of the analyses when compared against each other. This project is 
-              being completed over Summer 2021 outside of our professional endeavours, and we are learning all of these concepts
-              (web scraping, time series analysis, sentiment analysis / Natural Language Processing, financial reporting, etc) on
-              our own from scratch. 
-            </p>
-          </div>
-          <div class="news-head" id="news"><p>News the Bot Used to Buy/Sell</p></div>
-          <div class="news">
-            <ul class="news-list">
-              <li class="article">
-                <ul class="inner-article">
-                  <li>
-                    <img src="resources/a.png" alt="graph" class="article-img">
-                  </li>
-                  <li class="article-words">
-                    <p class="article-summary color">This article led to the bot buying 10 shares of AAPL.</p>
-                    <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
-                  </li>
-                </ul>
-              </li>
-              <li class="article">
-                <ul class="inner-article">
-                  <li>
-                    <img src="resources/a.png" alt="graph" class="article-img">
-                  </li>
-                  <li class="article-words">
-                    <p class="article-summary color">This article led to the bot selling 20 shares of GOOGL.</p>
-                    <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
-                  </li>
-                </ul>
-              </li>
-              <li class="article">
-                <ul class="inner-article">
-                  <li>
-                    <img src="resources/a.png" alt="graph" class="article-img">
-                  </li>
-                  <li class="article-words">
-                    <p class="article-summary color">This article led to the bot buying 15 shares of TSLA.</p>
-                    <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-        """
-      html_file.write(html_content)
-      html_file.write(constants.BOTTOM_OF_PAGE)
+      rest = constants.middle_page(equity, dailychange, percentchange, graph_div, buyingpower)
+      html_file.write(rest)
+      
 
 WDR = WebpageDataRefresher()
 WDR.create_site_html()
