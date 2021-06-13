@@ -93,8 +93,3 @@ class AccountDataRetriever:
     ''' for debugging, so you can see what your handling '''
     for position in sorted(self.positions):
       print(position)
-
-
-ADR = AccountDataRetriever()
-dc = ADR.get_account_daily_change()
-print(dc)

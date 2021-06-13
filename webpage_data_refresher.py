@@ -1,7 +1,7 @@
 from account_data_retriever import AccountDataRetriever
 import plotly.graph_objects as go
 from templates import constants
-from datetime import date, datetime
+from datetime import datetime
 import os
 
 
