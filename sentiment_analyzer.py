@@ -173,9 +173,5 @@ class SentimentAnalyzer:
       #print(cleaned_tokens_list)
     self.__write_to_freq_dict()
 
-
-
-
-
 SA = SentimentAnalyzer('TSLA')
 SA.put_all_tg()
