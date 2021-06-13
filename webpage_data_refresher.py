@@ -1,6 +1,6 @@
 from account_data_retriever import AccountDataRetriever
 import plotly.graph_objects as go
-from templates import constants
+from templates import constants, webpage
 from datetime import datetime
 import os
 
@@ -35,7 +35,7 @@ class WebpageDataRefresher(AccountDataRetriever):
     return self.__number_float_to_string(percentage)[0] + ' ' + self.__number_float_to_string(percentage)[1:]
 
 
-  def __convert_timestamps_from_api(self, portfolio_object) -> list:
+  def __convert_timestamps_from_api(self, portfolio_object):
     ''' Converts timestamp objects to human readable times '''
     timestamps = portfolio_object.timestamp
     time_array = []
@@ -47,7 +47,7 @@ class WebpageDataRefresher(AccountDataRetriever):
     return time_array
   
 
-  def __convert_equities_from_api(self, portfolio_object) -> list:
+  def __convert_equities_from_api(self, portfolio_object):
     ''' Converts equities to appropriate values for graph '''
     converted_equity_values = []
     for equity in portfolio_object.equity:
@@ -87,26 +87,42 @@ class WebpageDataRefresher(AccountDataRetriever):
     os.remove('./templates/graph.html')
     return graph_div
   
+  def format_sidebar_content(self, position):
+    position_values = []
+    position_values.append(position.symbol)
+    position_values.append(position.qty)
+    position_values.append("{:,.2f}".format(position.current_price))
+    position_values.append(self.get_position_colors()[position.symbol])
+    position_values.append(self.__format_percentage_to_string(position.intraday_plpc * 100))
+    return position_values
+    
+  def format_main_content(self):
+    ''' Returns a list containing [0] Equity, [1] Daily Change, [2] Percent Change, [3] Buying Power '''
+    return [
+      '{:,.2f}'.format(self.get_stock_equity()),
+      self.__format_dollars_to_string(self.get_account_daily_change()),
+      self.__format_percentage_to_string(self.get_account_percent_change()),
+      '{:,.2f}'.format(self.get_buying_power())
+    ]
 
   def create_site_html(self) -> str:
     ''' Puts together everything else to generate webpage '''
-    graph_div = self.create_plot_html()
     with open("templates/index.html", "w") as html_file:
-      html_top = constants.TOP_OF_PAGE
-      html_file.write(html_top)
+      html_file.write(webpage.DOCTYPE)
+      html_file.write(webpage.HEAD)
+      html_file.write(webpage.NAVBAR)
+      html_file.write(webpage.SIDEBAR)
       for position in self.positions:
-        price = "{:,.2f}".format(position.current_price)
-        percent = self.__format_percentage_to_string(position.intraday_plpc * 100)
-        color = self.get_position_colors()[position.symbol]
-        holding = constants.create_holding(position.symbol, position.qty, price, color, percent)
+        content = self.format_sidebar_content(position)
+        holding = webpage.add_sidebar_holding(content[0], content[1], content[2], content[3], content[4])
         html_file.write(holding)
       
-      equity = '{:,.2f}'.format(self.get_stock_equity())
-      dailychange = self.__format_dollars_to_string(self.get_account_daily_change())
-      percentchange = self.__format_percentage_to_string(self.get_account_percent_change())
-      buyingpower = '{:,.2f}'.format(self.get_buying_power())
-      rest = constants.middle_page(equity, dailychange, percentchange, graph_div, buyingpower)
-      html_file.write(rest)
+      content = self.format_main_content()
+      graph_div = self.create_plot_html()
+      primary_body = webpage.add_primary_content_body(content[0], content[1], content[2], graph_div, content[3])
+      html_file.write(primary_body)
+      html_file.write(webpage.NEWS)
+      html_file.write(webpage.CONTACT)
       
 
 WDR = WebpageDataRefresher()
