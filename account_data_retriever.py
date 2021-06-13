@@ -21,3 +21,11 @@ class AccountDataRetriever:
       equity += position.market_value
     
     return tuple((float(equity), self.__number_float_to_string(float(equity))))
+
+  def get_buying_power(self) -> tuple((float, str)):
+    '''
+    Returns a tuple containing the float value for buying power and a
+    formatted string of this value.
+    '''
+    buying_power = float(self.account.cash)
+    return tuple((buying_power, self.__number_float_to_string(buying_power)))  
