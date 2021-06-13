@@ -3,8 +3,14 @@ from config import *
 from models.stock import Stock
 
 class AccountDataRetriever:
+  '''
+  This class allows for easy access to relevent account information for debugging, 
+  updating the webpage, etc.
+  
+  NOTE: initializing an instance connects us to the api and sets class up with account
+        and positions info
 
-
+  '''
   def __init__(self) -> None:
     self.api = tradeapi.REST(API_KEY, SECRET_KEY, BASE_URL, api_version='v2')
     self.account = self.api.get_account()
@@ -79,6 +85,10 @@ class AccountDataRetriever:
 
 
   def get_position_colors(self) -> dict:
+    '''
+    Returns a dictionary mapping strings of stock symbols to a string, either
+    'green' or 'red' based on if the stock is up / down on the day.
+    '''
     colors = {}
     for position in self.positions:
       if position.intraday_pl >= 0:
@@ -90,6 +100,6 @@ class AccountDataRetriever:
 
   
   def print_stock_price_alphabetical(self):
-    ''' for debugging, so you can see what your handling '''
+    ''' for debugging, so you can see what you're handling '''
     for position in sorted(self.positions):
       print(position)

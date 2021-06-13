@@ -7,11 +7,10 @@ import os
 class WebpageDataRefresher(AccountDataRetriever):
   '''
   Webpage Data Refresher tool to supply QuantBot.io with latest information regarding
-  equities, positions, profits & losses, and more. Generally returns tuples containing
-  the float for a particular case and it's formatted string.
-  NOTE: initializing an instance connects us to the api and sets class up with account
-        and positions info
-  NOTE: functionality for sidebar refreshing needs to be added
+  equities, positions, profits & losses, and more. 
+  
+  When initialized, AccountDataRetriever's __init__ is used to connect us to the API
+
   NOTE: this class can / maybe will be used in conjunction with a server that runs it
         to update the site periodically
   '''
