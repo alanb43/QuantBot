@@ -1,6 +1,6 @@
 from account_data_retriever import AccountDataRetriever
 import plotly.graph_objects as go
-from templates import constants, webpage
+from models import webpage
 from datetime import datetime
 import os
 
