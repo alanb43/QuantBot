@@ -6,14 +6,12 @@ In the process of pursuing this goal, we aim to learn and use:
 * Web Scraping
 * Time series analysis
 * Sentiment Analysis
-* Various analytics libraries in Python
-* Various API's and front-end technologies
+* Cloud Services (GCP)
+* Dynamic web application development
+* Various analytics libraries in Python, front-end technologies
 
-Notes:
-* If this all goes smoothly (highly unlikely) it would be cool to create a polished website that shows the bots trading (live) and maybe some of the analysis it performs. 
+The end goal is to have a bot that operates completely on its own up the in the cloud, managing a joint portfolio for us. Information about the bot, its trades, and the portfolio will be found on QuantBot.io once this project is complete.
 
-Dependencies being used so far:
-* [Alpaca Trade API (Python)](https://pypi.org/project/alpaca-trade-api-fixed/)
-* [Beautiful Soup](https://pypi.org/project/beautifulsoup4/)
-* [Requests](https://pypi.org/project/requests/)
-* [urllib3](https://pypi.org/project/urllib3/#description)
+Start Date: 5/17/21
+
+End Date: 
