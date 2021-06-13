@@ -4,7 +4,6 @@ from templates import constants
 from datetime import datetime
 import os
 
-
 class WebpageDataRefresher(AccountDataRetriever):
   '''
   Webpage Data Refresher tool to supply QuantBot.io with latest information regarding
@@ -38,6 +37,7 @@ class WebpageDataRefresher(AccountDataRetriever):
 
 
   def __convert_timestamps_from_api(self, portfolio_object) -> list:
+    ''' Converts timestamp objects to human readable times '''
     timestamps = portfolio_object.timestamp
     time_array = []
     for stamp in timestamps:
@@ -49,6 +49,7 @@ class WebpageDataRefresher(AccountDataRetriever):
   
 
   def __convert_equities_from_api(self, portfolio_object) -> list:
+    ''' Converts equities to appropriate values for graph '''
     converted_equity_values = []
     for equity in portfolio_object.equity:
       converted_equity_values.append(round(equity - float(self.account.cash), 2))
@@ -57,6 +58,7 @@ class WebpageDataRefresher(AccountDataRetriever):
 
 
   def __get_equities_and_times(self):
+    ''' Calls other functions to get equity data and time data for graph axes '''
     portfolio_object = self.api.get_portfolio_history(date_start=None, date_end=None, period="1D", timeframe="5Min", extended_hours=True)
     equity_data = self.__convert_equities_from_api(portfolio_object)
     time_data = self.__convert_timestamps_from_api(portfolio_object)
@@ -64,6 +66,7 @@ class WebpageDataRefresher(AccountDataRetriever):
 
 
   def create_plot_html(self) -> str:
+    ''' Creates the graph html div and returns it in string form using equities and times '''
     equity_data, time_data = self.__get_equities_and_times()
     fig = go.Figure([go.Scatter(x=time_data, y=equity_data, line=dict(color="yellow"))])
     fig.layout.xaxis.color = 'white'
@@ -87,6 +90,7 @@ class WebpageDataRefresher(AccountDataRetriever):
   
 
   def create_site_html(self) -> str:
+    ''' Puts together everything else to generate webpage '''
     graph_div = self.create_plot_html()
     with open("templates/index.html", "w") as html_file:
       html_top = constants.TOP_OF_PAGE
