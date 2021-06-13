@@ -120,6 +120,7 @@ class WebpageDataRefresher(AccountDataRetriever):
         holding = webpage.add_sidebar_holding(content[0], content[1], content[2], content[3], content[4])
         html_file.write(holding)
       
+      html_file.write(webpage.END_SIDEBAR)
       content = self.format_main_content()
       graph_div = self.create_plot_html()
       primary_body = webpage.add_primary_content_body(content[0], content[1], content[2], graph_div, content[3])
