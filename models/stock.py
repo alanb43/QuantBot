@@ -3,21 +3,19 @@ class Stock:
   Stock object to store key information regarding a stock for the purpose of
   supplying QuantBot.io with correct info. Used with WebpageDataRefresher. 
   '''
-  def __init__(self, symbol, qty, current_price, lastday_price, market_value, 
-            unrealized_intraday_pl, unrealized_intraday_plpc, change_today, pl,
-            plpc, cost) -> None:
-    self.symbol = symbol
-    self.qty = qty
-    self.current_price = current_price
-    self.lastday_price = lastday_price
-    self.market_value = market_value
-    self.intraday_pl = unrealized_intraday_pl
-    self.intraday_plpc = unrealized_intraday_plpc
-    self.market_value = float(current_price) * float(qty)
-    self.change_today = change_today
-    self.pl = pl
-    self.plpc = plpc
-    self.cost = cost
+  def __init__(self, stock_info) -> None:
+    self.symbol = stock_info[0]
+    self.qty = stock_info[1]
+    self.current_price = stock_info[2]
+    self.lastday_price = stock_info[3]
+    self.market_value = stock_info[4]
+    self.intraday_pl = stock_info[5]
+    self.intraday_plpc = stock_info[6]
+    self.market_value = float(stock_info[2]) * float(stock_info[1])
+    self.change_today = stock_info[7]
+    self.pl = stock_info[8]
+    self.plpc = stock_info[9]
+    self.cost = stock_info[10]
 
 
   def __str__(self):
