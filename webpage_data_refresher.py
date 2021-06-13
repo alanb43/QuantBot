@@ -11,7 +11,8 @@ class Stock:
   supplying QuantBot.io with correct info. Used with WebpageDataRefresher. 
   '''
   def __init__(self, symbol, qty, current_price, lastday_price, market_value, 
-            unrealized_intraday_pl, unrealized_intraday_plpc, change_today, pl, plpc) -> None:
+            unrealized_intraday_pl, unrealized_intraday_plpc, change_today, pl,
+            plpc, cost) -> None:
     self.symbol = symbol
     self.qty = qty
     self.current_price = current_price
@@ -23,6 +24,7 @@ class Stock:
     self.change_today = change_today
     self.pl = pl
     self.plpc = plpc
+    self.cost = cost
 
 
   def __str__(self):
@@ -31,6 +33,7 @@ class Stock:
     string += f'''Yesterday's Close: {self.lastday_price}\nMarket Value: {self.market_value}\n'''
     string += f'''Today's P/L: {self.intraday_pl}\nToday's P/L % Change: {self.intraday_plpc}\n'''
     string += f"Market value: {self.market_value}\nOverall PL: {self.pl}\nOverall PLPC: {self.plpc}\n"
+    string += f'''Avg cost per share: {self.cost}\n'''
     return string
 
 
@@ -94,7 +97,7 @@ class WebpageDataRefresher:
     Returns a tuple containing the float value for buying power and a
     formatted string of this value.
     '''
-    buying_power = float(self.account.buying_power) - 1500000
+    buying_power = float(self.account.cash)
     return tuple((buying_power, self.__number_float_to_string(buying_power)))  
 
 
@@ -110,7 +113,8 @@ class WebpageDataRefresher:
           position.symbol, position.qty, position.current_price, 
           position.lastday_price, position.market_value, 
           position.unrealized_intraday_pl, position.unrealized_intraday_plpc,
-          position.change_today, position.unrealized_pl, position.unrealized_plpc
+          position.change_today, position.unrealized_pl, position.unrealized_plpc,
+          position.avg_entry_price
         )
       )
     return stock_array
@@ -300,5 +304,4 @@ class WebpageDataRefresher:
       html_file.write(constants.BOTTOM_OF_PAGE)
 
 WDR = WebpageDataRefresher()
-WDR.print_stock_price_alphabetical()
-# WDR.print_stock_price_alphabetical()
+WDR.create_site_html()
