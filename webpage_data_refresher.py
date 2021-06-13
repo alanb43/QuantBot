@@ -63,6 +63,26 @@ class WebpageDataRefresher(AccountDataRetriever):
     time_data = self.__convert_timestamps_from_api(portfolio_object)
     return tuple((equity_data, time_data))
 
+  
+  def format_sidebar_content(self, position):
+    ''' Generates formatted content for an individual holding in the sidebar '''
+    position_values = []
+    position_values.append(position.symbol)
+    position_values.append(position.qty)
+    position_values.append("{:,.2f}".format(position.current_price))
+    position_values.append(self.get_position_colors()[position.symbol])
+    position_values.append(self.__format_percentage_to_string(position.intraday_plpc * 100))
+    return position_values
+    
+  def format_main_content(self):
+    ''' Returns a list containing formatted values for 
+    [0] Equity, [1] Daily Change, [2] Percent Change, [3] Buying Power 
+    '''
+    return [ '{:,.2f}'.format(self.get_stock_equity()),
+              self.__format_dollars_to_string(self.get_account_daily_change()),
+              self.__format_percentage_to_string(self.get_account_percent_change()),
+              '{:,.2f}'.format(self.get_buying_power()) ]
+
 
   def create_plot_html(self) -> str:
     ''' Creates the graph html div and returns it in string form using equities and times '''
@@ -86,24 +106,7 @@ class WebpageDataRefresher(AccountDataRetriever):
       graph_div += graph.readline()
     os.remove('./templates/graph.html')
     return graph_div
-  
-  def format_sidebar_content(self, position):
-    position_values = []
-    position_values.append(position.symbol)
-    position_values.append(position.qty)
-    position_values.append("{:,.2f}".format(position.current_price))
-    position_values.append(self.get_position_colors()[position.symbol])
-    position_values.append(self.__format_percentage_to_string(position.intraday_plpc * 100))
-    return position_values
-    
-  def format_main_content(self):
-    ''' Returns a list containing [0] Equity, [1] Daily Change, [2] Percent Change, [3] Buying Power '''
-    return [
-      '{:,.2f}'.format(self.get_stock_equity()),
-      self.__format_dollars_to_string(self.get_account_daily_change()),
-      self.__format_percentage_to_string(self.get_account_percent_change()),
-      '{:,.2f}'.format(self.get_buying_power())
-    ]
+
 
   def create_site_html(self) -> str:
     ''' Puts together everything else to generate webpage '''
