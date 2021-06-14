@@ -136,58 +136,50 @@ class SentimentAnalyzer:
       for token in tokens:
         yield token
 
-  def __file_reader_helper(self, lines, dict, x):
-    while len(lines[x]) > 1:
-      line_split = lines[x].split()
-      if len(line_split) < 2:
-        pass
-      else:
-        dict[line_split[0]] = int(line_split[1])
-      x += 1
-    return x
-
 
   def __read_in_freq_dict(self):
     path = f"data_retriever_storage/news/sentiment_data/{self.__ticker}_sentiment_data.txt"
+    if not os.path.exists(path):
+      return
     with open(path, 'r') as f:
       lines = f.readlines()
-      potential_num_files = lines[0]
-      current_type = lines[1]
-      if len(potential_num_files):
-        self.num_articles = int(potential_num_files)
-      else:
-        self.num_articles = 0
-      self.neutral_articles = int(lines[2])
-      x = 3
-      x = self.__file_reader_helper(lines, self.neutral_dict, x)
-      x += 2
-      self.pos_articles = int(lines[x])
-      x = self.__file_reader_helper(lines, self.pos_dict, x)
-      x += 2
-      self.neg_articles = int(lines[x])
-      x = self.__file_reader_helper(lines, self.neg_dict, x)
+      self.num_articles = int(lines[0])
+      article_nums = [self.neutral_articles, self.pos_articles, self.neg_articles]
+      article_dicts = [self.neutral_dict, self.pos_dict, self.neg_dict]
+      tracker = 0
+      for line in lines[1:]:
+        if line == "\n":
+          tracker += 1
+        line_split = line.split()
+        if len(line_split) < 2:
+          if len(line_split) == 1 and line_split[0].isdigit():
+            article_nums[tracker] = int(line_split[0])
+        else:
+          article_dicts[tracker][line_split[0]] = int(line_split[1])
+      
+      self.neutral_articles = article_nums[0]
+      self.pos_articles = article_nums[1]
+      self.neg_articles = article_nums[2]
     
+
   def __write_to_freq_dict(self):
     path = f"data_retriever_storage/news/sentiment_data/{self.__ticker}_sentiment_data.txt"
     f = open(path, 'w')
     f.write(str(self.num_articles) + "\n")
     f.write("Neutral\n")
-    f.write(str(self.neutral_articles))
+    f.write(str(self.neutral_articles) + '\n')
     for key in self.neutral_dict.keys():
       line = key + " " + str(self.neutral_dict[key]) + "\n"
       f.write(line)
     f.write("\n")
-    f.write("\n")
     f.write("Positive\n")
-    f.write(str(self.pos_articles))
-    f.write("\n")
+    f.write(str(self.pos_articles) + "\n")
     for key in self.pos_dict.keys():
       line = key + " " + str(self.pos_dict[key]) + "\n"
       f.write(line)
     f.write("\n")
     f.write("Negative\n")
-    f.write(str(self.neg_articles))
-    f.write("\n")
+    f.write(str(self.neg_articles) + "\n")
     for key in self.neg_dict.keys():
       line = key + " " + str(self.neg_dict[key]) + "\n"
       f.write(line)
@@ -201,11 +193,10 @@ class SentimentAnalyzer:
         freq_dict[key] = 1
 
   def training_data_helper(self, url, type):
-
-    path = f"data_retriever_storage/news/sentiment_data/{self.__ticker}_training_data/"
+    self.__read_in_freq_dict()
+    path = f"data_retriever_storage/news/sentiment_data/"
     DR = d.DataRetriever()
     DR.training_data_scraper(url, self.__ticker, path)
-
     tokens_list = self.__tokenize(path + f"{self.__ticker}_train_out.txt")
     cleaned_tokens_list, mentions = self.__remove_noise(tokens_list)
     all_words = self.get_all_words(cleaned_tokens_list)
@@ -216,7 +207,7 @@ class SentimentAnalyzer:
       self.pos_articles += 1 
     elif type == "negative":
       self.__update_freq_dict(freq_dist, self.neg_dict)
-      self.neg_articles += 1 
+      self.neg_articles += 1
     else:
       self.__update_freq_dict(freq_dist, self.neutral_dict)
       self.neutral_articles += 1 
@@ -249,7 +240,4 @@ class SentimentAnalyzer:
 
 SA = SentimentAnalyzer('TSLA')
 # SA.put_all_tg()
-# SA.training_data_helper("https://www.marketwatch.com/story/we-put-these-eight-meme-stocks-through-a-rugged-analytical-test-which-are-poised-for-growth-and-which-have-big-downsides-11622810160?mod=mw_quote_news", "positive")
-SA.testing_dicts()
-
-print(self.pos_dict["earnings"])
+SA.training_data_helper("https://www.marketwatch.com/story/tesla-stock-slips-after-plaid-plus-model-canceled-2021-06-07?mod=mw_quote_news", "negative")

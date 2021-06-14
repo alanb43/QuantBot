@@ -37,7 +37,7 @@ class TimeSeriesAnalyzer:
     return data
 
 
-  def plot_moving_average(series, window, plot_intervals=False, scale=1.96):
+  def plot_moving_average(self, series, window, plot_intervals=False, scale=1.96):
 
     rolling_mean = series.rolling(window=window).mean()
     
@@ -57,6 +57,7 @@ class TimeSeriesAnalyzer:
     plt.plot(series[window:], label='Actual values')
     plt.legend(loc='best')
     plt.grid(True)
+    plt.show()
     
 
   def __double_exponential_smoothing(series, alpha, beta):
@@ -175,12 +176,13 @@ class TimeSeriesAnalyzer:
     plt.plot(data, label='actual')
     plt.legend()
     plt.grid(True)
+    plt.show()
     
 
 # plot_SARIMA(data, best_model, 5)
 
 
-TSA = TimeSeriesAnalyzer('DOCU')
+TSA = TimeSeriesAnalyzer('TSLA')
 
 data = TSA.read_data()
 
@@ -208,7 +210,7 @@ best_model = sm.tsa.statespace.SARIMAX(data.Close, order=(p, d, q),
 
 
 # print(best_model.summary())
-# TSA.plot_SARIMA(data, best_model, 3)
+TSA.plot_SARIMA(data, best_model, 5)
 with open(f"./data_retriever_storage/timeseries/{TSA.ticker}.txt", 'w') as tracker:
   tracker.write(str(data))
   tracker.write('\n\nFrom the above data, our modelling predicted:\n')
