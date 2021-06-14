@@ -212,7 +212,7 @@ best_model = sm.tsa.statespace.SARIMAX(data.Close, order=(p, d, q),
 with open(f"./data_retriever_storage/timeseries/{TSA.ticker}.txt", 'w') as tracker:
   tracker.write(str(data))
   tracker.write('\n\nFrom the above data, our modelling predicted:\n')
-  tracker.write(str(best_model.predict(start=data.Close.shape[0], end=data.Close.shape[0] + 3)) + '\n')
+  tracker.write(str(best_model.predict(start=data.Close.shape[0], end=data.Close.shape[0] + 10)) + '\n')
   tracker.write(str(TSA.mean_absolute_percentage_error(data.Close[s+d:], best_model.fittedvalues[s+d:])))
 
 
