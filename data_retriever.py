@@ -185,6 +185,31 @@ class DataRetriever:
     file1.close()
     self.__remove_files(remove, pathname)
 
+  def training_data_scraper(self, url, ticker, path):
+    soup = self.__create_soup(url)
+    file = open(path + ticker + '_train.txt', 'w')
+    file.write(soup.get_text())
+    output = ticker + '_train_out.txt'
+    file.close()
+    file = open(path + ticker + '_train.txt', 'r')
+    file1 = open(path + output, 'w')
+    line_num, advertisement_count = 0, 0
+    for line in file:
+      line_num += 1
+      if line == 'Advertisement\n':
+        advertisement_count += 1
+        continue
+      if line != '\n' and advertisement_count == 4:
+        if line[:9] == 'Read Next':
+          break
+        file1.write(line)
+    file1.close()
+    file1 = open(path + output, 'r')
+    remove = [input]
+    if len(file1.readlines()) < 7:
+      remove.append(output)
+    file1.close()
+
   ''' 3. Functions the Bot should use / access'''
   
   def get_stock_prices(self, ticker, time_range, interval = '1d'):
