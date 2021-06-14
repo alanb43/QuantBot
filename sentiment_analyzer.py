@@ -1,6 +1,16 @@
 from nltk import FreqDist
 import os
+import requests
+from bs4 import BeautifulSoup
+import data_retriever as d
 
+def create_soup(self, url):
+  '''
+  REQUIRES: url formatted as string of website to scrape
+  EFFECTS: returns BeautifulSoup object of sites html contents
+  '''
+  response = requests.get(url)
+  return BeautifulSoup(response.text, 'html.parser')
 
 class SentimentAnalyzer:
   '''
@@ -31,8 +41,13 @@ class SentimentAnalyzer:
       'AMZN' : ['amzn', 'amazon', 'jeff', 'bezos', 'delivery', 'space'], 
       'TSLA' : ['tsla', 'elon', 'tesla', 'roadster', 'musk', 'meme', 'doge', 'electric', 'model']
     }
-    self.freq_dict = {}
+    self.neutral_dict = {}
+    self.pos_dict = {}
+    self.neg_dict = {}
     self.num_articles = 0
+    self.pos_articles = 0
+    self.neg_articles = 0
+    self.neutral_articles = 0
 
   def __number_of_articles(self): 
     '''
@@ -121,38 +136,87 @@ class SentimentAnalyzer:
       for token in tokens:
         yield token
 
+  def __file_reader_helper(self, lines, dict, x):
+    while lines[x] != "\n":
+      line_split = lines[x].split()
+      if len(line_split) < 2:
+        pass
+      else:
+        self.neutral_dict[line_split[0]] = int(line_split[1])
+
+  
   def __read_in_freq_dict(self):
     path = f"data_retriever_storage/news/sentiment_data/{self.__ticker}_sentiment_data.txt"
     with open(path, 'r') as f:
-      potential_num_files = f.readline() # come back when doing math
+      lines = f.readlines()
+      potential_num_files = lines[0]
+      current_type = lines[1]
       if len(potential_num_files):
         self.num_articles = int(potential_num_files)
       else:
         self.num_articles = 0
-      
-      Lines = f.readlines()
-      for line in Lines:
-        line_split = line.split()
-        if len(line_split) < 2:
-          pass
-        else:
-          self.freq_dict[line_split[0]] = int(line_split[1])
+      self.neutral_articles = int(lines[2])
+      int x = 3
+      self.__file_reader_helper(, lines, neutral_dict, x)
+      x += 2
+      self.positive_articles = int(lines[x])
+      self.__file_reader_helper(, lines, positive_dict, x)
+      x += 2
+      self.negative_articles = int(lines[x])
+      self.__file_reader_helper(, lines, negative_dict, x)
     
   def __write_to_freq_dict(self):
     path = f"data_retriever_storage/news/sentiment_data/{self.__ticker}_sentiment_data.txt"
     f = open(path, 'w')
     f.write(str(self.num_articles) + "\n")
-    for key in self.freq_dict.keys():
-      line = key + " " + str(self.freq_dict[key]) + "\n"
+    f.write("Neutral\n")
+    f.write(self.neutral_articles)
+    for key in self.neutral_dict.keys():
+      line = key + " " + str(self.neutral_dict[key]) + "\n"
       f.write(line)
-  
-  def __update_freq_dict(self, freq_dist):
+    f.write("\n")
+    f.write("Positive\n")
+    f.write(self.positive_articles)
+    for key in self.positive_dict.keys():
+      line = key + " " + str(self.positive_dict[key]) + "\n"
+      f.write(line)
+    f.write("\n")
+    f.write("Negative\n")
+    f.write(self.negative_articles)
+    for key in self.negative_dict.keys():
+      line = key + " " + str(self.negative_dict[key]) + "\n"
+      f.write(line)
+
+  def __update_freq_dict(self, freq_dist, freq_dict): # will need to be updated to use bayes, decide which of 3 types article belongs under
     for key in freq_dist:
-      freq = freq_dist.get(key)
-      if key in self.freq_dict.keys():
-        self.freq_dict[key] += int(freq) - 1
+      freq = freq_dist.get(key)s
+      if key in freq_dict.keys():
+        freq_dict[key] += int(freq) - 1
       else:
-        self.freq_dict[key] = 1
+        freq_dict[key] = 1
+
+  def training_data_helper(self, url, type):
+    # path = f"data_retriever_storage/news/sentiment_data/{self.__ticker}_training_data.txt"
+    # DR = d.DataRetriever()
+    # DR.scrape_news_data(url, 1, self.__ticker)
+
+    # need a versio of scrape_news_data that only takes in one link, writes to the path above, then deletes it 
+
+
+    tokens_list = self.__tokenize(path + )
+    cleaned_tokens_list, mentions = self.__remove_noise(tokens_list)
+    all_words = self.get_all_words(cleaned_tokens_list)
+    freq_dist = FreqDist(all_words)
+    self.num_articles += 1
+    if type == "positive":
+      self.__update_freq_dict(freq_dist, self.pos_dict)
+      self.positive_articles += 1 
+    elif type == "negative":
+      self.__update_freq_dict(freq_dist, self.neg_dict)
+      self.negative_articles += 1 
+    else:
+      self.__update_freq_dict(freq_dist, self.neutral_dict)
+      self.neutral_articles += 1 
 
   def put_all_tg(self):
     # number of articles for a stock, file names for the article data
@@ -174,4 +238,5 @@ class SentimentAnalyzer:
     self.__write_to_freq_dict()
 
 SA = SentimentAnalyzer('TSLA')
-SA.put_all_tg()
+# SA.put_all_tg()
+SA.training_data_helper("https://www.marketwatch.com/story/china-s-car-sales-growth-slowed-in-may-271623143625?mod=mw_quote_news", "positive")
