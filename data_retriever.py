@@ -198,12 +198,12 @@ class DataRetriever:
     EXAMPLES OF TIME RANGES: '1w' '2y' '6m' 
     '''
     path = 'data_retriever_storage/prices'
-    if time_range[1] == 'w':
-      period = int(time_range[0]) * int(31536000 / 52)
-    elif time_range[1] == 'm':
-      period = int(time_range[0]) * int(31536000 / 12)
-    elif time_range[1] == 'y':
-      period = int(time_range[0]) * 31536000
+    if time_range[-1] == 'w':
+      period = int(time_range[:-1]) * int(31536000 / 52)
+    elif time_range[-1] == 'm':
+      period = int(time_range[:-1]) * int(31536000 / 12)
+    elif time_range[-1] == 'y':
+      period = int(time_range[:-1]) * 31536000
     else:
       return "ERROR: Invalid time_range entered. See examples"
     period2 = int(time.time())
