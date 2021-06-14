@@ -240,9 +240,3 @@ class DataRetriever:
       print("No new articles since last scan")
     except:
       print("Error: File Not Found")
-    
-
-''' Example '''
-DR = DataRetriever()
-DR.get_stock_news('TSLA')
-# DR.get_stock_prices('NHI', '2m')

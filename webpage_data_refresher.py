@@ -133,7 +133,3 @@ class WebpageDataRefresher(AccountDataRetriever):
       html_file.write(primary_body)
       html_file.write(webpage.NEWS)
       html_file.write(webpage.CONTACT)
-      
-
-WDR = WebpageDataRefresher()
-WDR.create_site_html()

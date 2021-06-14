@@ -21,18 +21,18 @@ class TimeSeriesAnalyzer:
 
 
   def __init__(self, ticker) -> None:
-    self.__ticker = ticker
+    self.ticker = ticker
     sns.set()
     warnings.filterwarnings('ignore')
     return
 
 
-  def mean_percentage_error(actual, predicted) -> float:
+  def mean_absolute_percentage_error(self, actual, predicted) -> float:
     return np.mean(np.abs((actual - predicted) / actual)) * 100
 
 
   def read_data(self) -> pd.DataFrame:
-    path = f'./data_retriever_storage/prices/{self.__ticker}_prices.csv'
+    path = f'./data_retriever_storage/prices/{self.ticker}_prices.csv'
     data = pd.read_csv(path, index_col=['Date'], parse_dates=['Date'])
     return data
 
@@ -143,8 +143,44 @@ class TimeSeriesAnalyzer:
     result_table = result_table.sort_values(by='aic', ascending=True).reset_index(drop=True)
     
     return result_table
+  
+  def plot_SARIMA(self, series, model, n_steps):
+    """
+        Plot model vs predicted values
+        
+        series - dataset with time series
+        model - fitted SARIMA model
+        n_steps - number of steps to predict in the future
+    """
+    s = 1
+    d = 3
+    data = series.copy().rename(columns = {'Close': 'actual'})
+    drop_cols = ["Open", "High", "Low", "Adj Close", "Volume"]
+    data.drop(drop_cols, axis=1, inplace=True)
+    print(data)
+    data['arima_model'] = model.fittedvalues
+    #Make a shift on s+d steps, because these values were unobserved by the model due to the differentiating
+    data['arima_model'][:s+d] = np.NaN
+    
+    #Forecast on n_steps forward
+    forecast = model.predict(start=data.shape[0], end=data.shape[0] + n_steps)
+    forecast = data.arima_model.append(forecast)
+    #Calculate error
+    error = self.mean_absolute_percentage_error(data['actual'][s+d:], data['arima_model'][s+d:])
+    
+    plt.figure(figsize=(17, 8))
+    #plt.title('Mean Absolute Percentage Error: {0:.2f}%'.format(error))
+    plt.plot(forecast, color='r', label='model')
+    plt.axvspan(data.index[-1], forecast.index[-1],alpha=0.5, color='lightgrey')
+    plt.plot(data, label='actual')
+    plt.legend()
+    plt.grid(True)
+    
 
-TSA = TimeSeriesAnalyzer('TSLA')
+# plot_SARIMA(data, best_model, 5)
+
+
+TSA = TimeSeriesAnalyzer('DOCU')
 
 data = TSA.read_data()
 
@@ -170,7 +206,14 @@ p, q, P, Q = result_table.parameters[0]
 best_model = sm.tsa.statespace.SARIMAX(data.Close, order=(p, d, q),
                                        seasonal_order=(P, D, Q, s)).fit(disp=-1)
 
-print(best_model.summary())
+
+# print(best_model.summary())
+# TSA.plot_SARIMA(data, best_model, 3)
+with open(f"./data_retriever_storage/timeseries/{TSA.ticker}.txt", 'w') as tracker:
+  tracker.write(str(data))
+  tracker.write('\n\nFrom the above data, our modelling predicted:\n')
+  tracker.write(str(best_model.predict(start=data.Close.shape[0], end=data.Close.shape[0] + 3)) + '\n')
+  tracker.write(str(TSA.mean_absolute_percentage_error(data.Close[s+d:], best_model.fittedvalues[s+d:])))
 
 
 
