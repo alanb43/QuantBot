@@ -77,11 +77,8 @@ class AccountDataRetriever:
     Returns a tuple containing the float value for the account's daily percent 
     change and a formatted string of this value.
     '''
-    percent_change = 0
-    for position in self.positions:
-      percent_change += ( position.change_today * ( position.market_value / self.get_stock_equity() ) )
-
-    return percent_change
+    yesterday_equity = self.get_stock_equity() - self.get_account_daily_change()
+    return ( ( self.get_stock_equity() - yesterday_equity ) / yesterday_equity ) * 100
 
 
   def get_position_colors(self) -> dict:

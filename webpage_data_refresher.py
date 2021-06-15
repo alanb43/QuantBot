@@ -57,8 +57,8 @@ class WebpageDataRefresher(AccountDataRetriever):
     ''' Converts equities to appropriate values for graph '''
     converted_equity_values = []
     for equity in portfolio_object.equity:
-      converted_equity_values.append(round(equity - float(self.account.cash), 2))
-
+      if equity:
+        converted_equity_values.append(round(equity - float(self.account.cash), 2))
     return converted_equity_values
 
 
@@ -133,3 +133,6 @@ class WebpageDataRefresher(AccountDataRetriever):
       html_file.write(primary_body)
       html_file.write(webpage.NEWS)
       html_file.write(webpage.CONTACT)
+
+WDR = WebpageDataRefresher()
+WDR.create_site_html()
