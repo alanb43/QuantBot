@@ -28,3 +28,15 @@ From the above data, our modelling predicted:
 304    256.461550
 Name: predicted_mean, dtype: float64
 2.633260218515742
+
+Date          ACTUAL
+2021-06-14    257.25
+2021-06-15    
+2021-06-16    
+2021-06-17    
+2021-06-18    
+2021-06-21    
+2021-06-22    
+2021-06-23    
+2021-06-24    
+2021-06-25    
