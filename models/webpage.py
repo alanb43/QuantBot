@@ -60,7 +60,39 @@ def add_primary_content_body(equity, dailychange, percentchange, graph, buyingpo
       </div>
   '''
 
-NEWS = '''
+def get_decisions():
+  decisions = []
+  with open('decisions.txt', 'r') as d:
+    lines = d.readlines()
+    x = 0
+    decision = []
+    for line in lines:
+      if x == 5:
+        decisions.append(decision)
+        decision = []
+        x = 0
+      decision.append(line)
+      x += 1
+  decisions.append(decision)
+  return [ele for ele in reversed(decisions)]
+
+def pull_recent_news(decision) -> str:
+  return  f'''
+          <li class="article">
+            <ul class="inner-article">
+              <li>
+                <img src="resources/a.png" alt="graph" class="article-img">
+              </li>
+              <li class="article-words">
+                <p class="article-summary color">This article led to the bot {decision[1]} {decision[2]} shares of {decision[0]}.</p>
+                <p class="article-p"><a href={decision[4]}>{decision[3]}</a></p>
+              </li>
+            </ul>
+          </li>
+    '''
+
+
+ABOUT = '''
     <div class="summary">
       <p class="color" style="font-weight: bold">What is Quantbot?</p>
       <p class="des">QuantBot is a completely automated bot that makes use of artificial intelligence to trade 
@@ -77,39 +109,9 @@ NEWS = '''
     <div class="news-head" id="news"><p>News the Bot Used to Buy/Sell</p></div>
       <div class="news">
         <ul class="news-list">
-          <li class="article">
-            <ul class="inner-article">
-              <li>
-                <img src="resources/a.png" alt="graph" class="article-img">
-              </li>
-              <li class="article-words">
-                <p class="article-summary color">This article led to the bot buying 10 shares of AAPL.</p>
-                <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
-              </li>
-            </ul>
-          </li>
-          <li class="article">
-            <ul class="inner-article">
-              <li>
-                <img src="resources/a.png" alt="graph" class="article-img">
-              </li>
-              <li class="article-words">
-                <p class="article-summary color">This article led to the bot selling 20 shares of GOOGL.</p>
-                <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
-              </li>
-            </ul>
-          </li>
-          <li class="article">
-            <ul class="inner-article">
-              <li>
-                <img src="resources/a.png" alt="graph" class="article-img">
-              </li>
-              <li class="article-words">
-                <p class="article-summary color">This article led to the bot buying 15 shares of TSLA.</p>
-                <p class="article-p">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe magnam animi voluptatibus qui? Ipsam provident laboriosam cupiditate sapiente expedita. Aspernatur aut accusamus pariatur rerum minima dolorum molestiae ipsa nam nihil!</p>
-              </li>
-            </ul>
-          </li>
+'''
+
+NEWS = '''
         </ul>
       </div>
 '''
@@ -124,3 +126,5 @@ CONTACT = '''
   </body>
 '''
 
+
+get_decisions()
