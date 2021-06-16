@@ -58,7 +58,7 @@ class DataRetriever:
     lines_seen = set()
     line_num = 1
     file_in = open(path + input, 'r')
-    file_out = open(path + output, 'w')
+    file_out = open(path + output, 'a')
     for line in file_in:
       # (MW specific) skip past first 9 links because they're not related
       if line not in lines_seen and line_num > 9:
@@ -117,7 +117,7 @@ class DataRetriever:
     soup = self.__create_soup(f'https://www.marketwatch.com/investing/stock/{ticker}?mod=quote_search')
     path = 'data_retriever_storage/news/news_links/'
     files = ['mw_a_tags.txt', 'mw_unrefined_links.txt', f'mw_{ticker}_links.txt']
-    links_to_ignore = self.__compare_links(soup, path, files)
+    #links_to_ignore = self.__compare_links(soup, path, files)
     self.__remove_files(files, path)
     pathname = f'./data_retriever_storage/news/news_article_contents/{ticker}/'
     if os.path.exists(pathname):
@@ -138,8 +138,7 @@ class DataRetriever:
         link_end = line.find('>', link_start)
         link = line[link_start: link_end - 1]
         if link[:34] == self.STORY or link[:37] == self.ARTICLE:
-          if link not in links_to_ignore:
-            temp_links.write(link + '\n')
+          temp_links.write(link + '\n')
 
     temp_links.close()
     self.__remove_duplicate_lines(files[1], files[2], path)
@@ -252,16 +251,13 @@ class DataRetriever:
     '''
     self.__scrape_news_links(ticker)
     path = f'./data_retriever_storage/news/news_links/mw_{ticker}_links.txt'
-    sent_path = f'./data_retriever_storage/news/sentiment_data/{ticker}_sentiment_data.txt'
-    try:
-      links_file = open(path)
-      link_number = 1
-      sent_file = open(sent_path)
-      num_articles = int(sent_file.readline())
-      for link in links_file[num_articles + 1]:
-        self.__scrape_news_data(link, link_number, ticker)
-        link_number += 1
-    except IndexError:
-      print("No new articles since last scan")
-    except:
-      print("Error: File Not Found")
+    #sent_path = f'./data_retriever_storage/news/sentiment_data/{ticker}_sentiment_data.txt'
+      # need to create system where links are not reread from file
+    links_file = open(path, 'r')
+    link_number = 1
+    for link in links_file:
+      self.__scrape_news_data(link, link_number, ticker)
+      link_number += 1
+
+DR = DataRetriever()
+DR.get_stock_news("AAPL")
