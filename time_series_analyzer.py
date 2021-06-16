@@ -1,4 +1,4 @@
-from data_retriever import DataRetriever 
+from datetime import date
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -59,8 +59,27 @@ class TimeSeriesAnalyzer:
     plt.grid(True)
     plt.show()
     
+  
+  def exponential_smoothing(self, series, alpha):
+    result = [series[0]] # first value is same as series
+    for n in range(1, len(series)):
+        result.append(alpha * series[n] + (1 - alpha) * result[n-1])
+    return result
 
-  def __double_exponential_smoothing(series, alpha, beta):
+
+  def plot_exponential_smoothing(self, series, alphas):
+ 
+    plt.figure(figsize=(17, 8))
+    for alpha in alphas:
+        plt.plot(self.exponential_smoothing(series, alpha), label="Alpha {}".format(alpha))
+    plt.plot(series.values, "c", label = "Actual")
+    plt.legend(loc="best")
+    plt.axis('tight')
+    plt.title("Exponential Smoothing")
+    plt.grid(True)
+
+
+  def double_exponential_smoothing(self, series, alpha, beta):
 
     result = [series[0]]
     for n in range(1, len(series)+1):
@@ -75,19 +94,21 @@ class TimeSeriesAnalyzer:
       result.append(level + trend)
     return result
 
+
   def plot_double_exponential_smoothing(self, series, alphas, betas):
      
     plt.figure(figsize=(17, 8))
     for alpha in alphas:
       for beta in betas:
-        plt.plot(self.__double_exponential_smoothing(series, alpha, beta), label="Alpha {}, beta {}".format(alpha, beta))
+        plt.plot(self.double_exponential_smoothing(series, alpha, beta), label="Alpha {}, beta {}".format(alpha, beta))
     plt.plot(series.values, label = "Actual")
     plt.legend(loc="best")
     plt.axis('tight')
     plt.title("Double Exponential Smoothing")
     plt.grid(True)
 
-  def tsplot(y, lags=None, figsize=(12, 7), syle='bmh'):
+
+  def tsplot(self, y, lags=None, figsize=(12, 7), syle='bmh'):
     
     if not isinstance(y, pd.Series):
       y = pd.Series(y)
@@ -105,6 +126,8 @@ class TimeSeriesAnalyzer:
       smt.graphics.plot_acf(y, lags=lags, ax=acf_ax)
       smt.graphics.plot_pacf(y, lags=lags, ax=pacf_ax)
       plt.tight_layout()
+    
+    return p_value
     
   
 
@@ -158,7 +181,6 @@ class TimeSeriesAnalyzer:
     data = series.copy().rename(columns = {'Close': 'actual'})
     drop_cols = ["Open", "High", "Low", "Adj Close", "Volume"]
     data.drop(drop_cols, axis=1, inplace=True)
-    print(data)
     data['arima_model'] = model.fittedvalues
     #Make a shift on s+d steps, because these values were unobserved by the model due to the differentiating
     data['arima_model'][:s+d] = np.NaN
@@ -170,7 +192,7 @@ class TimeSeriesAnalyzer:
     error = self.mean_absolute_percentage_error(data['actual'][s+d:], data['arima_model'][s+d:])
     
     plt.figure(figsize=(17, 8))
-    #plt.title('Mean Absolute Percentage Error: {0:.2f}%'.format(error))
+    plt.title('Mean Absolute Percentage Error: {0:.2f}%'.format(error))
     plt.plot(forecast, color='r', label='model')
     plt.axvspan(data.index[-1], forecast.index[-1],alpha=0.5, color='lightgrey')
     plt.plot(data, label='actual')
@@ -179,78 +201,42 @@ class TimeSeriesAnalyzer:
     plt.show()
     
 
-# plot_SARIMA(data, best_model, 5)
-
-
-TSA = TimeSeriesAnalyzer('TSLA')
-
-data = TSA.read_data()
-
-
-ps = range(0, 3)
-d = 1
-qs = range(0, 3)
-Ps = range(0, 3)
-D = 1
-Qs = range(0, 3)
-s = 3
-
-#Create a list with all possible combinations of parameters
-parameters = product(ps, qs, Ps, Qs)
-parameters_list = list(parameters)
-len(parameters_list)
-
-result_table = TSA.optimize_SARIMA(parameters_list, d, D, s, data)
-
-#Set parameters that give the lowest AIC (Akaike Information Criteria)
-p, q, P, Q = result_table.parameters[0]
-
-best_model = sm.tsa.statespace.SARIMAX(data.Close, order=(p, d, q),
+  def analyze(self):
+    data = self.read_data()
+    # print(data)
+    series = self.exponential_smoothing(data.Close, 0.05)
+    self.plot_exponential_smoothing(data.Close, [0.05, 0.15])
+    series = self.double_exponential_smoothing(data.Close, 0.02, 0.02)
+    self.plot_double_exponential_smoothing(data.Close, [.02, .9], [.02, .9])
+    lags = len(data.index) * 0.25
+    p_value = self.tsplot(data.Close, lags=int(lags))
+    if p_value:
+      data_diff = data.Close - data.Close.shift(1) # get rid of autocorrelation
+      self.tsplot(data_diff[1:], lags=int(lags))
+      # makes dickey-fuller p_value = 0, indicating no autocorrelation
+    
+    ps = range(0, 3)
+    d = 1
+    qs = range(0, 3)
+    Ps = range(0, 3)
+    D = 1
+    Qs = range(0, 3)
+    s = 3
+    parameters = product(ps, qs, Ps, Qs)
+    parameters_list = list(parameters)
+    result_table = self.optimize_SARIMA(parameters_list, d, D, s, data)
+    p, q, P, Q = result_table.parameters[0]
+    best_model = sm.tsa.statespace.SARIMAX(data.Close, order=(p, d, q),
                                        seasonal_order=(P, D, Q, s)).fit(disp=-1)
+    self.plot_SARIMA(data, best_model, 10)
+    print(best_model.predict(start=data.Close.shape[0], end=data.Close.shape[0] + 30))
+    print(self.mean_absolute_percentage_error(data.Close[s+d:], best_model.fittedvalues[s+d:]))
+    with open(f"./data_retriever_storage/timeseries/{TSA.ticker}.txt", 'w') as tracker:
+      tracker.write(str(data))
+      tracker.write('\n\nFrom the above data, our modelling predicted:\n')
+      tracker.write(str(best_model.predict(start=data.Close.shape[0], end=data.Close.shape[0] + 10)) + '\n')
+      tracker.write(str(TSA.mean_absolute_percentage_error(data.Close[s+d:], best_model.fittedvalues[s+d:])))
+    
 
-
-# print(best_model.summary())
-TSA.plot_SARIMA(data, best_model, 5)
-with open(f"./data_retriever_storage/timeseries/{TSA.ticker}.txt", 'w') as tracker:
-  tracker.write(str(data))
-  tracker.write('\n\nFrom the above data, our modelling predicted:\n')
-  tracker.write(str(best_model.predict(start=data.Close.shape[0], end=data.Close.shape[0] + 10)) + '\n')
-  tracker.write(str(TSA.mean_absolute_percentage_error(data.Close[s+d:], best_model.fittedvalues[s+d:])))
-
-
-
-
-
-# #Smooth by the previous 5 days (by week)
-# plot_moving_average(data.Close, 5)
-
-# #Smooth by the previous month (30 days)
-# plot_moving_average(data.Close, 30)
-
-# #Smooth by previous quarter (90 days)
-# plot_moving_average(data.Close, 90, plot_intervals=True, scale=.5)
-
-# plot_double_exponential_smoothing(data.Close, alphas=[0.9, 0.02], betas=[0.9, 0.02])
-
-# tsplot(data.Close, lags=30)
-
-# # Take the first difference to remove to make the process stationary
-# data_diff = data.Close - data.Close.shift(1)
-
-# tsplot(data_diff[1:], lags=30)
-
-
-"""
-Time Series Analysis:
-
-
-
-
-
-
-
-"""
-
-
-
-
+TSA = TimeSeriesAnalyzer('DOCU')
+TSA.analyze()
