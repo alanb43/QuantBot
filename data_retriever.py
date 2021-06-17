@@ -126,7 +126,7 @@ class DataRetriever:
     all_a_tags = open(path + files[0], 'w')
     for a_tag in soup.findAll('a'):
       all_a_tags.write(str(a_tag))
-    
+
     all_a_tags.close()
     all_a_tags = open(path + files[0], 'r')
     temp_links = open(path + files[1], 'w')
@@ -167,6 +167,10 @@ class DataRetriever:
     file = open(pathname + input, 'r')
     file1 = open(pathname + output, 'w')
     line_num, advertisement_count = 0, 0
+    title_tag = str(soup.find("title"))
+    title = title_tag[title_tag.index(">") + 1 : title_tag.rindex("-")]
+    file1.write(title + '\n')
+    file1.write(url)
     for line in file:
       line_num += 1
       if line == 'Advertisement\n':
