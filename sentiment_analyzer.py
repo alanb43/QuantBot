@@ -185,28 +185,44 @@ class SentimentAnalyzer:
       line = key + " " + str(self.neg_dict[key]) + "\n"
       f.write(line)
 
-  def buy_sell_decider(filepath):
-    """
-    use first two lines that article and other info to append to deicisons.txt
-    """
+  def buy_sell_decider(self, filepath, category):
+    if category[0] == "Positive":
+      action = "Buy"
+    elif category[1] == "Negative":
+      action = "Sell"
+    else: # not doing either
+      exit(0)
+
+    quantity = 0
+    if category[1] > 100:
+      quantity = 1
+    elif category[1] > 1000:
+      quantity = 2
+    # .... idk what these values should be we need to talk about that they're probably going to be percentages of how much we own in that company
+
     with open(filepath, 'r') as f_in:
-      pass
-
-    with open('./models/decisions.txt', 'a'):
-      pass
-
+      article_name = f_in.readline()
+      url = f_in.readline()
+      
+    with open('./models/decisions.txt', 'a') as f_out:
+      f_out.write(self.__ticker)
+      f_out.write(action)
+      f_out.write(quantity)
+      f_out.write(article_name)
+      f_out.write(url)
     
-    return None
+    print("The article: '" + article_name + "' has led QuantBot to " + action + " " + quantity + " shares of " + self.__ticker + ".\n")
 
 # write buy/sell decisions to a text file that the webpage_refresher pulls from to for loop
-  def __update_freq_dict(self, freq_dist, freq_dict, category, filepath): # will need to be updated to use bayes, decide which of 3 types article belongs under
+  def __update_freq_dict(self, freq_dist, freq_dict, category = [], filepath = ""): # will need to be updated to use bayes, decide which of 3 types article belongs under
     for key in freq_dist:
       freq = freq_dist.get(key)
       if key in freq_dict.keys():
         freq_dict[key] += int(freq) - 1
       else:
         freq_dict[key] = 1
-    self.buy_sell_decider(filepath)
+    if filepath != "":
+      self.buy_sell_decider(filepath, category)
 
   def training_data_helper(self, url, type):
     self.__read_in_freq_dict()
@@ -245,7 +261,7 @@ class SentimentAnalyzer:
     master = {}
     for dict in dictionaries:
       for word in dict.keys():
-        if master[word]:
+        if master.get(word):
           master[word] += dict[word]
         else:
           master[word] = 1  
@@ -256,7 +272,7 @@ class SentimentAnalyzer:
     cats = ["Neutral", "Positive", "Negative"]
     for i in range(len(dictionaries)):
       log_likelihood = 0
-      for word in words.keys():
+      for word in words:
         for y in range(len(dictionaries)):
           if dictionaries[y][word]:
             log_likelihood += np.log(dictionaries[y][word] / articles[y])
@@ -268,9 +284,9 @@ class SentimentAnalyzer:
       log_probability = np.log(log_priors[i]) + log_likelihood
       log_probabilities[cats[i]] = log_probability
       i += 1
-    print(log_probabilities)
     maxCat = max(log_probabilities.items(), key=operator.itemgetter(1))[0]
-    # return [maxCat, log_probabilities[maxCat]]
+    print(maxCat)
+    return [maxCat, log_probabilities[maxCat]]
 
   def put_all_tg(self):
     # number of articles for a stock, file names for the article data
@@ -278,6 +294,7 @@ class SentimentAnalyzer:
     num, article_files = self.__number_of_articles()
     self.num_articles += int(num)
     for file_name in article_files:
+      print("hi")
       file_path = f"data_retriever_storage/news/news_article_contents/{self.__ticker}/{file_name}"
       # tokenizes
       tokens_list = self.__tokenize(file_path)
@@ -301,4 +318,4 @@ class SentimentAnalyzer:
 
 SA = SentimentAnalyzer('TSLA')
 SA.put_all_tg()
-#SA.training_data_helper("https://www.marketwatch.com/story/tesla-stock-slips-after-plaid-plus-model-canceled-2021-06-07?mod=mw_quote_news", "negative")
+#SA.training_data_helper("https://www.marketwatch.com/story/suze-orman-says-bitcoin-is-a-place-to-put-some-money-and-just-leave-it-11623703566?mod=mw_quote_news", "neutral")
