@@ -131,8 +131,16 @@ class WebpageDataRefresher(AccountDataRetriever):
       graph_div = self.create_plot_html()
       primary_body = webpage.add_primary_content_body(content[0], content[1], content[2], graph_div, content[3])
       html_file.write(primary_body)
+      decisions = webpage.get_decisions()
+      for x in range(10):
+        html = webpage.pull_recent_news(decisions[x])
+        for line in html:
+          html_file.write(line)
+      html_file.write(webpage.ABOUT)
       html_file.write(webpage.NEWS)
       html_file.write(webpage.CONTACT)
 
 WDR = WebpageDataRefresher()
-WDR.create_site_html()
+# WDR.create_site_html()
+decisions = webpage.get_decisions()
+print(webpage.pull_recent_news(decisions[0]))

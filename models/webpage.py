@@ -62,7 +62,7 @@ def add_primary_content_body(equity, dailychange, percentchange, graph, buyingpo
 
 def get_decisions():
   decisions = []
-  with open('decisions.txt', 'r') as d:
+  with open('./models/decisions.txt', 'r') as d:
     lines = d.readlines()
     x = 0
     decision = []
@@ -77,19 +77,19 @@ def get_decisions():
   return [ele for ele in reversed(decisions)]
 
 def pull_recent_news(decision) -> str:
-  return  f'''
-          <li class="article">
+  return  f"""
+          <a href={decision[4]}><li class="article">
             <ul class="inner-article">
               <li>
                 <img src="resources/a.png" alt="graph" class="article-img">
               </li>
               <li class="article-words">
                 <p class="article-summary color">This article led to the bot {decision[1]} {decision[2]} shares of {decision[0]}.</p>
-                <p class="article-p"><a href={decision[4]}>{decision[3]}</a></p>
+                <p class="article-p">{decision[3]}</p>
               </li>
             </ul>
-          </li>
-    '''
+          </li></a>
+    """
 
 
 ABOUT = '''

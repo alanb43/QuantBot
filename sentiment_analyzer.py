@@ -3,6 +3,8 @@ import os
 import requests
 from bs4 import BeautifulSoup
 import data_retriever as d
+import numpy as np
+import operator
 
 def create_soup(self, url):
   '''
@@ -136,7 +138,6 @@ class SentimentAnalyzer:
       for token in tokens:
         yield token
 
-
   def __read_in_freq_dict(self):
     path = f"data_retriever_storage/news/sentiment_data/{self.__ticker}_sentiment_data.txt"
     if not os.path.exists(path):
@@ -184,13 +185,28 @@ class SentimentAnalyzer:
       line = key + " " + str(self.neg_dict[key]) + "\n"
       f.write(line)
 
-  def __update_freq_dict(self, freq_dist, freq_dict): # will need to be updated to use bayes, decide which of 3 types article belongs under
+  def buy_sell_decider(filepath):
+    """
+    use first two lines that article and other info to append to deicisons.txt
+    """
+    with open(filepath, 'r') as f_in:
+      pass
+
+    with open('./models/decisions.txt', 'a'):
+      pass
+
+    
+    return None
+
+# write buy/sell decisions to a text file that the webpage_refresher pulls from to for loop
+  def __update_freq_dict(self, freq_dist, freq_dict, category, filepath): # will need to be updated to use bayes, decide which of 3 types article belongs under
     for key in freq_dist:
       freq = freq_dist.get(key)
       if key in freq_dict.keys():
         freq_dict[key] += int(freq) - 1
       else:
         freq_dict[key] = 1
+    self.buy_sell_decider(filepath)
 
   def training_data_helper(self, url, type):
     self.__read_in_freq_dict()
@@ -216,6 +232,46 @@ class SentimentAnalyzer:
       os.remove(path + f"{self.__ticker}_train_out.txt")
       os.remove(path + f"{self.__ticker}_train.txt")
 
+  def bayes_calculation(self, words):
+    """
+    Things needed to complete:
+      1. total number of articles in entire training set: self.num_articles
+      2. the number of unique words in the entire training set: make a master dictionary that adds frequencies if a word shows up in multiple dictionaries, get size
+      3. for each word, the number of articles in the entire set that contain it: just the frequencies of the master dictionary
+      4. for each category, number of articles with that label: self.pos_articles...
+      5. for each category and word, number of articles with that category that have that word: original dictionaries
+    """
+    dictionaries = [self.neutral_dict, self.pos_dict, self.neg_dict]
+    master = {}
+    for dict in dictionaries:
+      for word in dict.keys():
+        if master[word]:
+          master[word] += dict[word]
+        else:
+          master[word] = 1  
+
+    log_probabilities = {}
+    log_priors = [self.neutral_articles / self.num_articles, self.pos_articles / self.num_articles, self.neg_articles / self.num_articles]
+    articles = [self.neutral_articles, self.pos_articles, self.neg_articles]
+    cats = ["Neutral", "Positive", "Negative"]
+    for i in range(len(dictionaries)):
+      log_likelihood = 0
+      for word in words.keys():
+        for y in range(len(dictionaries)):
+          if dictionaries[y][word]:
+            log_likelihood += np.log(dictionaries[y][word] / articles[y])
+          elif master[word]:
+            log_likelihood += np.log(master[word] / self.num_articles)
+          else:
+            log_likelihood += np.log(1 / self.num_articles)
+          y += 1
+      log_probability = np.log(log_priors[i]) + log_likelihood
+      log_probabilities[cats[i]] = log_probability
+      i += 1
+    print(log_probabilities)
+    maxCat = max(log_probabilities.items(), key=operator.itemgetter(1))[0]
+    # return [maxCat, log_probabilities[maxCat]]
+
   def put_all_tg(self):
     # number of articles for a stock, file names for the article data
     self.__read_in_freq_dict()
@@ -231,13 +287,18 @@ class SentimentAnalyzer:
       all_words = self.get_all_words(cleaned_tokens_list)
       # maps word to freq
       freq_dist = FreqDist(all_words)
-      self.__update_freq_dict(freq_dist)  
-      #print(cleaned_tokens_list)
+      category = self.bayes_calculation(all_words)
+      if category[0] == "Neutral": 
+        self.__update_freq_dict(freq_dist, self.neutral_dict, category, file_path)
+      elif category[0] == "Positive": 
+        self.__update_freq_dict(freq_dist, self.pos_dict, category, file_path)
+      else: 
+        self.__update_freq_dict(freq_dist, self.neg_dict, category, file_path)
     self.__write_to_freq_dict()
   
   def testing_dicts(self):
     self.__read_in_freq_dict()
 
 SA = SentimentAnalyzer('TSLA')
-# SA.put_all_tg()
-SA.training_data_helper("https://www.marketwatch.com/story/tesla-stock-slips-after-plaid-plus-model-canceled-2021-06-07?mod=mw_quote_news", "negative")
+SA.put_all_tg()
+#SA.training_data_helper("https://www.marketwatch.com/story/tesla-stock-slips-after-plaid-plus-model-canceled-2021-06-07?mod=mw_quote_news", "negative")

@@ -264,4 +264,4 @@ class DataRetriever:
       link_number += 1
 
 DR = DataRetriever()
-DR.get_stock_news("AAPL")
+DR.get_stock_news("TSLA")
