@@ -203,7 +203,6 @@ class TimeSeriesAnalyzer:
 
   def analyze(self):
     data = self.read_data()
-    # print(data)
     series = self.exponential_smoothing(data.Close, 0.05)
     self.plot_exponential_smoothing(data.Close, [0.05, 0.15])
     series = self.double_exponential_smoothing(data.Close, 0.02, 0.02)
@@ -229,7 +228,7 @@ class TimeSeriesAnalyzer:
     best_model = sm.tsa.statespace.SARIMAX(data.Close, order=(p, d, q),
                                        seasonal_order=(P, D, Q, s)).fit(disp=-1)
     self.plot_SARIMA(data, best_model, 10)
-    print(best_model.predict(start=data.Close.shape[0], end=data.Close.shape[0] + 30))
+    print(best_model.predict(start=data.Close.shape[0], end=data.Close.shape[0] + 10))
     print(self.mean_absolute_percentage_error(data.Close[s+d:], best_model.fittedvalues[s+d:]))
     with open(f"./data_retriever_storage/timeseries/{TSA.ticker}.txt", 'w') as tracker:
       tracker.write(str(data))
