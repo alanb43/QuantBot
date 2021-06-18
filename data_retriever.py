@@ -262,6 +262,3 @@ class DataRetriever:
     for link in links_file:
       self.__scrape_news_data(link, link_number, ticker)
       link_number += 1
-
-DR = DataRetriever()
-DR.get_stock_news("TSLA")

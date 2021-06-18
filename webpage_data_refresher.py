@@ -113,7 +113,6 @@ class WebpageDataRefresher(AccountDataRetriever):
     os.remove('./templates/graph.html')
     return graph_div
 
-
   def create_site_html(self) -> str:
     ''' Puts together everything else to generate webpage '''
     with open("templates/index.html", "w") as html_file:
@@ -132,15 +131,13 @@ class WebpageDataRefresher(AccountDataRetriever):
       primary_body = webpage.add_primary_content_body(content[0], content[1], content[2], graph_div, content[3])
       html_file.write(primary_body)
       decisions = webpage.get_decisions()
-      for x in range(10):
+      html_file.write(webpage.ABOUT)
+      for x in range(5):
         html = webpage.pull_recent_news(decisions[x])
         for line in html:
           html_file.write(line)
-      html_file.write(webpage.ABOUT)
       html_file.write(webpage.NEWS)
       html_file.write(webpage.CONTACT)
 
 WDR = WebpageDataRefresher()
-# WDR.create_site_html()
-decisions = webpage.get_decisions()
-print(webpage.pull_recent_news(decisions[0]))
+WDR.create_site_html()

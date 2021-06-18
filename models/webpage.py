@@ -78,14 +78,11 @@ def get_decisions():
 
 def pull_recent_news(decision) -> str:
   return  f"""
-          <a href={decision[4]}><li class="article">
+          <a href={decision[4]} target="_blank" style=" text-decoration: none;"><li class="article">
             <ul class="inner-article">
-              <li>
-                <img src="resources/a.png" alt="graph" class="article-img">
-              </li>
               <li class="article-words">
                 <p class="article-summary color">This article led to the bot {decision[1]} {decision[2]} shares of {decision[0]}.</p>
-                <p class="article-p">{decision[3]}</p>
+                <p class="article-p" style="color: white">{decision[3]}</p>
               </li>
             </ul>
           </li></a>

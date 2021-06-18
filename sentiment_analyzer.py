@@ -2,7 +2,7 @@ from nltk import FreqDist
 import os
 import requests
 from bs4 import BeautifulSoup
-import data_retriever as d
+from data_retriever import DataRetriever
 import numpy as np
 import operator
 
@@ -188,10 +188,10 @@ class SentimentAnalyzer:
   def buy_sell_decider(self, filepath, category):
     if category[0] == "Positive":
       action = "Buy"
-    elif category[1] == "Negative":
+    elif category[0] == "Negative":
       action = "Sell"
     else: # not doing either
-      exit(0)
+      return None
 
     quantity = 0
     if category[1] > 100:
@@ -205,13 +205,13 @@ class SentimentAnalyzer:
       url = f_in.readline()
       
     with open('./models/decisions.txt', 'a') as f_out:
-      f_out.write(self.__ticker)
-      f_out.write(action)
-      f_out.write(quantity)
+      f_out.write(self.__ticker + "\n")
+      f_out.write(action + "\n")
+      f_out.write(str(quantity) + "\n")
       f_out.write(article_name)
       f_out.write(url)
     
-    print("The article: '" + article_name + "' has led QuantBot to " + action + " " + quantity + " shares of " + self.__ticker + ".\n")
+    print("The article: '" + article_name + "' has led QuantBot to " + action + " " + str(quantity) + " shares of " + self.__ticker + ".\n")
 
 # write buy/sell decisions to a text file that the webpage_refresher pulls from to for loop
   def __update_freq_dict(self, freq_dist, freq_dict, category = [], filepath = ""): # will need to be updated to use bayes, decide which of 3 types article belongs under
@@ -227,7 +227,7 @@ class SentimentAnalyzer:
   def training_data_helper(self, url, type):
     self.__read_in_freq_dict()
     path = f"data_retriever_storage/news/sentiment_data/"
-    DR = d.DataRetriever()
+    DR = DataRetriever()
     DR.training_data_scraper(url, self.__ticker, path)
     tokens_list = self.__tokenize(path + f"{self.__ticker}_train_out.txt")
     cleaned_tokens_list, mentions = self.__remove_noise(tokens_list)
@@ -293,8 +293,9 @@ class SentimentAnalyzer:
     self.__read_in_freq_dict()
     num, article_files = self.__number_of_articles()
     self.num_articles += int(num)
+    print(article_files)
     for file_name in article_files:
-      print("hi")
+      print(file_name)
       file_path = f"data_retriever_storage/news/news_article_contents/{self.__ticker}/{file_name}"
       # tokenizes
       tokens_list = self.__tokenize(file_path)
@@ -307,10 +308,13 @@ class SentimentAnalyzer:
       category = self.bayes_calculation(all_words)
       if category[0] == "Neutral": 
         self.__update_freq_dict(freq_dist, self.neutral_dict, category, file_path)
+        self.neutral_articles += 1
       elif category[0] == "Positive": 
         self.__update_freq_dict(freq_dist, self.pos_dict, category, file_path)
+        self.pos_articles += 1
       else: 
         self.__update_freq_dict(freq_dist, self.neg_dict, category, file_path)
+        self.neg_articles += 1
     self.__write_to_freq_dict()
   
   def testing_dicts(self):
