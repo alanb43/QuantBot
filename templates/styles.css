@@ -136,7 +136,7 @@ h2 {
     margin-left: -20px;
     color: white;
     list-style: none;
-    margin-top: -10px;
+    margin-top: -25px;
 }
 
 .article {
@@ -149,6 +149,7 @@ h2 {
     list-style: none;
     display: flex;
     flex-direction: horizontal;
+    margin-left: -5%;
 }
 
 .article-img {
@@ -159,13 +160,13 @@ h2 {
 }
 
 .article-summary {
-    font-weight: bold;
     font-size: 15px;
     color: #ff6200;
 }
 
 .article-p {
     font-size: 12px;
+    font-weight: bold;
 }
 
 .article-words {
