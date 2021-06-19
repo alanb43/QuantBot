@@ -203,13 +203,15 @@ class SentimentAnalyzer:
     with open(filepath, 'r') as f_in:
       article_name = f_in.readline()
       url = f_in.readline()
-      
+    
+    DR = DataRetriever()
     with open('./models/decisions.txt', 'a') as f_out:
       f_out.write(self.__ticker + "\n")
       f_out.write(action + "\n")
       f_out.write(str(quantity) + "\n")
       f_out.write(article_name)
       f_out.write(url)
+      f_out.write(DR.get_article_intro(filepath) + "\n")
     
     print("The article: '" + article_name + "' has led QuantBot to " + action + " " + str(quantity) + " shares of " + self.__ticker + ".\n")
 

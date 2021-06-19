@@ -1,4 +1,6 @@
 import random
+from data_retriever import DataRetriever
+
 
 DOCTYPE = '''<!DOCTYPE html>'''
 HEAD = '''
@@ -69,7 +71,7 @@ def get_decisions():
     x = 0
     decision = []
     for line in lines:
-      if x == 5:
+      if x == 6:
         decisions.append(decision)
         decision = []
         x = 0
@@ -78,14 +80,14 @@ def get_decisions():
   decisions.append(decision)
   return [ele for ele in reversed(decisions)]
 
-def pull_recent_news(decision) -> str:
+def pull_recent_news(decision ) -> str:
   phrases = ["This article led the bot to " + decision[1] + " " + decision[2] + " shares of " + decision[0] + ".", "As a result of this article, QuantBot decided to " + decision[1] + " " + decision[2] + " shares of " + decision[0] + ".", "An order to " + decision[1] + " " + decision[2] + " shares of " + decision[0] + " was created due to this article."]
   return  f"""
           <a href={decision[4]} target="_blank" style=" text-decoration: none;"><li class="article">
             <ul class="inner-article">
               <li class="article-words">
                 <p class="article-p" style="color: white; font-size: 16px">{decision[3]}</p>
-                <p class="article-intro" style="color: white; font-size: 14px">"random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence..."</p>
+                <p class="article-intro" style="color: white; font-size: 14px">"{decision[5]}..."</p>
                 <p class="article-summary color" style="font-size: 15px; margin-top: 25px">QuantBot decided to {decision[1]} {decision[2]} shares of {decision[0]}.</p>
               </li>
             </ul>
@@ -126,6 +128,5 @@ CONTACT = '''
     </div>
   </body>
 '''
-
 
 get_decisions()
