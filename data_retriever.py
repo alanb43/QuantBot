@@ -188,6 +188,35 @@ class DataRetriever:
     file1.close()
     self.__remove_files(remove, pathname)
 
+
+  def get_article_intro(self, path):
+    '''
+    REQUIRES: a valid path to a news article's contents
+    EFFECTS:  returns a string of the first 45 relevant words in the article,
+              as a brief intro to be used on the site
+    '''
+    article_words = []
+    with open(path, 'r') as file:
+      file.readline()
+      line = file.readline()
+      while len(line.split()) < 3:
+        line = file.readline()
+      
+      article_words += line.split()
+      while len(article_words) < 40:
+        article_words += file.readline().split()
+
+      intro_string = ""
+      word_count = 0
+      for word in article_words:
+        if word_count == 45:
+          break
+        intro_string += word + " "
+        word_count += 1
+      
+      return intro_string
+      
+
   def training_data_scraper(self, url, ticker, path):
     soup = self.__create_soup(url)
     file = open(path + ticker + '_train.txt', 'w')
@@ -265,3 +294,8 @@ class DataRetriever:
 
 # DR = DataRetriever()
 # DR.get_stock_news("TSLA")
+
+# from data_retriever import DataRetriever
+# DR = DataRetriever()
+# DR.get_article_intro("./data_retriever_storage/news/news_article_contents/TSLA/TSLA1.txt")
+#'./data_retriever_storage/news/news_article_contents/
