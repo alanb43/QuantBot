@@ -84,9 +84,9 @@ def pull_recent_news(decision) -> str:
           <a href={decision[4]} target="_blank" style=" text-decoration: none;"><li class="article">
             <ul class="inner-article">
               <li class="article-words">
-                <p class="article-p color" style="font-size: 16px">Article: {decision[3]}</p>
-                <p class="article-intro" style="color: white; font-size: 12px">"random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence..."</p>
-                <p class="article-summary color" style="font-size: 15px; margin-top: 25px">{phrases[random.randint(0,len(phrases)-1)]}</p>
+                <p class="article-p" style="color: white; font-size: 16px">{decision[3]}</p>
+                <p class="article-intro" style="color: white; font-size: 14px">"random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence random sentence..."</p>
+                <p class="article-summary color" style="font-size: 15px; margin-top: 25px">QuantBot decided to {decision[1]} {decision[2]} shares of {decision[0]}.</p>
               </li>
             </ul>
           </li></a>
