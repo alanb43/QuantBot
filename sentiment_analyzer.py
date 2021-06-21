@@ -43,7 +43,6 @@ class SentimentAnalyzer:
       'AMZN' : ['amzn', 'amazon', 'jeff', 'bezos', 'delivery', 'space'], 
       'TSLA' : ['tsla', 'elon', 'tesla', 'roadster', 'musk', 'meme', 'doge', 'electric', 'model']
     }
-    self.neutral_dict = {}
     self.pos_dict = {}
     self.neg_dict = {}
     self.num_articles = 0
@@ -144,9 +143,11 @@ class SentimentAnalyzer:
       return
     with open(path, 'r') as f:
       lines = f.readlines()
+      if len(lines) == 0:
+        return None
       self.num_articles = int(lines[0])
-      article_nums = [self.neutral_articles, self.pos_articles, self.neg_articles]
-      article_dicts = [self.neutral_dict, self.pos_dict, self.neg_dict]
+      article_nums = [self.pos_articles, self.neg_articles]
+      article_dicts = [self.pos_dict, self.neg_dict]
       tracker = 0
       for line in lines[1:]:
         if line == "\n":
@@ -158,21 +159,14 @@ class SentimentAnalyzer:
         else:
           article_dicts[tracker][line_split[0]] = int(line_split[1])
       
-      self.neutral_articles = article_nums[0]
-      self.pos_articles = article_nums[1]
-      self.neg_articles = article_nums[2]
+      self.pos_articles = article_nums[0]
+      self.neg_articles = article_nums[1]
     
 
   def __write_to_freq_dict(self):
     path = f"data_retriever_storage/news/sentiment_data/{self.__ticker}_sentiment_data.txt"
     f = open(path, 'w')
     f.write(str(self.num_articles) + "\n")
-    f.write("Neutral\n")
-    f.write(str(self.neutral_articles) + '\n')
-    for key in self.neutral_dict.keys():
-      line = key + " " + str(self.neutral_dict[key]) + "\n"
-      f.write(line)
-    f.write("\n")
     f.write("Positive\n")
     f.write(str(self.pos_articles) + "\n")
     for key in self.pos_dict.keys():
@@ -242,9 +236,6 @@ class SentimentAnalyzer:
     elif type == "negative":
       self.__update_freq_dict(freq_dist, self.neg_dict)
       self.neg_articles += 1
-    else:
-      self.__update_freq_dict(freq_dist, self.neutral_dict)
-      self.neutral_articles += 1 
     self.__write_to_freq_dict()
     if os.path.exists(path + f"{self.__ticker}_train_out.txt"):
       os.remove(path + f"{self.__ticker}_train_out.txt")
@@ -259,7 +250,7 @@ class SentimentAnalyzer:
       4. for each category, number of articles with that label: self.pos_articles...
       5. for each category and word, number of articles with that category that have that word: original dictionaries
     """
-    dictionaries = [self.neutral_dict, self.pos_dict, self.neg_dict]
+    dictionaries = [self.pos_dict, self.neg_dict]
     master = {}
     for dict in dictionaries:
       for word in dict.keys():
@@ -269,9 +260,9 @@ class SentimentAnalyzer:
           master[word] = 1  
 
     log_probabilities = {}
-    log_priors = [self.neutral_articles / self.num_articles, self.pos_articles / self.num_articles, self.neg_articles / self.num_articles]
-    articles = [self.neutral_articles, self.pos_articles, self.neg_articles]
-    cats = ["Neutral", "Positive", "Negative"]
+    log_priors = [self.pos_articles / self.num_articles, self.neg_articles / self.num_articles]
+    articles = [self.pos_articles, self.neg_articles]
+    cats = ["Positive", "Negative"]
     for i in range(len(dictionaries)):
       log_likelihood = 0
       for word in words:
@@ -287,7 +278,6 @@ class SentimentAnalyzer:
       log_probabilities[cats[i]] = log_probability
       i += 1
     maxCat = max(log_probabilities.items(), key=operator.itemgetter(1))[0]
-    print(maxCat)
     return [maxCat, log_probabilities[maxCat]]
 
   def put_all_tg(self):
@@ -308,10 +298,7 @@ class SentimentAnalyzer:
       # maps word to freq
       freq_dist = FreqDist(all_words)
       category = self.bayes_calculation(all_words)
-      if category[0] == "Neutral": 
-        self.__update_freq_dict(freq_dist, self.neutral_dict, category, file_path)
-        self.neutral_articles += 1
-      elif category[0] == "Positive": 
+      if category[0] == "Positive": 
         self.__update_freq_dict(freq_dist, self.pos_dict, category, file_path)
         self.pos_articles += 1
       else: 
@@ -324,4 +311,4 @@ class SentimentAnalyzer:
 
 SA = SentimentAnalyzer('TSLA')
 SA.put_all_tg()
-#SA.training_data_helper("https://www.marketwatch.com/story/suze-orman-says-bitcoin-is-a-place-to-put-some-money-and-just-leave-it-11623703566?mod=mw_quote_news", "neutral")
+#SA.training_data_helper("https://www.marketwatch.com/story/suze-orman-says-bitcoin-is-a-place-to-put-some-money-and-just-leave-it-11623703566?mod=mw_quote_news", "negative")
