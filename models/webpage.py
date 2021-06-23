@@ -5,14 +5,14 @@ from data_retriever import DataRetriever
 DOCTYPE = '''<!DOCTYPE html>'''
 HEAD = '''
   <head>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/static/styles.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Ubuntu&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.typekit.net/oxi4xqh.css">
     <title>QuantBot</title>
-    <link rel="shortcut icon" href="resources/favicon.ico">
+    <link rel="shortcut icon" href="/static/favicon.ico">
   </head>
   <body>
 '''
@@ -21,7 +21,7 @@ NAVBAR = '''
     <div class="nav-bar">
       <a href="QuantBot.io">
       <video disableRemotePlayback autoplay muted loop id="myVideo">
-        <source src="resources/logo.mp4" type="video/mp4">
+        <source src="/static/logo.mp4" type="video/mp4">
       </video>
     </a>
       <ul class="nav-buttons">
