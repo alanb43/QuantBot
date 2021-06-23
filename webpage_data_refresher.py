@@ -103,7 +103,7 @@ class WebpageDataRefresher(AccountDataRetriever):
     fig.update_layout( xaxis = dict(dtick = 12) )
     fig.update_layout(xaxis_showgrid=False, yaxis_showgrid=False)
     with open('./templates/graph.html', 'w') as f:
-      f.write(fig.to_html(include_plotlyjs='cdn', default_width="90%", config={"displayModeBar": False}))
+      f.write(fig.to_html(include_plotlyjs='cdn', default_width="100%", default_height="600px", config={"displayModeBar": False}))
     with open('./templates/graph.html', 'r') as graph:
       graph.readline()
       graph.readline()
@@ -119,13 +119,6 @@ class WebpageDataRefresher(AccountDataRetriever):
       html_file.write(webpage.DOCTYPE)
       html_file.write(webpage.HEAD)
       html_file.write(webpage.NAVBAR)
-      html_file.write(webpage.SIDEBAR)
-      for position in self.positions:
-        content = self.format_sidebar_content(position)
-        holding = webpage.add_sidebar_holding(content[0], content[1], content[2], content[3], content[4])
-        html_file.write(holding)
-      
-      html_file.write(webpage.END_SIDEBAR)
       content = self.format_main_content()
       graph_div = self.create_plot_html()
       primary_body = webpage.add_primary_content_body(content[0], content[1], content[2], graph_div, content[3])
