@@ -293,8 +293,8 @@ class DataRetriever:
       self.__scrape_news_data(link, link_number, ticker)
       link_number += 1
 
-# DR = DataRetriever()
-# DR.get_stock_news("TSLA")
+DR = DataRetriever()
+DR.get_stock_news("AAPL")
 
 # from data_retriever import DataRetriever
 # DR = DataRetriever()

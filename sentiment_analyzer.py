@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from data_retriever import DataRetriever
 import numpy as np
 import operator
+from app import ticker_dict
 
 class SentimentAnalyzer:
 
@@ -15,6 +16,7 @@ class SentimentAnalyzer:
     self.pos_articles = 0
     self.neg_dict = {}
     self.neg_articles = 0
+    self.ticker_cat = ticker_dict()
     # Words determined to appear in high frequency with low value through training
     self.__words_to_skip = [
       'the', 'that', 'to', 'for', 'on', 'and', 'of', 'a', 'in', 'is', 'it', 'its', 'be', 'are',
@@ -28,6 +30,8 @@ class SentimentAnalyzer:
              and the number of articles.
     '''
     path = f'data_retriever_storage/news/news_article_contents/{ticker}/'
+    if not os.path.exists(path):
+      os.makedirs(path)
     article_list = os.listdir(path)
     return (article_list, len(article_list))
 
@@ -93,7 +97,7 @@ class SentimentAnalyzer:
 
 
   def __read_in_freq_dict(self, ticker):
-    path = f"data_retriever_storage/news/sentiment_data/{ticker}_sentiment_data.txt"
+    path = f"data_retriever_storage/news/sentiment_data/{self.ticker_cat[ticker]}_sentiment_data.txt"
     if not os.path.exists(path):
       return
     with open(path, 'r') as f:
@@ -119,20 +123,20 @@ class SentimentAnalyzer:
     
 
   def __write_to_freq_dict(self, ticker):
-    path = f"data_retriever_storage/news/sentiment_data/{ticker}_sentiment_data.txt"
-    f = open(path, 'w')
-    f.write(str(self.num_articles) + "\n")
-    f.write("Positive\n")
-    f.write(str(self.pos_articles) + "\n")
-    for key in self.pos_dict.keys():
-      line = key + " " + str(self.pos_dict[key]) + "\n"
-      f.write(line)
-    f.write("\n")
-    f.write("Negative\n")
-    f.write(str(self.neg_articles) + "\n")
-    for key in self.neg_dict.keys():
-      line = key + " " + str(self.neg_dict[key]) + "\n"
-      f.write(line)
+    path = f"data_retriever_storage/news/sentiment_data/{self.ticker_cat[ticker]}_sentiment_data.txt"
+    with open(path, 'w+') as f:
+      f.write(str(self.num_articles) + "\n")
+      f.write("Positive\n")
+      f.write(str(self.pos_articles) + "\n")
+      for key in self.pos_dict.keys():
+        line = key + " " + str(self.pos_dict[key]) + "\n"
+        f.write(line)
+      f.write("\n")
+      f.write("Negative\n")
+      f.write(str(self.neg_articles) + "\n")
+      for key in self.neg_dict.keys():
+        line = key + " " + str(self.neg_dict[key]) + "\n"
+        f.write(line)
 
 
   def buy_sell_decider(self, ticker, filepath, category):
@@ -266,7 +270,7 @@ class SentimentAnalyzer:
 
 
 SA = SentimentAnalyzer()
-SA.analyze('TSLA')
+SA.analyze('AAPL')
 #SA.model_trainer('TSLA', 'positive', 'https://www.marketwatch.com/articles/elon-musk-is-buying-even-more-tesla-stock-1539785532?mod=mw_quote_news')
     
 # analyze returns [Strong sell, light sell, nothing, light buy, Strong buy]
