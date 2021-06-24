@@ -6,10 +6,13 @@ import time
 
 T = Trader()
 data = T.create_market_order_data("AMD", 5, "buy", "market", "day")
-T.place_order(data)
+#T.place_order(data)
 
 app = Flask(__name__)
 
+
+def ticker_dict(): # open symbols.csv, make matrix containing ticker, category
+  pass
 
 
 @app.route("/")
