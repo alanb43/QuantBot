@@ -31,3 +31,7 @@ class Stock:
   def __lt__(self, other_stock):
     ''' Overloaded less than operator, for alphabetical sorting of stocks based on symbol '''
     return self.symbol < other_stock.symbol
+
+  def __gt__(self, other_stock):
+
+    return abs(self.plpc) > abs(other_stock.plpc)
