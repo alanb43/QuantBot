@@ -2,3 +2,4 @@ config.py
 __pycache__/
 data_retriever_storage/news/*
 data_retriever_storage/prices/*
+data_retriever_storage/timeseries/*

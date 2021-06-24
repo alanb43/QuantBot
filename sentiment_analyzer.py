@@ -310,5 +310,5 @@ class SentimentAnalyzer:
     self.__read_in_freq_dict()
 
 SA = SentimentAnalyzer('TSLA')
-SA.put_all_tg()
-#SA.training_data_helper("https://www.marketwatch.com/story/suze-orman-says-bitcoin-is-a-place-to-put-some-money-and-just-leave-it-11623703566?mod=mw_quote_news", "negative")
+#SA.put_all_tg()
+SA.training_data_helper("https://www.marketwatch.com/story/suze-orman-says-bitcoin-is-a-place-to-put-some-money-and-just-leave-it-11623703566?mod=mw_quote_news", "negative")
