@@ -237,10 +237,11 @@ class DataRetriever:
         file1.write(line)
     file1.close()
     file1 = open(path + output, 'r')
-    remove = [input]
+    remove = []
     if len(file1.readlines()) < 7:
       remove.append(output)
     file1.close()
+
 
   ''' 3. Functions the Bot should use / access'''
   
