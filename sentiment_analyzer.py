@@ -209,8 +209,9 @@ class SentimentAnalyzer:
     
     print("The article: '" + article_name + "' has led QuantBot to " + action + " " + str(quantity) + " shares of " + self.__ticker + ".\n")
 
-# write buy/sell decisions to a text file that the webpage_refresher pulls from to for loop
-  def __update_freq_dict(self, freq_dist, freq_dict, category = [], filepath = ""): # will need to be updated to use bayes, decide which of 3 types article belongs under
+  # write buy/sell decisions to a text file that the webpage_refresher pulls from to for loop
+  # will need to be updated to use bayes, decide which of 3 types article belongs under
+  def __update_freq_dict(self, freq_dist, freq_dict, category = [], filepath = ""): 
     for key in freq_dist:
       freq = freq_dist.get(key)
       if key in freq_dict.keys():

@@ -68,7 +68,7 @@ class SentimentAnalyzer:
               that determined to be low-value + frequent (see __init__)
     EFFECTS:  returns list of cleaned / 'noise-less' tokens
     '''
-    punctuation = '''#@,();:?/’|.\^$”“''' # punctuation we choose to omit
+    punctuation = '''#@,();:?/’|.\^=$”“''' # punctuation we choose to omit
     cleaned_tokens_list = []
     for token in tokens_list:
       if '$' in token or token.isdigit() or token[0] == '-' or token[0] == '—':
@@ -82,22 +82,14 @@ class SentimentAnalyzer:
       for ch in token:
         if ch in punctuation:
           token = token.replace(ch, "")
-      if token.isdigit():
+      if token.isdigit() or len(token) > 12:
         continue
-      if token not in self.__words_to_ditch:
+      if 'https' in token:
+        continue 
+      if token not in self.__words_to_skip:
         cleaned_tokens_list.append(token)
     
     return cleaned_tokens_list
-
-  
-  def get_all_words(self, cleaned_tokens_list):
-    ''' 
-    REQUIRES: list containing tokens that already have noised removed from them
-    EFFECTS:  yields each token 
-    '''
-    for tokens in cleaned_tokens_list:
-      for token in tokens:
-        yield token
 
 
   def __read_in_freq_dict(self, ticker):
@@ -174,7 +166,7 @@ class SentimentAnalyzer:
     print("The article: '" + article_name + "' has led QuantBot to " + action + " " + str(quantity) + " shares of " + ticker + ".\n")
   
 
-  def __update_freq_dict(self, freq_dist, freq_dict, category = [], filepath = ""):
+  def __update_freq_dict(self, ticker, freq_dist, freq_dict, category = [], filepath = ""):
     for key in freq_dist:
       freq = freq_dist.get(key)
       if key in freq_dict.keys():
@@ -182,26 +174,25 @@ class SentimentAnalyzer:
       else:
         freq_dict[key] = 1
     if filepath != "":
-      self.buy_sell_decider(filepath, category)
+      self.buy_sell_decider(ticker, filepath, category)
   
 
   def model_trainer(self, ticker, type, url):
-    self.__read_in_freq_dict()
+    self.__read_in_freq_dict(ticker)
     path = f"data_retriever_storage/news/sentiment_data/"
     DR = DataRetriever()
     DR.training_data_scraper(url, ticker, path)
     tokens_list = self.__tokenize(path + f"{ticker}_train_out.txt")
-    cleaned_tokens_list, mentions = self.__remove_noise(tokens_list)
-    all_words = self.get_all_words(cleaned_tokens_list)
-    freq_dist = FreqDist(all_words)
+    cleaned_tokens_list = self.__remove_noise(tokens_list)
+    freq_dist = FreqDist(cleaned_tokens_list)
     self.num_articles += 1
     if type == "positive":
-      self.__update_freq_dict(freq_dist, self.pos_dict)
+      self.__update_freq_dict(ticker, freq_dist, self.pos_dict)
       self.pos_articles += 1 
     elif type == "negative":
-      self.__update_freq_dict(freq_dist, self.neg_dict)
+      self.__update_freq_dict(ticker, freq_dist, self.neg_dict)
       self.neg_articles += 1
-    self.__write_to_freq_dict()
+    self.__write_to_freq_dict(ticker)
     if os.path.exists(path + f"{ticker}_train_out.txt"):
       os.remove(path + f"{ticker}_train_out.txt")
       os.remove(path + f"{ticker}_train.txt")
@@ -233,9 +224,9 @@ class SentimentAnalyzer:
       log_likelihood = 0
       for word in words:
         for y in range(len(dictionaries)):
-          if dictionaries[y][word]:
+          if dictionaries[y].get(word):
             log_likelihood += np.log(dictionaries[y][word] / articles[y])
-          elif master[word]:
+          elif master.get(word):
             log_likelihood += np.log(master[word] / self.num_articles)
           else:
             log_likelihood += np.log(1 / self.num_articles)
@@ -248,24 +239,24 @@ class SentimentAnalyzer:
 
 
   def analyze(self, ticker):
-    self.__read_in_freq_dict()
-    num, article_files = self.__articles_and_count(ticker)
+    self.__read_in_freq_dict(ticker)
+    article_files, num = self.__articles_and_count(ticker)
     self.num_articles += int(num)
     for file_name in article_files:
       file_path = f"data_retriever_storage/news/news_article_contents/{ticker}/{file_name}"
       tokens_list = self.__tokenize(file_path)
       cleaned_tokens_list = self.__remove_noise(tokens_list)
-      all_words = self.get_all_words(cleaned_tokens_list)
-      freq_dist = FreqDist(all_words) # maps word to freq
-      category = self.bayes_calculation(all_words)
+      #all_words = self.get_all_words(cleaned_tokens_list)
+      freq_dist = FreqDist(cleaned_tokens_list) # maps word to freq
+      category = self.bayes_calculation(cleaned_tokens_list)
       if category[0] == "Positive": 
-        self.__update_freq_dict(freq_dist, self.pos_dict, category, file_path)
+        self.__update_freq_dict(ticker, freq_dist, self.pos_dict, category, file_path)
         self.pos_articles += 1
       else: 
-        self.__update_freq_dict(freq_dist, self.neg_dict, category, file_path)
+        self.__update_freq_dict(ticker, freq_dist, self.neg_dict, category, file_path)
         self.neg_articles += 1
     
-    self.__write_to_freq_dict()
+    self.__write_to_freq_dict(ticker)
 
 
     '''
@@ -274,9 +265,9 @@ class SentimentAnalyzer:
     '''
 
 
-# SA = SentimentAnalyzer()
-# SA.analyze('TSLA')
-# SA.model_trainer('TSLA', 'negative' 'https://www.marketwatch.com/story/suze-orman-says-bitcoin-is-a-place-to-put-some-money-and-just-leave-it-11623703566?mod=mw_quote_news')
+SA = SentimentAnalyzer()
+SA.analyze('TSLA')
+#SA.model_trainer('TSLA', 'positive', 'https://www.marketwatch.com/articles/elon-musk-is-buying-even-more-tesla-stock-1539785532?mod=mw_quote_news')
     
 # analyze returns [Strong sell, light sell, nothing, light buy, Strong buy]
 # Strong sell dumps 75% - 100% depending time series
