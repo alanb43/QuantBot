@@ -6,66 +6,30 @@ from data_retriever import DataRetriever
 import numpy as np
 import operator
 
-def create_soup(self, url):
-  '''
-  REQUIRES: url formatted as string of website to scrape
-  EFFECTS: returns BeautifulSoup object of sites html contents
-  '''
-  response = requests.get(url)
-  return BeautifulSoup(response.text, 'html.parser')
-
 class SentimentAnalyzer:
-  '''
-  Class should support
-    tokenizing
-    removing noise
-    determining density
-    the actual model
-    testing the model
-  
-    RIGHT NOW WE INITIALIZE:
-      initialize with a ticker
-      we tokenize from a file,
-      and remove the noise from the tokens.
 
-      need to build dataset and find prices after articles come out
-      to determine positive / negative effects of article sentiments / words
-  '''
   def __init__(self) -> None:
-    self.__tickers = tickers_list
-    self.__path = f'data_retriever_storage/news/news_article_contents/{ticker}/'
-    self.__words_to_ditch = [
+    # Initialize counters for number of (pos & neg & overall) articles, dictionaries 
+    self.num_articles = 0
+    self.pos_dict = {}
+    self.pos_articles = 0
+    self.neg_dict = {}
+    self.neg_articles = 0
+    # Words determined to appear in high frequency with low value through training
+    self.__words_to_skip = [
       'the', 'that', 'to', 'for', 'on', 'and', 'of', 'a', 'in', 'is', 'it', 'its', 'be', 'are',
       'has', 'than', 'by', 'man', 'he', 'she', 'from', 'an', 'with', 'about'
     ]
-    self.__tickers = {
-      'AAPL' : ['aapl', 'apple', 'tim', 'cook', 'iphone'], 
-      'AMZN' : ['amzn', 'amazon', 'jeff', 'bezos', 'delivery', 'space'], 
-      'TSLA' : ['tsla', 'elon', 'tesla', 'roadster', 'musk', 'meme', 'doge', 'electric', 'model']
-    }
-    self.pos_dict = {}
-    self.neg_dict = {}
-    self.num_articles = 0
-    self.pos_articles = 0
-    self.neg_articles = 0
 
 
-  def __number_of_articles(self): 
+  def __articles_and_count(self, ticker):
     '''
-    EFFECTS: returns the number of articles for the ticker the class object is 
-             instantiated with, as well as a list of the filenames
+    EFFECTS: returns a list of the article filenames for the given ticker
+             and the number of articles.
     '''
-    list = os.listdir(self.__path)
-    return (len(list), list)
-
-
-  def update_tickers(self, common_phrases):
-    '''
-    REQUIRES: str (ALL CAPS) representing ticker, list of strings (all lowercase) 
-              representing phrases
-    EFFECTS:  updates tickers dictionary
-    '''
-    self.__tickers[self.__ticker] += common_phrases
+    path = f'data_retriever_storage/news/news_article_contents/{ticker}/'
+    article_list = os.listdir(path)
+    return (article_list, len(article_list))
 
 
   def update_words_to_ditch(self, words_to_ditch):
@@ -79,7 +43,7 @@ class SentimentAnalyzer:
 
   def __tokenize(self, path):
     '''
-    REQUIRES: str representing valid path (filename included!) to article data file,
+    REQUIRES: str representing valid path (filename included!) to article data file
     EFFECTS:  creates, populates, and returns list of words from the file (unrefined)
     '''
     file = open(path, 'r')
@@ -91,54 +55,45 @@ class SentimentAnalyzer:
       if keep_skipping or len(line.split()) == 0:
         continue
       tokens = list(line.split())
-      tokens_list.append(tokens)
+      tokens_list += tokens
+    
     return tokens_list
 
-
+  
   def __remove_noise(self, tokens_list):
     '''
-    REQUIRES: list representing unrefined words from article, string (ALL CAPS) 
-              representing ticker
-    MODIFIES: tokenizes the data. removes punctuation, makes all words lowercase,
-              maintains percentages, removes numbers if not part of a percentage,
-              removes words that don't add anything (determined these words by 
-              analyzing AAPL, AMZN, and TSLA articles for words excessively used)
-    EFFECTS:  returns tuple containing tokenized words and the number of mentions
-              of the desired ticker
+    REQUIRES: list representing unrefined words from article
+    MODIFIES: removes noise from the tokens: removes punctuation, lowercase applied
+              to all words, removes numbers (only maintains percentages), removes words
+              that determined to be low-value + frequent (see __init__)
+    EFFECTS:  returns list of cleaned / 'noise-less' tokens
     '''
-    punctuation = '''#@,();:?/’|.\^$”“'''
-    mentions = 0
+    punctuation = '''#@,();:?/’|.\^=$”“''' # punctuation we choose to omit
     cleaned_tokens_list = []
-    for tokens in tokens_list:
-      cleaned_tokens = []
-      for token in tokens:
-        if '$' in token or token.isdigit() or token[0] == '-' or token[0] == '—':
-          continue
-        if '%' not in token: # if it's not a percentage
-          token = token.lower()
-          if "’s" in token:
-            token = token.replace("’s", "")
-          elif "'s" in token:
-            token = token.replace("'s", "")
-        for ch in token:
-          if ch in punctuation:
-            token = token.replace(ch, "")
-        if token.isdigit():
-          continue
-        if token in self.__tickers[self.__ticker]:
-          mentions += 1
-        if token not in self.__words_to_ditch:
-          cleaned_tokens.append(token)
-      cleaned_tokens_list.append(cleaned_tokens)
-    return (cleaned_tokens_list, mentions)
+    for token in tokens_list:
+      if '$' in token or token.isdigit() or token[0] == '-' or token[0] == '—':
+        continue
+      if '%' not in token: # if it's not a percentage
+        token = token.lower()
+        if "’s" in token:
+          token = token.replace("’s", "")
+        elif "'s" in token:
+          token = token.replace("'s", "")
+      for ch in token:
+        if ch in punctuation:
+          token = token.replace(ch, "")
+      if token.isdigit() or len(token) > 12:
+        continue
+      if 'https' in token:
+        continue 
+      if token not in self.__words_to_skip:
+        cleaned_tokens_list.append(token)
+    
+    return cleaned_tokens_list
 
-  def get_all_words(self, cleaned_tokens_list):
-    for tokens in cleaned_tokens_list:
-      for token in tokens:
-        yield token
 
-  def __read_in_freq_dict(self):
-    path = f"data_retriever_storage/news/sentiment_data/{self.__ticker}_sentiment_data.txt"
+  def __read_in_freq_dict(self, ticker):
+    path = f"data_retriever_storage/news/sentiment_data/{ticker}_sentiment_data.txt"
     if not os.path.exists(path):
       return
     with open(path, 'r') as f:
@@ -151,7 +106,7 @@ class SentimentAnalyzer:
       tracker = 0
       for line in lines[1:]:
         if line == "\n":
-          tracker += 1
+          tracker += 1 # file has positive / negative data separated by blank lines
         line_split = line.split()
         if len(line_split) < 2:
           if len(line_split) == 1 and line_split[0].isdigit():
@@ -163,8 +118,8 @@ class SentimentAnalyzer:
       self.neg_articles = article_nums[1]
     
 
-  def __write_to_freq_dict(self):
-    path = f"data_retriever_storage/news/sentiment_data/{self.__ticker}_sentiment_data.txt"
+  def __write_to_freq_dict(self, ticker):
+    path = f"data_retriever_storage/news/sentiment_data/{ticker}_sentiment_data.txt"
     f = open(path, 'w')
     f.write(str(self.num_articles) + "\n")
     f.write("Positive\n")
@@ -179,7 +134,8 @@ class SentimentAnalyzer:
       line = key + " " + str(self.neg_dict[key]) + "\n"
       f.write(line)
 
-  def buy_sell_decider(self, filepath, category):
+
+  def buy_sell_decider(self, ticker, filepath, category):
     if category[0] == "Positive":
       action = "Buy"
     elif category[0] == "Negative":
@@ -200,18 +156,17 @@ class SentimentAnalyzer:
     
     DR = DataRetriever()
     with open('./models/decisions.txt', 'a') as f_out:
-      f_out.write(self.__ticker + "\n")
+      f_out.write(ticker + "\n")
       f_out.write(action + "\n")
       f_out.write(str(quantity) + "\n")
       f_out.write(article_name)
       f_out.write(url)
       f_out.write(DR.get_article_intro(filepath) + "\n")
     
-    print("The article: '" + article_name + "' has led QuantBot to " + action + " " + str(quantity) + " shares of " + self.__ticker + ".\n")
+    print("The article: '" + article_name + "' has led QuantBot to " + action + " " + str(quantity) + " shares of " + ticker + ".\n")
+  
 
-  # write buy/sell decisions to a text file that the webpage_refresher pulls from to for loop
-  # will need to be updated to use bayes, decide which of 3 types article belongs under
-  def __update_freq_dict(self, freq_dist, freq_dict, category = [], filepath = ""): 
+  def __update_freq_dict(self, ticker, freq_dist, freq_dict, category = [], filepath = ""):
     for key in freq_dist:
       freq = freq_dist.get(key)
       if key in freq_dict.keys():
@@ -219,28 +174,29 @@ class SentimentAnalyzer:
       else:
         freq_dict[key] = 1
     if filepath != "":
-      self.buy_sell_decider(filepath, category)
+      self.buy_sell_decider(ticker, filepath, category)
+  
 
-  def training_data_helper(self, url, type):
-    self.__read_in_freq_dict()
+  def model_trainer(self, ticker, type, url):
+    self.__read_in_freq_dict(ticker)
     path = f"data_retriever_storage/news/sentiment_data/"
     DR = DataRetriever()
-    DR.training_data_scraper(url, self.__ticker, path)
-    tokens_list = self.__tokenize(path + f"{self.__ticker}_train_out.txt")
-    cleaned_tokens_list, mentions = self.__remove_noise(tokens_list)
-    all_words = self.get_all_words(cleaned_tokens_list)
-    freq_dist = FreqDist(all_words)
+    DR.training_data_scraper(url, ticker, path)
+    tokens_list = self.__tokenize(path + f"{ticker}_train_out.txt")
+    cleaned_tokens_list = self.__remove_noise(tokens_list)
+    freq_dist = FreqDist(cleaned_tokens_list)
     self.num_articles += 1
     if type == "positive":
-      self.__update_freq_dict(freq_dist, self.pos_dict)
+      self.__update_freq_dict(ticker, freq_dist, self.pos_dict)
       self.pos_articles += 1 
     elif type == "negative":
-      self.__update_freq_dict(freq_dist, self.neg_dict)
+      self.__update_freq_dict(ticker, freq_dist, self.neg_dict)
       self.neg_articles += 1
-    self.__write_to_freq_dict()
-    if os.path.exists(path + f"{self.__ticker}_train_out.txt"):
-      os.remove(path + f"{self.__ticker}_train_out.txt")
-      os.remove(path + f"{self.__ticker}_train.txt")
+    self.__write_to_freq_dict(ticker)
+    if os.path.exists(path + f"{ticker}_train_out.txt"):
+      os.remove(path + f"{ticker}_train_out.txt")
+      os.remove(path + f"{ticker}_train.txt")
+
 
   def bayes_calculation(self, words):
     """
@@ -268,9 +224,9 @@ class SentimentAnalyzer:
       log_likelihood = 0
       for word in words:
         for y in range(len(dictionaries)):
-          if dictionaries[y][word]:
+          if dictionaries[y].get(word):
             log_likelihood += np.log(dictionaries[y][word] / articles[y])
-          elif master[word]:
+          elif master.get(word):
             log_likelihood += np.log(master[word] / self.num_articles)
           else:
             log_likelihood += np.log(1 / self.num_articles)
@@ -281,35 +237,38 @@ class SentimentAnalyzer:
     maxCat = max(log_probabilities.items(), key=operator.itemgetter(1))[0]
     return [maxCat, log_probabilities[maxCat]]
 
-  def put_all_tg(self):
-    # number of articles for a stock, file names for the article data
-    self.__read_in_freq_dict()
-    num, article_files = self.__number_of_articles()
+
+  def analyze(self, ticker):
+    self.__read_in_freq_dict(ticker)
+    article_files, num = self.__articles_and_count(ticker)
     self.num_articles += int(num)
-    print(article_files)
     for file_name in article_files:
-      print(file_name)
-      file_path = f"data_retriever_storage/news/news_article_contents/{self.__ticker}/{file_name}"
-      # tokenizes
+      file_path = f"data_retriever_storage/news/news_article_contents/{ticker}/{file_name}"
       tokens_list = self.__tokenize(file_path)
-      #removes noise 
-      cleaned_tokens_list, mentions = self.__remove_noise(tokens_list)
-      # gets all words in the generator object
-      all_words = self.get_all_words(cleaned_tokens_list)
-      # maps word to freq
-      freq_dist = FreqDist(all_words)
-      category = self.bayes_calculation(all_words)
+      cleaned_tokens_list = self.__remove_noise(tokens_list)
+      #all_words = self.get_all_words(cleaned_tokens_list)
+      freq_dist = FreqDist(cleaned_tokens_list) # maps word to freq
+      category = self.bayes_calculation(cleaned_tokens_list)
       if category[0] == "Positive": 
-        self.__update_freq_dict(freq_dist, self.pos_dict, category, file_path)
+        self.__update_freq_dict(ticker, freq_dist, self.pos_dict, category, file_path)
         self.pos_articles += 1
       else: 
-        self.__update_freq_dict(freq_dist, self.neg_dict, category, file_path)
+        self.__update_freq_dict(ticker, freq_dist, self.neg_dict, category, file_path)
         self.neg_articles += 1
-    self.__write_to_freq_dict()
-  
-  def testing_dicts(self):
-    self.__read_in_freq_dict()
+    
+    self.__write_to_freq_dict(ticker)
 
-SA = SentimentAnalyzer('TSLA')
-#SA.put_all_tg()
-SA.training_data_helper("https://www.marketwatch.com/story/suze-orman-says-bitcoin-is-a-place-to-put-some-money-and-just-leave-it-11623703566?mod=mw_quote_news", "negative")
+
+    '''
+    def testing_dicts(self):
+      self.__read_in_freq_dict()
+    '''
+
+
+SA = SentimentAnalyzer()
+SA.analyze('TSLA')
+#SA.model_trainer('TSLA', 'positive', 'https://www.marketwatch.com/articles/elon-musk-is-buying-even-more-tesla-stock-1539785532?mod=mw_quote_news')
+    
+# analyze returns [Strong sell, light sell, nothing, light buy, Strong buy]
+# Strong sell dumps 75% - 100% depending time series
+# 
