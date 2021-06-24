@@ -16,6 +16,7 @@ class Stock:
     self.pl = stock_info[8]
     self.plpc = stock_info[9]
     self.cost = stock_info[10]
+    self.abs_intraday_plpc = abs(self.intraday_plpc)
 
 
   def __str__(self):

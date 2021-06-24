@@ -31,8 +31,8 @@ class SentimentAnalyzer:
       need to build dataset and find prices after articles come out
       to determine positive / negative effects of article sentiments / words
   '''
-  def __init__(self, ticker) -> None:
-    self.__ticker = ticker
+  def __init__(self) -> None:
+    self.__tickers = tickers_list
     self.__path = f'data_retriever_storage/news/news_article_contents/{ticker}/'
     self.__words_to_ditch = [
       'the', 'that', 'to', 'for', 'on', 'and', 'of', 'a', 'in', 'is', 'it', 'its', 'be', 'are',
@@ -48,7 +48,7 @@ class SentimentAnalyzer:
     self.num_articles = 0
     self.pos_articles = 0
     self.neg_articles = 0
-    self.neutral_articles = 0
+
 
   def __number_of_articles(self): 
     '''

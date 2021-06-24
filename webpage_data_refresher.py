@@ -3,7 +3,6 @@ import plotly.graph_objects as go
 from models import webpage
 from datetime import datetime
 import os
-import operator
 
 class WebpageDataRefresher(AccountDataRetriever):
   '''
@@ -114,17 +113,9 @@ class WebpageDataRefresher(AccountDataRetriever):
     os.remove('./templates/graph.html')
     return graph_div
   
-  def sorted_plpc(self):
-    listPENIS = self.positions
-    listPENIS.sort(key=operator.attrgetter('intraday_plpc'), reverse=True)
-    listPENIS = [ele for ele in reversed(listPENIS)]
-    for penis in listPENIS:
-      print(penis)
-
 
   def create_site_html(self) -> str:
     ''' Puts together everything else to generate webpage '''
-    self.sorted_plpc()
     with open("templates/index.html", "w") as html_file:
       html_file.write(webpage.DOCTYPE)
       html_file.write(webpage.HEAD)
