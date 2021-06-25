@@ -27,7 +27,6 @@ def index():
   WDR.create_site_html()
   stocks = WDR.positions
   sorted_by_plpc = WDR.plpc_sorted_holdings
-  print(ticker_dict())
   return render_template('index.html', stocks=stocks, plpc_sorted=sorted_by_plpc)
 
 
