@@ -34,12 +34,14 @@ for row in rows:
   symbols.append(symbol)
   stock_ids[symbol] = row['id']
 
+START_YEAR = "2021-01-01"
+
 yesterday = date.today() - timedelta(1)
 day_before_yesterday = yesterday - timedelta(1)
 
 for symbol in symbols:
   stock_id = stock_ids[symbol]
-  barsets = ADR.api.get_bars(symbols[0], start=day_before_yesterday, end=yesterday, timeframe=TimeFrame.Day)
+  barsets = ADR.api.get_bars(symbol, start=day_before_yesterday, end=yesterday, timeframe=TimeFrame.Day)
   for bar in barsets:
     open = bar.o
     close = bar.c
