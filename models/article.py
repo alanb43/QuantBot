@@ -1,4 +1,4 @@
-class NewsArticle:
+class Article:
   '''
   NEWS ARTICLE MODEL
   '''

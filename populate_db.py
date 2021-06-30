@@ -1,5 +1,6 @@
 import sqlite3
 from account_data_retriever import AccountDataRetriever
+from data_retriever import DataRetriever
 from enum import Enum
 from datetime import date, timedelta
 
