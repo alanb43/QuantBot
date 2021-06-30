@@ -1,11 +1,10 @@
-from models.news_article import NewsArticle
 import urllib.request
 import time
 from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 import os
-from models.news_article import NewsArticle
+from models.article import Article
 
 class DataRetriever:
   '''
@@ -104,7 +103,7 @@ class DataRetriever:
             break
           article_content += word + " "
     
-    article = NewsArticle(title, url, article_content)
+    article = Article(title, url, article_content)
     return article
 
 
