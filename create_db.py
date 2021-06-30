@@ -54,7 +54,7 @@ cursor.execute("""
         stock_id INTEGER,
         title NOT NULL,
         date_retrieved NOT NULL,
-        url NOT NULL,
+        url UNIQUE NOT NULL,
         analyzed BIT NOT NULL,
         article_content NOT NULL,
         FOREIGN KEY (stock_id) REFERENCES stock (id)

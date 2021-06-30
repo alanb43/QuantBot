@@ -21,7 +21,7 @@ for stock in ADR.positions:
   except:
     print(f"{stock.symbol} was already in the database")
 
-connection.commit
+connection.commit()
 
 cursor.execute("""SELECT id, symbol FROM stock""")
 rows = cursor.fetchall()
@@ -34,7 +34,8 @@ for row in rows:
 
 START_YEAR = "2021-01-01"
 
-yesterday = date.today() - timedelta(1)
+today = date.today()
+yesterday = today - timedelta(1)
 day_before_yesterday = yesterday - timedelta(1)
 
 for symbol in symbols:
@@ -51,6 +52,13 @@ for symbol in symbols:
       INSERT INTO stock_price (stock_id, date, open, high, low, close, volume) VALUES 
       (?, ?, ?, ?, ?, ?, ?)""", 
       (stock_id, date_, open, high, low, close, vol)
+    )
+  articles = DR.get_stock_news(symbol)
+  for article in articles:
+    cursor.execute("""
+    INSERT INTO stock_news (stock_id, title, date_retrieved, url, analyzed, article_content) VALUES
+    (?, ?, ?, ?, ?, ?)""",
+    (stock_id, article.title, today, article.url, 0, article.contents)
     )
 
 connection.commit()
