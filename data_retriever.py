@@ -1,9 +1,11 @@
+from models.news_article import NewsArticle
 import urllib.request
 import time
 from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
-import os, shutil
+import os
+from models.news_article import NewsArticle
 
 class DataRetriever:
   '''
@@ -30,16 +32,6 @@ class DataRetriever:
 
   ''' 1. Simple Helper Functions '''
 
-  def __remove_files(self, file_list, path = './') -> None:
-    '''
-    REQUIRES: list of filenames to remove, the directory where they're stored
-    EFFECTS: removes the files from the directory if they exist
-    '''
-    for file in file_list:
-      if os.path.exists(path + file):
-        os.remove(path + file)
-
-
   def __create_soup(self, url):
     '''
     REQUIRES: url formatted as string of website to scrape
@@ -48,62 +40,8 @@ class DataRetriever:
     response = requests.get(url)
     return BeautifulSoup(response.text, 'html.parser')
 
-  
-  def __remove_duplicate_lines(self, input, output, path):
-    '''
-    REQUIRES: input file name and output file name to read / write 
-              from, path at which they're located   
-    EFFECTS: writes a single copy of each line to output file
-    '''
-    lines_seen = set()
-    line_num = 1
-    file_in = open(path + input, 'r')
-    file_out = open(path + output, 'a')
-    for line in file_in:
-      # (MW specific) skip past first 9 links because they're not related
-      if line not in lines_seen and line_num > 9:
-        file_out.write(line)
-        lines_seen.add(line)
-      line_num += 1
-
-    file_out.close()
 
   ''' 2. Scraping/Implementation Helpers'''
-
-  def __get_timestamp(self, news_soup):
-    dt = str(news_soup.find('time', class_='timestamp timestamp--pub'))
-    dt = dt[dt.find(": ") + 2: dt.find(" at")]
-    dt = dt[dt.index(' ') + 1: dt.index(',')] + ' ' + dt[:dt.index(' ')] + ',' + dt[dt.rindex(' '):]
-    d8time = datetime.strptime(dt, "%d %B, %Y")
-    return d8time
-    
-
-  def __compare_timestamp(self, ticker, timestamp) -> bool:
-    path = f"./data_retriever_storage/news/sentiment_data/{ticker}_sentiment_data.txt"
-    sentiment_data = open(path, 'r')
-    sentiment_data.readline()
-    latest_timestamp = sentiment_data.readline()
-    if timestamp > latest_timestamp:
-      return True
-    return False
-
-  def __compare_links(self, soup, path, files):
-    a_tags = []
-    duplicate_links = []
-    for a_tag in soup.findAll('a'):
-      a_tags.append(str(a_tag))
-    for tag in a_tags:
-      if tag.find('href') != -1:
-        link_start = tag.find('href') + 6
-        link_end = tag.find('>', link_start)
-        link = tag[link_start: link_end - 1]
-        if link[:34] == self.STORY or link[:37] == self.ARTICLE:
-          for old_link in open(path + files[2], 'r'):
-            if link == old_link[:-1]:
-              duplicate_links.append(link)
-    
-    return duplicate_links
-
 
   def __scrape_news_links(self, ticker):
     '''
@@ -120,6 +58,7 @@ class DataRetriever:
       a_tag_list.append(str(a_tag))
 
     link_set = set()
+    unrelated_links = 0
     # Many of the <a> elements have unwanted info or nested elements 
     for tag in a_tag_list:
       # find link, check if it's to news story, add it to temp_links if so
@@ -128,12 +67,14 @@ class DataRetriever:
         link_end = tag.find('>', link_start)
         link = tag[link_start: link_end - 1]
         if link[:34] == self.STORY or link[:37] == self.ARTICLE:
-          link_set.add(link)
-
+          unrelated_links += 1
+          if unrelated_links > 10:
+            link_set.add(link)
+    # print(link_set)
     return link_set
 
 
-  def __scrape_news_data(self, url, article_num, ticker):
+  def __scrape_news_data(self, url):
     '''
     REQUIRES: string of article link, int number associated with output
               file name, string ticker representing associated stock
@@ -143,66 +84,42 @@ class DataRetriever:
               that we want, storing it in a file at the path.
     '''
     soup = self.__create_soup(url)
-    pathname = f'./data_retriever_storage/news/news_article_contents/{ticker}/'
-    if not os.path.exists(pathname):
-      os.mkdir(pathname)
-    input = url[37:url.rfind('-')]
-    file = open(pathname + input, 'w')
-    file.write(soup.get_text())
-    output = ticker + str(article_num) + '.txt'
-    file.close()
-    file = open(pathname + input, 'r')
-    file1 = open(pathname + output, 'w')
-    line_num, advertisement_count = 0, 0
+    article_html_contents = soup.get_text()
+    advertisement_count = 0
     title_tag = str(soup.find("title"))
     title = title_tag[title_tag.index(">") + 1 : title_tag.rindex("-")]
-    file1.write(title + '\n')
-    file1.write(url)
-    for line in file:
-      line_num += 1
-      if line == 'Advertisement\n':
+    article_content = ""
+    beginning_junk = True
+    words_that_end = ["Editor's", "Read", "Read:", "read:", "Write", "Email"]
+    for word in article_html_contents.split():
+      if word == 'Advertisement':
         advertisement_count += 1
         continue
-      if line != '\n' and advertisement_count == 4:
-        if line[:9] == 'Read Next':
-          break
-        file1.write(line)
-    file1.close()
-    file1 = open(pathname + output, 'r')
-    remove = [input]
-    if len(file1.readlines()) < 7:
-      remove.append(output)
-    file1.close()
-    self.__remove_files(remove, pathname)
+      if advertisement_count == 4:
+        if beginning_junk:
+          if (word.isalpha() and not word.isupper()):
+            beginning_junk = False
+        if not beginning_junk:
+          if word in words_that_end:
+            break
+          article_content += word + " "
+    
+    article = NewsArticle(title, url, article_content)
+    return article
+      
 
-
-  def get_article_intro(self, path):
+  def get_article_intro(self, article):
     '''
     REQUIRES: a valid path to a news article's contents
     EFFECTS:  returns a string of the first 45 relevant words in the article,
               as a brief intro to be used on the site
     '''
-    article_words = []
-    with open(path, 'r') as file:
-      file.readline()
-      line = file.readline()
-      while len(line.split()) < 3:
-        line = file.readline()
-      
-      article_words += line.split()
-      while len(article_words) < 40:
-        article_words += file.readline().split()
-
-      intro_string = ""
-      word_count = 0
-      for word in article_words:
-        if word_count == 45:
-          break
-        intro_string += word + " "
-        word_count += 1
-      
-      return intro_string
-      
+    intro = ""
+    for word in article.contents.split()[:40]:
+      intro += word + " "
+    
+    return intro
+    
 
   def training_data_scraper(self, url, ticker, path):
     soup = self.__create_soup(url)
@@ -270,16 +187,19 @@ class DataRetriever:
           updating of paths to reflect individual tickers for sorting and 
           storage simplicity.
     '''
-    self.__scrape_news_links(ticker)
-    path = f'./data_retriever_storage/news/news_links/mw_{ticker}_links.txt'
-    links_file = open(path, 'r')
-    link_number = 1
-    for link in links_file:
-      self.__scrape_news_data(link, link_number, ticker)
-      link_number += 1
+    links = self.__scrape_news_links(ticker)
+    news_articles = []
+    for link in links:
+      article = self.__scrape_news_data(link)
+      news_articles.append(article)
+    
+    return news_articles
 
 DR = DataRetriever()
-DR.get_stock_news("AAPL")
+articles = DR.get_stock_news("AAPL")
+for article in articles:
+  DR.get_article_intro(article)
+  print('\n')
 
 # from data_retriever import DataRetriever
 # DR = DataRetriever()

@@ -52,6 +52,7 @@ cursor.execute("""
     CREATE TABLE IF NOT EXISTS stock_news (
         id INTEGER PRIMARY KEY, 
         stock_id INTEGER,
+        title NOT NULL,
         date_retrieved NOT NULL,
         url NOT NULL,
         analyzed BIT NOT NULL,
