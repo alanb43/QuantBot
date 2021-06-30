@@ -115,35 +115,22 @@ class DataRetriever:
             containing links to all of the ticker's stories, returns its path.
     '''
     soup = self.__create_soup(f'https://www.marketwatch.com/investing/stock/{ticker}?mod=quote_search')
-    path = 'data_retriever_storage/news/news_links/'
-    files = ['mw_a_tags.txt', 'mw_unrefined_links.txt', f'mw_{ticker}_links.txt']
-    #links_to_ignore = self.__compare_links(soup, path, files)
-    self.__remove_files(files, path)
-    pathname = f'./data_retriever_storage/news/news_article_contents/{ticker}/'
-    if os.path.exists(pathname):
-      shutil.rmtree(pathname)
-    # Where we'll store the <a> html elements
-    all_a_tags = open(path + files[0], 'w')
+    a_tag_list = []
     for a_tag in soup.findAll('a'):
-      all_a_tags.write(str(a_tag))
+      a_tag_list.append(str(a_tag))
 
-    all_a_tags.close()
-    all_a_tags = open(path + files[0], 'r')
-    temp_links = open(path + files[1], 'w')
+    link_set = set()
     # Many of the <a> elements have unwanted info or nested elements 
-    for line in all_a_tags:
+    for tag in a_tag_list:
       # find link, check if it's to news story, add it to temp_links if so
-      if line.find('href') != -1:
-        link_start = line.find('href') + 6
-        link_end = line.find('>', link_start)
-        link = line[link_start: link_end - 1]
+      if tag.find('href') != -1:
+        link_start = tag.find('href') + 6
+        link_end = tag.find('>', link_start)
+        link = tag[link_start: link_end - 1]
         if link[:34] == self.STORY or link[:37] == self.ARTICLE:
-          temp_links.write(link + '\n')
+          link_set.add(link)
 
-    temp_links.close()
-    self.__remove_duplicate_lines(files[1], files[2], path)
-    files_to_remove = [files[0], files[1]]
-    self.__remove_files(files_to_remove, path)
+    return link_set
 
 
   def __scrape_news_data(self, url, article_num, ticker):
@@ -285,8 +272,6 @@ class DataRetriever:
     '''
     self.__scrape_news_links(ticker)
     path = f'./data_retriever_storage/news/news_links/mw_{ticker}_links.txt'
-    #sent_path = f'./data_retriever_storage/news/sentiment_data/{ticker}_sentiment_data.txt'
-      # need to create system where links are not reread from file
     links_file = open(path, 'r')
     link_number = 1
     for link in links_file:
