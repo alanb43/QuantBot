@@ -19,7 +19,7 @@ for stock in ADR.positions:
   try:
     cursor.execute("""INSERT INTO stock (symbol) VALUES (?)""", (stock.symbol,))
   except:
-    print(f"{stock.symbol} was already in the database")
+    pass
 
 connection.commit()
 
@@ -55,10 +55,12 @@ for symbol in symbols:
     )
   articles = DR.get_stock_news(symbol)
   for article in articles:
-    cursor.execute("""
-    INSERT INTO stock_news (stock_id, title, date_retrieved, url, analyzed, article_content) VALUES
-    (?, ?, ?, ?, ?, ?)""",
-    (stock_id, article.title, today, article.url, 0, article.contents)
-    )
-
-connection.commit()
+    try:
+      cursor.execute("""
+      INSERT INTO stock_news (stock_id, title, date_retrieved, url, analyzed, article_content) VALUES
+      (?, ?, ?, ?, ?, ?)""",
+      (stock_id, article.title, today, article.url, 0, article.contents)
+      )
+    except:
+      print("URL was in database: ", article.url)
+  connection.commit()
