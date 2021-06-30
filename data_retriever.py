@@ -106,20 +106,7 @@ class DataRetriever:
     
     article = NewsArticle(title, url, article_content)
     return article
-      
 
-  def get_article_intro(self, article):
-    '''
-    REQUIRES: a valid path to a news article's contents
-    EFFECTS:  returns a string of the first 45 relevant words in the article,
-              as a brief intro to be used on the site
-    '''
-    intro = ""
-    for word in article.contents.split()[:40]:
-      intro += word + " "
-    
-    return intro
-    
 
   def training_data_scraper(self, url, ticker, path):
     soup = self.__create_soup(url)
@@ -174,6 +161,17 @@ class DataRetriever:
     download_path = f'./{path}/{ticker}_prices.csv'
     urllib.request.urlretrieve(download_url, download_path)
 
+  def get_article_intro(self, article):
+    '''
+    REQUIRES: a valid path to a news article's contents
+    EFFECTS:  returns a string of the first 45 relevant words in the article,
+              as a brief intro to be used on the site
+    '''
+    intro = ""
+    for word in article.contents.split()[:40]:
+      intro += word + " "
+    
+    return intro
 
   def get_stock_news(self, ticker):
     '''
@@ -194,12 +192,6 @@ class DataRetriever:
       news_articles.append(article)
     
     return news_articles
-
-DR = DataRetriever()
-articles = DR.get_stock_news("AAPL")
-for article in articles:
-  DR.get_article_intro(article)
-  print('\n')
 
 # from data_retriever import DataRetriever
 # DR = DataRetriever()
