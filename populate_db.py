@@ -15,13 +15,13 @@ DR = DataRetriever()
 
 # For when new stocks need to be added to stock schema
 
-for stock in ADR.positions:
-  try:
-    cursor.execute("""INSERT INTO stock (symbol) VALUES (?)""", (stock.symbol,))
-  except:
-    pass
+# for stock in ADR.positions:
+#   try:
+#     cursor.execute("""INSERT INTO stock (symbol) VALUES (?)""", (stock.symbol,))
+#   except:
+#     pass
 
-connection.commit()
+# connection.commit()
 
 cursor.execute("""SELECT id, symbol FROM stock""")
 rows = cursor.fetchall()
@@ -38,28 +38,30 @@ today = date.today()
 yesterday = today - timedelta(1)
 day_before_yesterday = yesterday - timedelta(1)
 
+
+
 for symbol in symbols:
   stock_id = stock_ids[symbol]
-  barsets = API.get_bars(symbol, start=day_before_yesterday, end=yesterday, timeframe=TimeFrame.Day)
-  for bar in barsets:
-    open = bar.o
-    close = bar.c
-    high = bar.h
-    low = bar.l
-    vol = bar.v
-    date_ = bar.t.date()
-    cursor.execute("""
-      INSERT INTO stock_price (stock_id, date, open, high, low, close, volume) VALUES 
-      (?, ?, ?, ?, ?, ?, ?)""", 
-      (stock_id, date_, open, high, low, close, vol)
-    )
+  print(f"{symbol} data is being processed")
+  # barsets = API.get_bars(symbol, start=START_YEAR, end=yesterday, timeframe=TimeFrame.Day)
+  # for bar in barsets:
+  #   open = bar.o
+  #   close = bar.c
+  #   high = bar.h
+  #   low = bar.l
+  #   vol = bar.v
+  #   date_ = bar.t.date()
+  #   cursor.execute("""
+  #     INSERT INTO stock_price (stock_id, date, open, high, low, close, volume) VALUES 
+  #     (?, ?, ?, ?, ?, ?, ?)""", 
+  #     (stock_id, date_, open, high, low, close, vol)
+  #   )
   articles = DR.get_stock_news(symbol)
   for article in articles:
     try:
       cursor.execute("""
       INSERT INTO stock_news (stock_id, title, date_retrieved, url, analyzed, article_content) VALUES
-      (?, ?, ?, ?, ?, ?)""",
-      (stock_id, article.title, today, article.url, 0, article.contents)
+      (?, ?, ?, ?, ?, ?)""", (stock_id, article.title, today, article.url, 0, article.contents)
       )
     except:
       print("URL was in database: ", article.url)

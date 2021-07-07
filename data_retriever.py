@@ -69,7 +69,7 @@ class DataRetriever:
           unrelated_links += 1
           if unrelated_links > 10:
             link_set.add(link)
-    # print(link_set)
+    
     return link_set
 
 
@@ -102,6 +102,8 @@ class DataRetriever:
           if word in words_that_end:
             break
           article_content += word + " "
+          if "Community Guidelines" in article_content:
+            return
     
     article = Article(title, url, article_content)
     return article
