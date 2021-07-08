@@ -1,6 +1,8 @@
 # Constant queries, change them here and everywhere will be updated at once.
 
 # For updating database with new data
+INSERT_STOCK = """INSERT INTO stock (symbol, category) VALUES (?, ?)"""
+
 INSERT_STOCK_PRICE = """INSERT INTO stock_price (stock_id, date, open, high, low, close, volume) VALUES (?, ?, ?, ?, ?, ?, ?)"""
 
 INSERT_NEWS_ARTICLE = """INSERT INTO stock_news (stock_id, title, date_retrieved, url, analyzed, article_content) VALUES (?, ?, ?, ?, ?, ?)"""

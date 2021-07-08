@@ -17,6 +17,7 @@ for row in rows:
 DR = DataRetriever()
 
 for symbol in symbols:
+  print(f"{symbol}'s news articles are being processed.")
   stock_id = stock_ids[symbol]
   articles = DR.get_stock_news(symbol)
   for article in articles:
