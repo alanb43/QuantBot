@@ -1,5 +1,9 @@
 # Constant queries, change them here and everywhere will be updated at once.
 
+# For selecting data within database
+
+
+
 # For updating database with new data
 INSERT_STOCK = """INSERT INTO stock (symbol, category) VALUES (?, ?)"""
 
@@ -17,7 +21,7 @@ CREATE_NEWS_TABLE = """CREATE TABLE IF NOT EXISTS stock_news (id INTEGER PRIMARY
                        url UNIQUE NOT NULL, analyzed BIT NOT NULL, article_content NOT NULL, FOREIGN KEY (stock_id) REFERENCES stock (id))"""
 
 CREATE_SENTIMENT_TABLE = """CREATE TABLE IF NOT EXISTS sentiment_data (word PRIMARY KEY, category NOT NULL, sentiment NOT NULL,
-                            frequency INTEGER NOT NULL, stock_id INTEGER, FOREIGN KEY (stock_id) REFERENCES stock (id))"""
+                            frequency INTEGER NOT NULL, FOREIGN KEY (category) REFERENCES stock (category))"""
 
 CREATE_TIMESERIES_TABLE = """CREATE TABLE IF NOT EXISTS time_series_data (id INTEGER PRIMARY KEY, stock_id INTEGER, symbol TEXT, mape FLOAT NOT NULL,
                              one_week_fc FLOAT NOT NULL, one_month_fc FLOAT NOT NULL, one_week_actual FLOAT NOT NULL, one_month_actual FLOAT NOT NULL,
