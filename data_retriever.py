@@ -103,7 +103,7 @@ class DataRetriever:
             break
           article_content += word + " "
           if "Community Guidelines" in article_content:
-            return
+            return "BAD ARTICLE"
     
     article = Article(title, url, article_content)
     return article
@@ -190,7 +190,8 @@ class DataRetriever:
     news_articles = []
     for link in links:
       article = self.__scrape_news_data(link)
-      news_articles.append(article)
+      if article != "BAD ARTICLE":
+        news_articles.append(article)
     
     return news_articles
 
