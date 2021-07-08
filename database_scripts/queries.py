@@ -25,7 +25,11 @@ CREATE_TIMESERIES_TABLE = """CREATE TABLE IF NOT EXISTS time_series_data (id INT
 
 # For deleting database tables
 DROP_STOCK_TABLE = """DROP TABLE stock"""
+
 DROP_PRICE_TABLE = """DROP TABLE stock_price"""
+
 DROP_NEWS_TABLE = """DROP TABLE stock_news"""
+
 DROP_SENTIMENT_TABLE = """DROP TABLE sentiment_data"""
+
 DROP_TIMESERIES_TABLE = """DROP TABLE time_series_data"""
