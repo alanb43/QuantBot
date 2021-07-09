@@ -22,7 +22,7 @@ for symbol in symbols:
   articles = DR.get_stock_news(symbol)
   for article in articles:
     try:
-      CURSOR.execute(queries.INSERT_NEWS_ARTICLE, (stock_id, article.title, date.today(), article.url, 0, article.contents))
+      CURSOR.execute(queries.INSERT_NEWS_ARTICLE, (stock_id, article.title, date.today(), article.url, 0, None, article.contents))
     except:
       print(f"URL was in database: {article.url}")
   CONNECTION.commit()

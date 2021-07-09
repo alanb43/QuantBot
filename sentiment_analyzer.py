@@ -6,6 +6,8 @@ from data_retriever import DataRetriever
 import numpy as np
 import operator
 from app import ticker_dict
+from config import *
+import database_scripts.queries as queries
 
 class SentimentAnalyzer:
 
@@ -170,7 +172,7 @@ class SentimentAnalyzer:
     print("The article: '" + article_name + "' has led QuantBot to " + action + " " + str(quantity) + " shares of " + ticker + ".\n")
   
 
-  def __update_freq_dict(self, ticker, freq_dist, freq_dict, category = [], filepath = ""):
+  def __update_freq_dict(self, ticker, freq_dist, freq_dict, category = [], filepath = ""):    
     for key in freq_dist:
       freq = freq_dist.get(key)
       if key in freq_dict.keys():
@@ -202,7 +204,7 @@ class SentimentAnalyzer:
       os.remove(path + f"{ticker}_train.txt")
 
 
-  def bayes_calculation(self, words):
+  def bayes_calculation(self, words={}):
     """
     Things needed to complete:
       1. total number of articles in entire training set: self.num_articles
@@ -211,6 +213,16 @@ class SentimentAnalyzer:
       4. for each category, number of articles with that label: self.pos_articles...
       5. for each category and word, number of articles with that category that have that word: original dictionaries
     """
+    
+    dictionaries = [self.pos_dict, self.neg_dict]
+    for row in CURSOR.execute(queries.SELECT_SENTIMENT_WORD):
+      word = row[0]
+      category = row[1]
+      positive_freq = row[2]
+      negative_freq = row[3]
+      frequency = row[4]
+
+    
     dictionaries = [self.pos_dict, self.neg_dict]
     master = {}
     for dict in dictionaries:
@@ -224,9 +236,9 @@ class SentimentAnalyzer:
     log_priors = [self.pos_articles / self.num_articles, self.neg_articles / self.num_articles]
     articles = [self.pos_articles, self.neg_articles]
     cats = ["Positive", "Negative"]
-    for i in range(len(dictionaries)):
+    for i in range(len(dictionaries)): #positive, negative
       log_likelihood = 0
-      for word in words:
+      for word in words: #words in article
         for y in range(len(dictionaries)):
           if dictionaries[y].get(word):
             log_likelihood += np.log(dictionaries[y][word] / articles[y])
@@ -270,7 +282,7 @@ class SentimentAnalyzer:
 
 
 SA = SentimentAnalyzer()
-SA.analyze('AAPL')
+SA.analyze('TSLA')
 #SA.model_trainer('TSLA', 'positive', 'https://www.marketwatch.com/articles/elon-musk-is-buying-even-more-tesla-stock-1539785532?mod=mw_quote_news')
     
 # analyze returns [Strong sell, light sell, nothing, light buy, Strong buy]
