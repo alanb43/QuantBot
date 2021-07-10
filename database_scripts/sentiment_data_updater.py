@@ -4,6 +4,7 @@ from nltk import FreqDist
 import __init__
 import queries
 from config import *
+from data_retriever import DataRetriever
 import numpy as np
 
 words = ["joshua", "profit", "loss", "annarbor", "bartSimpson", "fartSimpson"]
@@ -22,6 +23,12 @@ words = ["joshua", "profit", "loss", "annarbor", "bartSimpson", "fartSimpson"]
 #   negative_freq
 #   frequency
 #   word
+
+
+# How sentiments should be formatted EVERY STEP OF THE WAY
+# Positive, Negative
+# Category Options
+# Semiconductors, Computer_Services, Production_Technology_Equipment, Software, Computer_Hardware
 
 
 # UPDATE READ_IN, WRITE ISNT NEEDED
@@ -55,7 +62,7 @@ class SentAnalyzer():
   def read_sentiment_data(self):
     self.pos = {}
     self.neg = {}
-    self.total_articles = CURSOR.execute(queries.SELECT_TOTAL_NUM_ARTICLES).fetchone()[0]
+    self.num_articles = CURSOR.execute(queries.SELECT_TOTAL_NUM_ARTICLES).fetchone()[0]
     self.pos_articles = CURSOR.execute(queries.SELECT_POS_NUM_ARTICLES).fetchone()[0]
     self.neg_articles = CURSOR.execute(queries.SELECT_NEG_NUM_ARTICLES).fetchone()[0]
 
@@ -106,7 +113,16 @@ class SentAnalyzer():
     return cleaned_tokens_list
 
 
-  def bayes_calculation(self, cleaned_tokens):
+  def create_master_dict(self):
+    master = {**self.pos, **self.neg}
+    for word in master.keys():
+      if word in self.pos and word in self.neg:
+        master[word] = self.pos[word] + self.neg[word]
+
+    return master
+
+
+  def bayes_calculation(self, cleaned_tokens, master):
     """
     Things needed to complete:
       1. total number of articles in entire training set: self.num_articles
@@ -116,30 +132,46 @@ class SentAnalyzer():
       5. for each category and word, number of articles with that category that have that word: original dictionaries
     """
     dictionaries = [self.pos, self.neg]
-    master = {**self.pos, **self.neg}
-    for word in master.keys():
-      if word in self.pos and word in self.neg:
-        master[word] = self.pos[word] + self.neg[word]
+    # log_probabilities = {}
+    # log_priors = [self.pos_articles / self.num_articles, self.neg_articles / self.num_articles]
+    # articles = [self.pos_articles, self.neg_articles]
+    # sentiments = ["Positive", "Negative"]
+    # log_likelihood = 0
+    # for word in cleaned_tokens:
+    #   for dict in dictionaries:
+    #     if dict.get(word):
+    #       log_likelihood += np.log(dict[word] / articles[dictionaries.index(dict)])
+    #     elif master.get(word):
+    #       log_likelihood += np.log(master[word] / self.num_articles)
+    #     else:
+    #       log_likelihood += np.log(1 / self.num_articles)
+    #     log_probability = np.log(log_priors[dictionaries.index(dict)])
+    #     log_probabilities[sentiments[dictionaries.index(dict)]] = log_probability
+
 
     log_probabilities = {}
     log_priors = [self.pos_articles / self.num_articles, self.neg_articles / self.num_articles]
+    print(log_priors)
     articles = [self.pos_articles, self.neg_articles]
-    sentiments = ["Positive", "Negative"]
-    # for dict in dictionaries: #positive, negative
-    #   log_likelihood = 0
-    #   for word in cleaned_tokens: #words in article
-    #     for y in range(len(dictionaries)):
-    #       if dictionaries[y].get(word):
-    #         log_likelihood += np.log(dictionaries[y][word] / articles[y])
-    #       elif master.get(word):
-    #         log_likelihood += np.log(master[word] / self.num_articles)
-    #       else:
-    #         log_likelihood += np.log(1 / self.num_articles)
-    #       y += 1
-    #   log_probability = np.log(log_priors[i]) + log_likelihood
-    #   log_probabilities[sentiments[i]] = log_probability
-    maxSentiment = max(log_probabilities.items(), key=operator.itemgetter(1))[0]
-    return [maxSentiment, log_probabilities[maxSentiment]]
+    cats = ["Positive", "Negative"]
+    for i in range(len(dictionaries)): #positive, negative
+      log_likelihood = 0
+      for word in cleaned_tokens: #words in article
+        print(word + " is being iterated.")
+        for y in range(len(dictionaries)):
+          if dictionaries[y].get(word):
+            log_likelihood += np.log(dictionaries[y][word] / articles[y])
+          elif master.get(word):
+            log_likelihood += np.log(master[word] / self.num_articles)
+          else:
+            log_likelihood += np.log(1 / self.num_articles)
+            #print("LogLikelihood: ", log_likelihood, '\n')
+      log_probability = np.log(log_priors[i]) + log_likelihood
+      print("Log probability for ", cats[i], " dictionary: ", log_probability)
+      log_probabilities[cats[i]] = log_probability
+
+    maxCat = max(log_probabilities.items(), key=operator.itemgetter(1))[0]
+    return [maxCat, log_probabilities[maxCat]]
 
 
   def update_database(self, freq_dist, category, sentiment):
@@ -168,18 +200,52 @@ class SentAnalyzer():
   def analyze(self):
     # Loop through un-analyzed articles in DB. Analyze them, return answer about sentiment WITH CORRESPONDING STOCK.
     self.read_sentiment_data()
+    print(self.pos_articles)
     CURSOR.execute(queries.SELECT_UNANALYZED_ARTICLES) # gets stock_id, article_content
     for row in CURSOR.fetchall():
       stock_id, article_content = row["stock_id"], row["article_content"]
       CURSOR.execute(queries.SELECT_STOCK_WITH_ID, (stock_id,))
-      stock_symbol = CURSOR.fetchone()["symbol"]
+      row = CURSOR.fetchone()
+      stock_symbol, stock_category = row["symbol"], row["category"] # (ex) semiconductors
       token_list = self.tokenize(article_content)
       cleaned_token_list = self.remove_noise(token_list)
       freq_dist = FreqDist(cleaned_token_list)
-      sentiment = self.bayes_calculation(cleaned_token_list)
+      master_dict = self.create_master_dict()
+      sentiment = self.bayes_calculation(cleaned_token_list, master_dict)
+      self.update_database(freq_dist, stock_category, sentiment)
+  
+
+  def model_trainer(self, stock_id, sentiment, category, url):
+    DR = DataRetriever()
+    article = DR.scrape_news_data(url) # returns Article object
+    tokens = self.tokenize(article.contents)
+    cleaned_tokens = self.remove_noise(tokens)
+    freq_dist = FreqDist(cleaned_tokens)
+    self.update_database(freq_dist, category, sentiment)
+    CURSOR.execute(queries.INSERT_NEWS_ARTICLE, (stock_id, article.title, article.date, url, 1, sentiment, article.contents))
+    CONNECTION.commit()
+    
+    # self.__read_in_freq_dict(ticker)
+    # path = f"data_retriever_storage/news/sentiment_data/"
+    # DR = DataRetriever()
+    # DR.training_data_scraper(url, ticker, path)
+    # tokens_list = self.__tokenize(path + f"{ticker}_train_out.txt")
+    # cleaned_tokens_list = self.__remove_noise(tokens_list)
+    # freq_dist = FreqDist(cleaned_tokens_list)
+    # self.num_articles += 1
+    # if type == "positive":
+    #   self.__update_freq_dict(ticker, freq_dist, self.pos_dict)
+    #   self.pos_articles += 1 
+    # elif type == "negative":
+    #   self.__update_freq_dict(ticker, freq_dist, self.neg_dict)
+    #   self.neg_articles += 1
+    # self.__write_to_freq_dict(ticker)
+    # if os.path.exists(path + f"{ticker}_train_out.txt"):
+    #   os.remove(path + f"{ticker}_train_out.txt")
+    #   os.remove(path + f"{ticker}_train.txt")
       
 
 SA = SentAnalyzer()
-SA.analyze()
+SA.model_trainer(41, "Negative", "Computer_Hardware", "https://www.marketwatch.com/story/china-is-cracking-down-on-its-own-tech-giants-but-apple-and-the-u-s-ipo-market-could-pay-the-price-11625765133?mod=mw_quote_news")
 
 

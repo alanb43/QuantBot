@@ -1,9 +1,8 @@
 import urllib.request
 import time
-from datetime import datetime
+from datetime import date
 import requests
 from bs4 import BeautifulSoup
-import os
 from models.article import Article
 
 class DataRetriever:
@@ -73,7 +72,7 @@ class DataRetriever:
     return link_set
 
 
-  def __scrape_news_data(self, url):
+  def scrape_news_data(self, url):
     '''
     REQUIRES: string of article link, int number associated with output
               file name, string ticker representing associated stock
@@ -105,7 +104,7 @@ class DataRetriever:
           if "Community Guidelines" in article_content:
             return "BAD ARTICLE"
     
-    article = Article(title, url, article_content)
+    article = Article(title, url, date.today(), article_content)
     return article
 
 
@@ -189,7 +188,7 @@ class DataRetriever:
     links = self.__scrape_news_links(ticker)
     news_articles = []
     for link in links:
-      article = self.__scrape_news_data(link)
+      article = self.scrape_news_data(link)
       if article != "BAD ARTICLE":
         news_articles.append(article)
     
