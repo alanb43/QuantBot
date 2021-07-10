@@ -101,9 +101,9 @@ class DataRetriever:
           if word in words_that_end:
             break
           article_content += word + " "
-          if "Community Guidelines" in article_content:
+          if "Community Guidelines" in article_content or "performs" in title:
             return "BAD ARTICLE"
-    
+
     article = Article(title, url, date.today(), article_content)
     return article
 

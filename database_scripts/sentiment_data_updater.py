@@ -224,28 +224,9 @@ class SentAnalyzer():
     self.update_database(freq_dist, category, sentiment)
     CURSOR.execute(queries.INSERT_NEWS_ARTICLE, (stock_id, article.title, article.date, url, 1, sentiment, article.contents))
     CONNECTION.commit()
-    
-    # self.__read_in_freq_dict(ticker)
-    # path = f"data_retriever_storage/news/sentiment_data/"
-    # DR = DataRetriever()
-    # DR.training_data_scraper(url, ticker, path)
-    # tokens_list = self.__tokenize(path + f"{ticker}_train_out.txt")
-    # cleaned_tokens_list = self.__remove_noise(tokens_list)
-    # freq_dist = FreqDist(cleaned_tokens_list)
-    # self.num_articles += 1
-    # if type == "positive":
-    #   self.__update_freq_dict(ticker, freq_dist, self.pos_dict)
-    #   self.pos_articles += 1 
-    # elif type == "negative":
-    #   self.__update_freq_dict(ticker, freq_dist, self.neg_dict)
-    #   self.neg_articles += 1
-    # self.__write_to_freq_dict(ticker)
-    # if os.path.exists(path + f"{ticker}_train_out.txt"):
-    #   os.remove(path + f"{ticker}_train_out.txt")
-    #   os.remove(path + f"{ticker}_train.txt")
-      
 
 SA = SentAnalyzer()
-SA.model_trainer(41, "Negative", "Computer_Hardware", "https://www.marketwatch.com/story/china-is-cracking-down-on-its-own-tech-giants-but-apple-and-the-u-s-ipo-market-could-pay-the-price-11625765133?mod=mw_quote_news")
+SA.model_trainer(23, "Negative", "Semiconductors", "https://www.marketwatch.com/story/another-intel-product-delay-drags-chip-stocks-dow-lower-11624987740?mod=mw_quote_news")
+SA.model_trainer(23, "Negative", "Semiconductors", "https://www.marketwatch.com/articles/intel-chips-semiconductors-notebook-sales-production-51624293623?mod=mw_quote_news_seemore")
 
 
