@@ -216,6 +216,11 @@ class SentAnalyzer():
   
 
   def model_trainer(self, stock_id, sentiment, category, url):
+    CURSOR.execute(queries.EXISTS_NEWS_WITH_URL, (url,))
+    url_in_db = CURSOR.fetchone()[0]
+    if url_in_db == 1:
+      print("Can't train with this, it's already in database.")
+      return
     DR = DataRetriever()
     article = DR.scrape_news_data(url) # returns Article object
     tokens = self.tokenize(article.contents)

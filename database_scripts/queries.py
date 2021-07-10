@@ -8,6 +8,10 @@ SELECT_ALL_SENTIMENT_DATA = """SELECT * FROM sentiment_data"""
 
 SELECT_WORD_SENTIMENT_DATUM = """SELECT * FROM sentiment_data WHERE word = ?"""
 
+SELECT_NEWS_WITH_URL = """SELECT * FROM stock_news WHERE url = ?"""
+
+EXISTS_NEWS_WITH_URL = f"""SELECT EXISTS({SELECT_NEWS_WITH_URL})"""
+
 SELECT_TOTAL_NUM_ARTICLES = """SELECT COUNT(*) FROM stock_news"""
 
 SELECT_POS_NUM_ARTICLES = """SELECT COUNT(*) FROM stock_news WHERE sentiment = 'Positive'"""
