@@ -64,6 +64,77 @@ def add_primary_content_body(equity, dailychange, percentchange, graph, buyingpo
       </div>
   '''
 
+TOPHALF = '''
+  <div class="plpcs" style="width: 100%; position: relative; left: -5%; margin-bottom: 40px">
+  <p style="position: relative; left: 6.5%; color: yellow; font-size: 18px">Today's Biggest Movers</p>
+  <style>
+    .zoom {
+      transition: transform .1s; /* Animation */
+      z-index: 20;
+      -webkit-box-shadow: 0px 4px 14px 0px rgba(66,66,66,0.38); 
+      box-shadow: 0px 4px 14px 0px rgba(66,66,66,0.38);
+    }
+    .zoom:hover {
+      transform: scale(1.2); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+      cursor: pointer;
+      z-index: 25;
+      opacity: 100%;
+      -webkit-box-shadow: 0px 10px 13px -7px #000000, 5px 10px 8px 10px rgba(0,0,0,0.42); 
+      box-shadow: 0px 10px 13px -7px #000000, 5px 10px 8px 10px rgba(0,0,0,0.42);
+    }
+  </style>
+    <ul class="outer-list" style="list-style: none; font-size: 15px;">
+      <li>
+        <ul class="inner-list" style="list-style: none; display: flex; flex-direction: horizontal">
+
+'''
+
+BOTTOMHALF = '''
+        </ul>
+      </li>
+      <li>
+        <ul  class="inner-list" style="list-style: none; display: flex; flex-direction: horizontal; margin-top: 15px">
+'''
+
+ENDOFPLPC = '''
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+'''
+
+
+# just show ticker and plpc centered, when hovering, shift content to the left and on the right show price and our holdings
+
+def get_winner(plpc):
+  #width = str(25 + float(500 * abs(plpc.intraday_plpc))) + "%"
+  opacity = str(60 + float(10000 * abs(plpc.intraday_plpc))) + "%"
+  if (plpc.intraday_plpc * 100) >= 0 and (plpc.intraday_plpc * 100) < 1:
+    color = "rgba(2, 66, 0, 1)"
+  elif (plpc.intraday_plpc * 100) >= 1 and (plpc.intraday_plpc * 100) < 1.5:
+    color = "rgba(24, 152, 22, 1)"
+  elif (plpc.intraday_plpc * 100) >= 1.5:
+    color = "rgba(3, 255, 0, 0.85)"
+
+  if (plpc.intraday_plpc * 100) < 0 and (plpc.intraday_plpc * 100) > -1:
+    color = "rgba(144, 0, 0, 0.85)"
+  elif (plpc.intraday_plpc * 100) <= -1 and (plpc.intraday_plpc * 100) > -1.5:
+    color = "rgba(174, 0, 0, 1)"
+  elif (plpc.intraday_plpc * 100) <= -1.5:
+    color = "red"
+
+  return f'''
+    <li class="zoom" style="width: 25%; background-color: {color}; opacity: {opacity}; color: white; list-style: none; margin-right: 15px; height: 80px;">
+    <a style="color: white; text-decoration: none; width: 100%" href="https://www.marketwatch.com/investing/stock/{plpc.symbol}" target="_blank">
+      <ul class = "tile" style="list-style: none; position: relative; left: -5%; top: 5%">
+        <li style="display: flex; flex-direction: horizontal; margin-bottom: -25px"><p class="left-col">{plpc.symbol}</p><p class="right-col" style="position: absolute; right: 5%; margin-bottom: -65px">${"{:.2f}".format(plpc.current_price)}</p></li>
+        <li><p class="left-col">{str(round(plpc.intraday_plpc * 100, 2))}%</p><p class="right-col" style="position: absolute; right: 5%; top: 21px">${"{:.2f}".format(plpc.current_price * plpc.qty)}</p></li>
+      </ul>
+    </a>
+    </li>
+  '''  
+
 def get_decisions():
   decisions = []
   with open('./models/decisions.txt', 'r') as d:
@@ -109,6 +180,8 @@ ABOUT = '''
         our own from scratch. 
       </p>
     </div>
+    '''
+NEWSTART = '''
     <div class="news-head" id="news"><p>News the Bot Used to Buy/Sell</p></div>
       <div class="news">
         <ul class="news-list">

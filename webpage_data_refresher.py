@@ -3,6 +3,7 @@ import plotly.graph_objects as go
 from models import webpage
 from datetime import datetime
 import os
+import random
 
 class WebpageDataRefresher(AccountDataRetriever):
   '''
@@ -126,6 +127,20 @@ class WebpageDataRefresher(AccountDataRetriever):
       html_file.write(primary_body)
       decisions = webpage.get_decisions()
       html_file.write(webpage.ABOUT)
+      ADR = AccountDataRetriever()
+      plpcs = ADR.plpc_sorted_holdings[0:10]
+      html_file.write(webpage.TOPHALF)
+      random.shuffle(plpcs)
+      x = 0
+      while x < 5:
+        html_file.write(webpage.get_winner(plpcs[x]))
+        x += 1 
+      html_file.write(webpage.BOTTOMHALF)
+      while x < 10:
+        html_file.write(webpage.get_winner(plpcs[x]))
+        x += 1 
+      html_file.write(webpage.ENDOFPLPC)
+      html_file.write(webpage.NEWSTART)
       for x in range(5):
         html = webpage.pull_recent_news(decisions[x])
         for line in html:
