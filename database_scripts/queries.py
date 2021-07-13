@@ -23,6 +23,8 @@ SELECT_UNANALYZED_ARTICLES = """SELECT stock_id, article_content FROM stock_news
 # For updating database with new data
 UPDATE_SENTIMENT = """UPDATE sentiment_data SET positive_freq = ?, negative_freq = ?, frequency = ? WHERE word = ?"""
 
+UPDATE_SENTIMENT_CATEGORY = """UPDATE sentiment_data SET category = ?"""
+
 
 # For INSERTING into database 
 INSERT_STOCK = """INSERT INTO stock (symbol, category) VALUES (?, ?)"""

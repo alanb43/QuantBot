@@ -1,5 +1,5 @@
 import operator
-from sqlite3.dbapi2 import IntegrityError
+from sqlite3.dbapi2 import Cursor, IntegrityError
 from nltk import FreqDist
 import __init__
 import queries
@@ -132,32 +132,13 @@ class SentAnalyzer():
       5. for each category and word, number of articles with that category that have that word: original dictionaries
     """
     dictionaries = [self.pos, self.neg]
-    # log_probabilities = {}
-    # log_priors = [self.pos_articles / self.num_articles, self.neg_articles / self.num_articles]
-    # articles = [self.pos_articles, self.neg_articles]
-    # sentiments = ["Positive", "Negative"]
-    # log_likelihood = 0
-    # for word in cleaned_tokens:
-    #   for dict in dictionaries:
-    #     if dict.get(word):
-    #       log_likelihood += np.log(dict[word] / articles[dictionaries.index(dict)])
-    #     elif master.get(word):
-    #       log_likelihood += np.log(master[word] / self.num_articles)
-    #     else:
-    #       log_likelihood += np.log(1 / self.num_articles)
-    #     log_probability = np.log(log_priors[dictionaries.index(dict)])
-    #     log_probabilities[sentiments[dictionaries.index(dict)]] = log_probability
-
-
     log_probabilities = {}
     log_priors = [self.pos_articles / self.num_articles, self.neg_articles / self.num_articles]
-    print(log_priors)
     articles = [self.pos_articles, self.neg_articles]
-    cats = ["Positive", "Negative"]
+    sentiments = ["Positive", "Negative"]
     for i in range(len(dictionaries)): #positive, negative
       log_likelihood = 0
       for word in cleaned_tokens: #words in article
-        print(word + " is being iterated.")
         for y in range(len(dictionaries)):
           if dictionaries[y].get(word):
             log_likelihood += np.log(dictionaries[y][word] / articles[y])
@@ -165,10 +146,8 @@ class SentAnalyzer():
             log_likelihood += np.log(master[word] / self.num_articles)
           else:
             log_likelihood += np.log(1 / self.num_articles)
-            #print("LogLikelihood: ", log_likelihood, '\n')
       log_probability = np.log(log_priors[i]) + log_likelihood
-      print("Log probability for ", cats[i], " dictionary: ", log_probability)
-      log_probabilities[cats[i]] = log_probability
+      log_probabilities[sentiments[i]] = log_probability
 
     maxCat = max(log_probabilities.items(), key=operator.itemgetter(1))[0]
     return [maxCat, log_probabilities[maxCat]]
@@ -185,7 +164,10 @@ class SentAnalyzer():
         # This is where we'd update the words' values
         CURSOR.execute(queries.SELECT_WORD_SENTIMENT_DATUM, (word,))
         content = CURSOR.fetchone()
-        word, pos, neg, total = content["word"], content["positive_freq"], content["negative_freq"], content["frequency"]
+        word, db_category, pos, neg, total = content["word"], content["category"], content["positive_freq"], content["negative_freq"], content["frequency"]
+        if category not in db_category.split():
+          db_category = db_category + " " + category
+          CURSOR.execute(queries.UPDATE_SENTIMENT_CATEGORY, (db_category,))
         if sentiment == "Positive":
           positive = pos + freq
           total = positive + neg
@@ -200,7 +182,6 @@ class SentAnalyzer():
   def analyze(self):
     # Loop through un-analyzed articles in DB. Analyze them, return answer about sentiment WITH CORRESPONDING STOCK.
     self.read_sentiment_data()
-    print(self.pos_articles)
     CURSOR.execute(queries.SELECT_UNANALYZED_ARTICLES) # gets stock_id, article_content
     for row in CURSOR.fetchall():
       stock_id, article_content = row["stock_id"], row["article_content"]
@@ -213,6 +194,8 @@ class SentAnalyzer():
       master_dict = self.create_master_dict()
       sentiment = self.bayes_calculation(cleaned_token_list, master_dict)
       self.update_database(freq_dist, stock_category, sentiment)
+      # self.decide_forecast # buy / sell
+      # write to database containing just STOCKS and if we currently are buying, selling, or doing nothign?
   
 
   def model_trainer(self, stock_id, sentiment, category, url):
@@ -230,8 +213,13 @@ class SentAnalyzer():
     CURSOR.execute(queries.INSERT_NEWS_ARTICLE, (stock_id, article.title, article.date, url, 1, sentiment, article.contents))
     CONNECTION.commit()
 
-SA = SentAnalyzer()
-SA.model_trainer(23, "Negative", "Semiconductors", "https://www.marketwatch.com/story/another-intel-product-delay-drags-chip-stocks-dow-lower-11624987740?mod=mw_quote_news")
-SA.model_trainer(23, "Negative", "Semiconductors", "https://www.marketwatch.com/articles/intel-chips-semiconductors-notebook-sales-production-51624293623?mod=mw_quote_news_seemore")
+# SA = SentAnalyzer()
+# SA.model_trainer(41, "Positive", "Computer_Hardware", "http://www.marketwatch.com/articles/why-apple-pay-is-way-more-secure-than-a-credit-card-1476903380?mod=mw_quote_news")
+
+# pip3 install sqlite3
+# in terminal : 
+# $ sqlite3 stock-data.db
+# $ select * from stock where symbol = "Symbol you want in all caps"
+# $ you need the number and the category to use model trainer
 
 
