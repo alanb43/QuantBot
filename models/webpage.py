@@ -1,5 +1,5 @@
 import random
-from data_retriever import DataRetriever
+from article_retriever import ArticleRetriever
 
 
 DOCTYPE = '''<!DOCTYPE html>'''

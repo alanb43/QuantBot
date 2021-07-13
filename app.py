@@ -1,4 +1,3 @@
-from data_retriever import DataRetriever
 from flask import Flask, render_template
 from webpage_data_refresher import WebpageDataRefresher
 from trader import Trader
