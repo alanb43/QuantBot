@@ -1,7 +1,7 @@
 import __init__
 import queries
 from config import *
-from data_retriever import DataRetriever
+from article_retriever import ArticleRetriever
 from datetime import date
 
 # Get symbols and IDs to use as keys in table
@@ -14,12 +14,12 @@ for row in rows:
   symbols.append(symbol)
   stock_ids[symbol] = row['id']
 
-DR = DataRetriever()
+AR = ArticleRetriever
 
 for symbol in symbols:
   print(f"{symbol}'s news articles are being processed.")
   stock_id = stock_ids[symbol]
-  articles = DR.get_stock_news(symbol)
+  articles = AR.get_stock_news(symbol)
   for article in articles:
     try:
       CURSOR.execute(queries.INSERT_NEWS_ARTICLE, (stock_id, article.title, date.today(), article.url, 0, None, article.contents))
