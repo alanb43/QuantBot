@@ -1,13 +1,10 @@
-import urllib.request
-import time
 from datetime import date
 import requests
 from bs4 import BeautifulSoup
 from models.article import Article
 
-class DataRetriever:
+class ArticleRetriever:
   '''
-  
   Data Retrieval tool for both price history and stock news, utilizing yahoo
   finance and MarketWatch for the respective subjects. May be updated to include
   more financial data in the near future.
@@ -19,16 +16,13 @@ class DataRetriever:
   NOTE: Helper functions start with '__' to make them private to the class
   NOTE: Create an instance : DR = DataRetriever(), use this instance to call
         functions many times.
-
   '''
-
 
   def __init__(self) -> None:
     self.STORY = 'https://www.marketwatch.com/story/'
     self.ARTICLE = 'https://www.marketwatch.com/articles/'
     return
 
-  ''' 1. Simple Helper Functions '''
 
   def __create_soup(self, url):
     '''
@@ -38,8 +32,6 @@ class DataRetriever:
     response = requests.get(url)
     return BeautifulSoup(response.text, 'html.parser')
 
-
-  ''' 2. Scraping/Implementation Helpers'''
 
   def __scrape_news_links(self, ticker):
     '''
@@ -108,33 +100,7 @@ class DataRetriever:
     return article
 
 
-  ''' 3. Functions the Bot should use / access'''
-  
-  def get_stock_prices(self, ticker, time_range, interval = '1d'):
-    '''
-    REQUIRES: string representing stock symbol in CAPS (ex : 'TSLA'), string
-          representing a time range in this format : #w, #m, #y where # is
-          the number of weeks, months, or years of data you want leading up
-          to today's data.
-    EFFECTS:  obtains the stock's price history from today to today minus the
-              entered timerange and stores it in a csv file on the repo.
-    EXAMPLES OF TIME RANGES: '1w' '2y' '6m' 
-    '''
-    path = 'data_retriever_storage/prices'
-    if time_range[-1] == 'w':
-      period = int(time_range[:-1]) * int(31536000 / 52)
-    elif time_range[-1] == 'm':
-      period = int(time_range[:-1]) * int(31536000 / 12)
-    elif time_range[-1] == 'y':
-      period = int(time_range[:-1]) * 31536000
-    else:
-      return "ERROR: Invalid time_range entered. See examples"
-    period2 = int(time.time())
-    period1 = period2 - period
-    download_url = f'https://query1.finance.yahoo.com/v7/finance/download/{ticker}?period1={period1}&period2={period2}&interval={interval}&events=history&includeAdjustedClose=true'
-    download_path = f'./{path}/{ticker}_prices.csv'
-    urllib.request.urlretrieve(download_url, download_path)
-
+  # For website to display brief intro on mainpage
   def get_article_intro(self, article):
     '''
     REQUIRES: a valid path to a news article's contents
@@ -147,6 +113,8 @@ class DataRetriever:
     
     return intro
 
+
+  # main function bot will use to gather articles for stocks
   def get_stock_news(self, ticker):
     '''
     REQUIRES: a string representing a valid ticker / symbol

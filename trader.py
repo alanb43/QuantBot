@@ -17,8 +17,7 @@ class Trader:
   '''
 
   def __init__(self) -> None:
-    __api = tradeapi.REST(API_KEY, SECRET_KEY, BASE_URL, api_version='v2')
-    return
+    pass
 
   ''' 1. Debug functions '''
 

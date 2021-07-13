@@ -1,10 +1,10 @@
 import operator
-from sqlite3.dbapi2 import Cursor, IntegrityError
+from sqlite3.dbapi2 import IntegrityError
 from nltk import FreqDist
 import __init__
 import queries
 from config import *
-from data_retriever import DataRetriever
+from article_retriever import ArticleRetriever
 import numpy as np
 
 words = ["joshua", "profit", "loss", "annarbor", "bartSimpson", "fartSimpson"]
@@ -204,8 +204,8 @@ class SentAnalyzer():
     if url_in_db == 1:
       print("Can't train with this, it's already in database.")
       return
-    DR = DataRetriever()
-    article = DR.scrape_news_data(url) # returns Article object
+    AR = ArticleRetriever()
+    article = AR.scrape_news_data(url) # returns Article object
     tokens = self.tokenize(article.contents)
     cleaned_tokens = self.remove_noise(tokens)
     freq_dist = FreqDist(cleaned_tokens)
