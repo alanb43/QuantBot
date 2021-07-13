@@ -1,4 +1,3 @@
-import alpaca_trade_api as tradeapi
 from config import *
 from models.stock import Stock
 import operator
@@ -13,7 +12,7 @@ class AccountDataRetriever:
 
   '''
   def __init__(self) -> None:
-    self.api = tradeapi.REST(API_KEY, SECRET_KEY, BASE_URL, api_version='v2')
+    self.api = API
     self.account = self.api.get_account()
     self.positions = self.__get_account_positions()
     self.plpc_sorted_holdings = sorted(self.positions, key=operator.attrgetter('abs_intraday_plpc'), reverse=True)
