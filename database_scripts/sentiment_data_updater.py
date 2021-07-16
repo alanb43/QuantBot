@@ -7,31 +7,11 @@ from config import *
 from article_retriever import ArticleRetriever
 import numpy as np
 
-words = ["joshua", "profit", "loss", "annarbor", "bartSimpson", "fartSimpson"]
-
-# To insert / read from Sentiment Data Table
-#
-#   word,
-#   category,
-#   positive_freq,
-#   negative_freq,
-#   frequency
-#
-# To update 
-# 
-#   positive_freq,
-#   negative_freq
-#   frequency
-#   word
-
-
 # How sentiments should be formatted EVERY STEP OF THE WAY
 # Positive, Negative
 # Category Options
 # Semiconductors, Computer_Services, Production_Technology_Equipment, Software, Computer_Hardware
 
-
-# UPDATE READ_IN, WRITE ISNT NEEDED
 class SentAnalyzer():
 
   def __init__(self) -> None:
@@ -54,9 +34,6 @@ class SentAnalyzer():
     EFFECTS:  updates tickers dictionary
     '''
     self.__words_to_ditch += words_to_ditch
-
-  # DETERMINE MEANS OF ACCESSING ARTICLE CONTENTS 
-  # LIKELY ON AN ARTICLE TO ARTICLE BASIS BY SEARCHING DB FOR "ANALYZED " = 0
 
 
   def read_sentiment_data(self):
@@ -114,6 +91,9 @@ class SentAnalyzer():
 
 
   def create_master_dict(self):
+    '''
+    EFFECTS: creates a master dictionary mapping words to their TOTAL frequencies (positive + negative)
+    '''
     master = {**self.pos, **self.neg}
     for word in master.keys():
       if word in self.pos and word in self.neg:
@@ -179,6 +159,7 @@ class SentAnalyzer():
       finally:
         CONNECTION.commit()
 
+  
   def analyze(self):
     # Loop through un-analyzed articles in DB. Analyze them, return answer about sentiment WITH CORRESPONDING STOCK.
     self.read_sentiment_data()
@@ -221,5 +202,3 @@ class SentAnalyzer():
 # $ sqlite3 stock-data.db
 # $ select * from stock where symbol = "Symbol you want in all caps"
 # $ you need the number and the category to use model trainer
-
-
