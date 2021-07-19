@@ -4,6 +4,8 @@
 
 SELECT_STOCK_WITH_ID = """SELECT * FROM stock WHERE id = ?"""
 
+SELECT_STOCK_ID_AND_SYMBOL = """SELECT id, symbol FROM stock"""
+
 SELECT_ALL_SENTIMENT_DATA = """SELECT * FROM sentiment_data"""
 
 SELECT_WORD_SENTIMENT_DATUM = """SELECT * FROM sentiment_data WHERE word = ?"""

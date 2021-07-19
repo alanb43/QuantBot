@@ -5,7 +5,7 @@ from article_retriever import ArticleRetriever
 from datetime import date
 
 # Get symbols and IDs to use as keys in table
-CURSOR.execute("""SELECT id, symbol FROM stock""")
+CURSOR.execute(queries.SELECT_STOCK_ID_AND_SYMBOL)
 rows = CURSOR.fetchall()
 symbols = []
 stock_ids = {}
@@ -14,7 +14,7 @@ for row in rows:
   symbols.append(symbol)
   stock_ids[symbol] = row['id']
 
-AR = ArticleRetriever
+AR = ArticleRetriever()
 
 for symbol in symbols:
   print(f"{symbol}'s news articles are being processed.")

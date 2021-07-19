@@ -1,13 +1,13 @@
+from dataclasses import dataclass
+
+@dataclass
 class Article:
-  '''
-  NEWS ARTICLE MODEL
-  '''
+  ''' NEWS ARTICLE MODEL '''
   
-  def __init__(self, title="", url="", date="", contents="") -> None:
-      self.title = title
-      self.url = url
-      self.date = date
-      self.contents = contents
+  title: str
+  url: str
+  date: str
+  contents: str
 
   def listify(self) -> list:
     ''' Returns list of class contents '''
