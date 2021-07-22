@@ -31,7 +31,8 @@ class AccountDataRetriever:
             float(position.lastday_price), float(position.market_value), 
             float(position.unrealized_intraday_pl), float(position.unrealized_intraday_plpc),
             float(position.change_today), float(position.unrealized_pl), 
-            float(position.unrealized_plpc), float(position.avg_entry_price)
+            float(position.unrealized_plpc), float(position.avg_entry_price), 
+            abs(float(position.market_value))
         )
       )
 

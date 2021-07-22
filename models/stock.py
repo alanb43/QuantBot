@@ -18,7 +18,8 @@ class Stock:
   pl: float
   plpc: float
   cost: float
-  abs_intraday_plpc = abs(intraday_plpc)
+  abs_intraday_plpc: float
+
 
   def __lt__(self, other_stock):
     ''' Overloaded less than operator, for alphabetical sorting of stocks based on symbol '''

@@ -194,11 +194,10 @@ class SentAnalyzer():
     CURSOR.execute(queries.INSERT_NEWS_ARTICLE, (stock_id, article.title, article.date, url, 1, sentiment, article.contents))
     CONNECTION.commit()
 
-# SA = SentAnalyzer()
-# SA.model_trainer(41, "Positive", "Computer_Hardware", "http://www.marketwatch.com/articles/why-apple-pay-is-way-more-secure-than-a-credit-card-1476903380?mod=mw_quote_news")
+SA = SentAnalyzer()
+SA.model_trainer(41, "Positive", "Computer_Hardware", "https://www.marketwatch.com/articles/apples-market-cap-nearing-2-5-trillion-as-analysts-turn-bullish-on-earnings-51626277312?mod=mw_quote_news_seemore")
 
-# pip3 install sqlite3
 # in terminal : 
 # $ sqlite3 stock-data.db
-# $ select * from stock where symbol = "Symbol you want in all caps"
+# $ select * from stock where symbol = "Symbol you want in all caps";
 # $ you need the number and the category to use model trainer

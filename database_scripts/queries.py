@@ -22,11 +22,14 @@ SELECT_NEG_NUM_ARTICLES = """SELECT COUNT(*) FROM stock_news WHERE sentiment = '
 
 SELECT_UNANALYZED_ARTICLES = """SELECT stock_id, article_content FROM stock_news WHERE analyzed = 0"""
 
+SELECT_DECISIONS = """SELECT current_decision, last_decision WHERE symbol = ?"""
+
 # For updating database with new data
 UPDATE_SENTIMENT = """UPDATE sentiment_data SET positive_freq = ?, negative_freq = ?, frequency = ? WHERE word = ?"""
 
 UPDATE_SENTIMENT_CATEGORY = """UPDATE sentiment_data SET category = ?"""
 
+UPDATE_DECISION = """UPDATE stock SET current_decision = ?, last_decision = ? WHERE symbol = ?"""
 
 # For INSERTING into database 
 INSERT_STOCK = """INSERT INTO stock (symbol, category) VALUES (?, ?)"""
@@ -38,7 +41,9 @@ INSERT_NEWS_ARTICLE = """INSERT INTO stock_news (stock_id, title, date_retrieved
 INSERT_SENTIMENT_DATUM = """INSERT INTO sentiment_data (word, category, positive_freq, negative_freq, frequency) VALUES (?, ?, ?, ?, ?)"""
 
 # For creating database tables
-CREATE_STOCK_TABLE = """CREATE TABLE IF NOT EXISTS stock (id INTEGER PRIMARY KEY, symbol TEXT NOT NULL UNIQUE, category TEXT)"""
+CREATE_STOCK_TABLE = """CREATE TABLE IF NOT EXISTS stock (id INTEGER PRIMARY KEY, symbol TEXT NOT NULL UNIQUE, category TEXT, current_decision, last_decision)"""
+
+CREATE_DECISIONS_TABLE = """CREATE TABLE IF NOT EXISTS decisions (id INTEGER PRIMARY KEY, symbol, decision, shares_moved, url, title, article_intro, FOREIGN KEY (symbol) REFERENCES stock (symbol))"""
 
 CREATE_PRICE_TABLE = """CREATE TABLE IF NOT EXISTS stock_price (id INTEGER PRIMARY KEY, stock_id INTEGER, date NOT NULL, open NOT NULL, 
                         high NOT NULL, low NOT NULL, close NOT NULL, volume NOT NULL, FOREIGN KEY (stock_id) REFERENCES stock (id))"""
@@ -63,3 +68,5 @@ DROP_NEWS_TABLE = """DROP TABLE stock_news"""
 DROP_SENTIMENT_TABLE = """DROP TABLE sentiment_data"""
 
 DROP_TIMESERIES_TABLE = """DROP TABLE time_series_data"""
+
+DROP_DECISIONS_TABLE = """DROP TABLE decisions"""
