@@ -20,21 +20,16 @@ class WebpageDataRefresher(AccountDataRetriever):
     ''' Turns a float into a formatted string '''
     return f'{float :,.2f}'
 
-
   def __format_dollars_to_string(self, float) -> str:
     ''' Formats a dollar string with dollar signs and direction '''
     string = self.__number_float_to_string(float)
-    if str(float)[0] == '-':
-      return "-$" + string[1:]
-    return "+$" + string
-
+    return ("-$" + string[1:]) if (str(float)[0] == '-') else ("+$" + string)
 
   def __format_percentage_to_string(self, percentage) -> str:
     ''' Formats a percentage string with direction '''
-    if percentage >= 0:
-      return '+' + self.__number_float_to_string(percentage)
-    return self.__number_float_to_string(percentage)[0] + ' ' + self.__number_float_to_string(percentage)[1:]
-
+    #if percentage >= 0:
+    return ('+' + self.__number_float_to_string(percentage)) if (percentage >= 0) else (self.__number_float_to_string(percentage)[0] 
+      + ' ' + self.__number_float_to_string(percentage)[1:])
 
   def __convert_timestamps_from_api(self, portfolio_object):
     ''' Converts timestamp objects to human readable times '''
@@ -79,8 +74,10 @@ class WebpageDataRefresher(AccountDataRetriever):
     position_values.append("{:,.2f}".format(position.current_price))
     position_values.append(self.get_position_colors()[position.symbol])
     position_values.append(self.__format_percentage_to_string(position.intraday_plpc * 100))
-    return position_values
     
+    return position_values
+  
+
   def format_main_content(self):
     ''' Returns a list containing formatted values for 
     [0] Equity, [1] Daily Change, [2] Percent Change, [3] Buying Power 
@@ -111,11 +108,13 @@ class WebpageDataRefresher(AccountDataRetriever):
       graph.readline()
       graph_div = graph.readline()
       graph_div += graph.readline()
+    
     os.remove('./templates/graph.html')
+    
     return graph_div
   
 
-  def create_site_html(self) -> str:
+  def create_site_html(self):
     ''' Puts together everything else to generate webpage '''
     with open("templates/index.html", "w") as html_file:
       html_file.write(webpage.DOCTYPE)
@@ -147,5 +146,3 @@ class WebpageDataRefresher(AccountDataRetriever):
           html_file.write(line)
       html_file.write(webpage.NEWS)
       html_file.write(webpage.CONTACT)
-
-

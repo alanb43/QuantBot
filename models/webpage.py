@@ -1,6 +1,5 @@
-import random
-from article_retriever import ArticleRetriever
-
+from config import CURSOR
+from .decision import Decision
 
 DOCTYPE = '''<!DOCTYPE html>'''
 HEAD = '''
@@ -137,29 +136,24 @@ def get_winner(plpc):
 
 def get_decisions():
   decisions = []
-  with open('./models/decisions.txt', 'r') as d:
-    lines = d.readlines()
-    x = 0
-    decision = []
-    for line in lines:
-      if x == 6:
-        decisions.append(decision)
-        decision = []
-        x = 0
-      decision.append(line)
-      x += 1
-  decisions.append(decision)
-  return [ele for ele in reversed(decisions)]
+  CURSOR.execute("""SELECT * FROM decisions DESC LIMIT 10""")
+  for row in CURSOR.fetchall():
+    decisions.append(Decision(row[1], row[2], row[3], row[4], row[5], row[6]))
+  
+  return decisions.reverse() 
 
-def pull_recent_news(decision ) -> str:
-  phrases = ["This article led the bot to " + decision[1] + " " + decision[2] + " shares of " + decision[0] + ".", "As a result of this article, QuantBot decided to " + decision[1] + " " + decision[2] + " shares of " + decision[0] + ".", "An order to " + decision[1] + " " + decision[2] + " shares of " + decision[0] + " was created due to this article."]
+def pull_recent_news(d : 'Decision') -> 'str':
+  phrases = [ "This article led the bot to " + d.decision + " " + d.shares_moved + " shares of " + d.symbol + ".", 
+              "As a result of this article, QuantBot decided to " + d.decision + " " + d.shares_moved + " shares of " + d.symbol + ".", 
+              "An order to " + d.decision + " " + d.shares_moved + " shares of " + d.symbol + " was created due to this article." ]
+  
   return  f"""
-          <a href={decision[4]} target="_blank" style=" text-decoration: none;"><li class="article">
+          <a href={d.url} target="_blank" style=" text-decoration: none;"><li class="article">
             <ul class="inner-article">
               <li class="article-words">
-                <p class="article-p" style="color: white; font-size: 16px">{decision[3]}</p>
-                <p class="article-intro" style="color: white; font-size: 14px">"{decision[5]}..."</p>
-                <p class="article-summary color" style="font-size: 15px; margin-top: 25px">QuantBot decided to {decision[1]} {decision[2]} shares of {decision[0]}.</p>
+                <p class="article-p" style="color: white; font-size: 16px">{d.title}</p>
+                <p class="article-intro" style="color: white; font-size: 14px">"{d.intro}..."</p>
+                <p class="article-summary color" style="font-size: 15px; margin-top: 25px">QuantBot decided to {d.decision} {d.shares_moved} shares of {d.symbol}.</p>
               </li>
             </ul>
           </li></a>

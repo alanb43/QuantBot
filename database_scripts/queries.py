@@ -22,7 +22,8 @@ SELECT_NEG_NUM_ARTICLES = """SELECT COUNT(*) FROM stock_news WHERE sentiment = '
 
 SELECT_UNANALYZED_ARTICLES = """SELECT stock_id, article_content FROM stock_news WHERE analyzed = 0"""
 
-SELECT_DECISIONS = """SELECT current_decision, last_decision WHERE symbol = ?"""
+SELECT_LAST10_DECISIONS = """SELECT * FROM decisions DESC LIMIT 10"""
+
 
 # For updating database with new data
 UPDATE_SENTIMENT = """UPDATE sentiment_data SET positive_freq = ?, negative_freq = ?, frequency = ? WHERE word = ?"""
