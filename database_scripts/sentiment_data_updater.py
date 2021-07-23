@@ -66,27 +66,39 @@ class SentAnalyzer():
               that determined to be low-value + frequent (see __init__)
     EFFECTS:  returns list of cleaned / 'noise-less' tokens
     '''
-    punctuation = '''#@,();:?/’|.\^=$”“''' # punctuation we choose to omit
+    punctuation = '''#@,()€ ;:[]?/’<>|.&\^="$”“''' # punctuation we choose to omit
+    numbers = '''1234567890'''
     cleaned_tokens_list = []
-    for token in tokens_list:
-      if '$' in token or token.isdigit() or token[0] == '-' or token[0] == '—':
+    i = 0
+    while i < len(tokens_list):
+      token = tokens_list[i]
+      token = token.lower()
+      # REMOVE HYPHENS, SPLITS INTO 2 SEPARATE WORDS
+      if "-" in token: 
+        tokens_list.append(token[:token.index('-')])
+        tokens_list.append(token[token.index('-') + 1:])
+      elif "—" in token:
+        tokens_list.append(token[:token.index('—')])
+        tokens_list.append(token[token.index('—') + 1:])
+      # REMOVES NUMBERS / PERCENTAGES
+      if '$' in token or token.isdigit() or token[0] == '-' or token[0] == '—' or '%' in token:
         continue
-      if '%' not in token: # if it's not a percentage
-        token = token.lower()
-        if "’s" in token:
-          token = token.replace("’s", "")
-        elif "'s" in token:
-          token = token.replace("'s", "")
+      # REMOVE 's OCCURRENCES
+      if "’s" in token:
+        token = token.replace("’s", "")
+      elif "'s" in token:
+        token = token.replace("'s", "")
+      # REMOVE PUNCTUATION AND NUMBERS
       for ch in token:
-        if ch in punctuation:
+        if ch in punctuation or ch in numbers:
           token = token.replace(ch, "")
-      if token.isdigit() or len(token) > 12:
+      # LAST CHECKS FOR GENERALLY BAD TOKENS
+      if token.isdigit() or len(token) > 12 or 'https' in token or token in self.__words_to_skip:
         continue
-      if 'https' in token:
-        continue 
-      if token not in self.__words_to_skip:
-        cleaned_tokens_list.append(token)
-    
+      
+      cleaned_tokens_list.append(token)
+      i += 1
+
     return cleaned_tokens_list
 
 
