@@ -28,9 +28,8 @@ class WebpageDataRefresher(AccountDataRetriever):
 
   def __format_percentage_to_string(self, percentage) -> str:
     ''' Formats a percentage string with direction '''
-    #if percentage >= 0:
     return ('+' + self.__number_float_to_string(percentage)) if (percentage >= 0) else (self.__number_float_to_string(percentage)[0] 
-      + ' ' + self.__number_float_to_string(percentage)[1:])
+            + ' ' + self.__number_float_to_string(percentage)[1:])
 
   def __convert_timestamps_from_api(self, portfolio_object):
     ''' Converts timestamp objects to human readable times '''
@@ -56,6 +55,7 @@ class WebpageDataRefresher(AccountDataRetriever):
     for equity in portfolio_object.equity:
       if equity:
         converted_equity_values.append(round(equity - float(self.account.cash), 2))
+    
     return converted_equity_values
 
 
@@ -64,6 +64,7 @@ class WebpageDataRefresher(AccountDataRetriever):
     portfolio_object = self.api.get_portfolio_history(date_start=None, date_end=None, period="1D", timeframe="5Min", extended_hours=True)
     equity_data = self.__convert_equities_from_api(portfolio_object)
     time_data = self.__convert_timestamps_from_api(portfolio_object)
+
     return tuple((equity_data, time_data))
 
   
@@ -126,20 +127,15 @@ class WebpageDataRefresher(AccountDataRetriever):
       primary_body = webpage.add_primary_content_body(content[0], content[1], content[2], graph_div, content[3])
       html_file.write(primary_body)
       decisions = get_decisions()
-      print(decisions)
       html_file.write(webpage.ABOUT)
       ADR = AccountDataRetriever()
       plpcs = ADR.plpc_sorted_holdings[0:10]
       html_file.write(webpage.TOPHALF)
       random.shuffle(plpcs)
-      x = 0
-      while x < 5:
-        html_file.write(webpage.get_winner(plpcs[x]))
-        x += 1 
-      html_file.write(webpage.BOTTOMHALF)
-      while x < 10:
-        html_file.write(webpage.get_winner(plpcs[x]))
-        x += 1 
+      for i in range(10):
+        html_file.write(webpage.get_winner(plpcs[i]))
+        if i == 4:
+          html_file.write(webpage.BOTTOMHALF)
       html_file.write(webpage.ENDOFPLPC)
       html_file.write(webpage.NEWSTART)
       for decision in decisions:
