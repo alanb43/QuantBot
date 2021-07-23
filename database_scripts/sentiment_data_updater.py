@@ -72,7 +72,13 @@ class SentAnalyzer():
     i = 0
     while i < len(tokens_list):
       token = tokens_list[i]
+      i += 1
       token = token.lower()
+      if len(token) == 0:
+        continue
+      # REMOVES NUMBERS / PERCENTAGES
+      if '$' in token or token.isdigit() or token[0] == '-' or token[0] == '—' or '%' in token:
+        continue
       # REMOVE HYPHENS, SPLITS INTO 2 SEPARATE WORDS
       if "-" in token: 
         tokens_list.append(token[:token.index('-')])
@@ -80,9 +86,6 @@ class SentAnalyzer():
       elif "—" in token:
         tokens_list.append(token[:token.index('—')])
         tokens_list.append(token[token.index('—') + 1:])
-      # REMOVES NUMBERS / PERCENTAGES
-      if '$' in token or token.isdigit() or token[0] == '-' or token[0] == '—' or '%' in token:
-        continue
       # REMOVE 's OCCURRENCES
       if "’s" in token:
         token = token.replace("’s", "")
@@ -97,7 +100,6 @@ class SentAnalyzer():
         continue
       
       cleaned_tokens_list.append(token)
-      i += 1
 
     return cleaned_tokens_list
 
@@ -207,7 +209,7 @@ class SentAnalyzer():
     CONNECTION.commit()
 
 SA = SentAnalyzer()
-SA.model_trainer(41, "Positive", "Computer_Hardware", "https://www.marketwatch.com/articles/apples-market-cap-nearing-2-5-trillion-as-analysts-turn-bullish-on-earnings-51626277312?mod=mw_quote_news_seemore")
+SA.model_trainer(17, "Negative", "Software", "https://www.marketwatch.com/articles/thousands-of-businesses-hit-by-hack-of-microsoft-exchange-51615232254?mod=mw_quote_news_seemore")
 
 # in terminal : 
 # $ sqlite3 stock-data.db
