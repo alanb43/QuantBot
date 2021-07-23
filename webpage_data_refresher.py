@@ -1,6 +1,7 @@
 from account_data_retriever import AccountDataRetriever
 import plotly.graph_objects as go
 from models import webpage
+from models.webpage import get_decisions
 from datetime import datetime
 import os
 import random
@@ -20,21 +21,15 @@ class WebpageDataRefresher(AccountDataRetriever):
     ''' Turns a float into a formatted string '''
     return f'{float :,.2f}'
 
-
   def __format_dollars_to_string(self, float) -> str:
     ''' Formats a dollar string with dollar signs and direction '''
     string = self.__number_float_to_string(float)
-    if str(float)[0] == '-':
-      return "-$" + string[1:]
-    return "+$" + string
-
+    return ("-$" + string[1:]) if (str(float)[0] == '-') else ("+$" + string)
 
   def __format_percentage_to_string(self, percentage) -> str:
     ''' Formats a percentage string with direction '''
-    if percentage >= 0:
-      return '+' + self.__number_float_to_string(percentage)
-    return self.__number_float_to_string(percentage)[0] + ' ' + self.__number_float_to_string(percentage)[1:]
-
+    return ('+' + self.__number_float_to_string(percentage)) if (percentage >= 0) else (self.__number_float_to_string(percentage)[0] 
+            + ' ' + self.__number_float_to_string(percentage)[1:])
 
   def __convert_timestamps_from_api(self, portfolio_object):
     ''' Converts timestamp objects to human readable times '''
@@ -60,6 +55,7 @@ class WebpageDataRefresher(AccountDataRetriever):
     for equity in portfolio_object.equity:
       if equity:
         converted_equity_values.append(round(equity - float(self.account.cash), 2))
+    
     return converted_equity_values
 
 
@@ -68,6 +64,7 @@ class WebpageDataRefresher(AccountDataRetriever):
     portfolio_object = self.api.get_portfolio_history(date_start=None, date_end=None, period="1D", timeframe="5Min", extended_hours=True)
     equity_data = self.__convert_equities_from_api(portfolio_object)
     time_data = self.__convert_timestamps_from_api(portfolio_object)
+
     return tuple((equity_data, time_data))
 
   
@@ -79,8 +76,10 @@ class WebpageDataRefresher(AccountDataRetriever):
     position_values.append("{:,.2f}".format(position.current_price))
     position_values.append(self.get_position_colors()[position.symbol])
     position_values.append(self.__format_percentage_to_string(position.intraday_plpc * 100))
-    return position_values
     
+    return position_values
+  
+
   def format_main_content(self):
     ''' Returns a list containing formatted values for 
     [0] Equity, [1] Daily Change, [2] Percent Change, [3] Buying Power 
@@ -111,11 +110,13 @@ class WebpageDataRefresher(AccountDataRetriever):
       graph.readline()
       graph_div = graph.readline()
       graph_div += graph.readline()
+    
     os.remove('./templates/graph.html')
+    
     return graph_div
   
 
-  def create_site_html(self) -> str:
+  def create_site_html(self):
     ''' Puts together everything else to generate webpage '''
     with open("templates/index.html", "w") as html_file:
       html_file.write(webpage.DOCTYPE)
@@ -125,27 +126,21 @@ class WebpageDataRefresher(AccountDataRetriever):
       graph_div = self.create_plot_html()
       primary_body = webpage.add_primary_content_body(content[0], content[1], content[2], graph_div, content[3])
       html_file.write(primary_body)
-      decisions = webpage.get_decisions()
+      decisions = get_decisions()
       html_file.write(webpage.ABOUT)
       ADR = AccountDataRetriever()
       plpcs = ADR.plpc_sorted_holdings[0:10]
       html_file.write(webpage.TOPHALF)
       random.shuffle(plpcs)
-      x = 0
-      while x < 5:
-        html_file.write(webpage.get_winner(plpcs[x]))
-        x += 1 
-      html_file.write(webpage.BOTTOMHALF)
-      while x < 10:
-        html_file.write(webpage.get_winner(plpcs[x]))
-        x += 1 
+      for i in range(10):
+        html_file.write(webpage.get_winner(plpcs[i]))
+        if i == 4:
+          html_file.write(webpage.BOTTOMHALF)
       html_file.write(webpage.ENDOFPLPC)
       html_file.write(webpage.NEWSTART)
-      for x in range(5):
-        html = webpage.pull_recent_news(decisions[x])
+      for decision in decisions:
+        html = webpage.pull_recent_news(decision)
         for line in html:
           html_file.write(line)
       html_file.write(webpage.NEWS)
       html_file.write(webpage.CONTACT)
-
-
