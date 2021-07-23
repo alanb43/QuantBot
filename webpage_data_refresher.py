@@ -1,6 +1,7 @@
 from account_data_retriever import AccountDataRetriever
 import plotly.graph_objects as go
 from models import webpage
+from models.webpage import get_decisions
 from datetime import datetime
 import os
 import random
@@ -124,7 +125,8 @@ class WebpageDataRefresher(AccountDataRetriever):
       graph_div = self.create_plot_html()
       primary_body = webpage.add_primary_content_body(content[0], content[1], content[2], graph_div, content[3])
       html_file.write(primary_body)
-      decisions = webpage.get_decisions()
+      decisions = get_decisions()
+      print(decisions)
       html_file.write(webpage.ABOUT)
       ADR = AccountDataRetriever()
       plpcs = ADR.plpc_sorted_holdings[0:10]
@@ -140,8 +142,8 @@ class WebpageDataRefresher(AccountDataRetriever):
         x += 1 
       html_file.write(webpage.ENDOFPLPC)
       html_file.write(webpage.NEWSTART)
-      for x in range(5):
-        html = webpage.pull_recent_news(decisions[x])
+      for decision in decisions:
+        html = webpage.pull_recent_news(decision)
         for line in html:
           html_file.write(line)
       html_file.write(webpage.NEWS)

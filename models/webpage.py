@@ -1,5 +1,6 @@
-from config import CURSOR
+from config import *
 from .decision import Decision
+from database_scripts import queries
 
 DOCTYPE = '''<!DOCTYPE html>'''
 HEAD = '''
@@ -136,16 +137,17 @@ def get_winner(plpc):
 
 def get_decisions():
   decisions = []
-  CURSOR.execute("""SELECT * FROM decisions DESC LIMIT 10""")
+  CURSOR.execute(queries.SELECT_LAST10_DECISIONS)
   for row in CURSOR.fetchall():
     decisions.append(Decision(row[1], row[2], row[3], row[4], row[5], row[6]))
   
-  return decisions.reverse() 
+  print(decisions)
+  return decisions
 
 def pull_recent_news(d : 'Decision') -> 'str':
-  phrases = [ "This article led the bot to " + d.decision + " " + d.shares_moved + " shares of " + d.symbol + ".", 
-              "As a result of this article, QuantBot decided to " + d.decision + " " + d.shares_moved + " shares of " + d.symbol + ".", 
-              "An order to " + d.decision + " " + d.shares_moved + " shares of " + d.symbol + " was created due to this article." ]
+  phrases = [ "This article led the bot to " + d.decision + " " + str(d.shares_moved) + " shares of " + d.symbol + ".", 
+              "As a result of this article, QuantBot decided to " + d.decision + " " + str(d.shares_moved) + " shares of " + d.symbol + ".", 
+              "An order to " + d.decision + " " + str(d.shares_moved) + " shares of " + d.symbol + " was created due to this article." ]
   
   return  f"""
           <a href={d.url} target="_blank" style=" text-decoration: none;"><li class="article">
@@ -195,5 +197,3 @@ CONTACT = '''
     </div>
   </body>
 '''
-
-get_decisions()

@@ -24,7 +24,6 @@ SELECT_UNANALYZED_ARTICLES = """SELECT stock_id, article_content FROM stock_news
 
 SELECT_LAST10_DECISIONS = """SELECT * FROM decisions DESC LIMIT 10"""
 
-
 # For updating database with new data
 UPDATE_SENTIMENT = """UPDATE sentiment_data SET positive_freq = ?, negative_freq = ?, frequency = ? WHERE word = ?"""
 
@@ -40,6 +39,8 @@ INSERT_STOCK_PRICE = """INSERT INTO stock_price (stock_id, date, open, high, low
 INSERT_NEWS_ARTICLE = """INSERT INTO stock_news (stock_id, title, date_retrieved, url, analyzed, sentiment, article_content) VALUES (?, ?, ?, ?, ?, ?, ?)"""
 
 INSERT_SENTIMENT_DATUM = """INSERT INTO sentiment_data (word, category, positive_freq, negative_freq, frequency) VALUES (?, ?, ?, ?, ?)"""
+
+INSERT_DECISION = """INSERT INTO decisions (symbol, decision, shares_moved, url, title, article_intro) VALUES (?, ?, ?, ?, ?, ?)"""
 
 # For creating database tables
 CREATE_STOCK_TABLE = """CREATE TABLE IF NOT EXISTS stock (id INTEGER PRIMARY KEY, symbol TEXT NOT NULL UNIQUE, category TEXT, current_decision, last_decision)"""
