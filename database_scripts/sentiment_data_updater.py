@@ -23,7 +23,9 @@ class SentAnalyzer():
       # Words determined to appear in high frequency with low value through training
       self.__words_to_skip = [
         'the', 'that', 'to', 'for', 'on', 'and', 'of', 'a', 'in', 'is', 'it', 'its', 'be', 'are',
-        'has', 'than', 'by', 'man', 'he', 'she', 'from', 'an', 'with', 'about'
+        'has', 'than', 'by', 'man', 'he', 'she', 'from', 'an', 'with', 'about', 'as', 'at', 'this',
+        'we', 'his', 'not', 'they', 'had', 'now', 'their', 'was', 'but', 'said', 'have', 'more',
+        'so', 'if', 'how', 'much', 'two', 'i', 'such', 'any'
       ]
 
 
@@ -177,9 +179,10 @@ class SentAnalyzer():
   def analyze(self):
     # Loop through un-analyzed articles in DB. Analyze them, return answer about sentiment WITH CORRESPONDING STOCK.
     self.read_sentiment_data()
+    # counter = 0
     CURSOR.execute(queries.SELECT_UNANALYZED_ARTICLES) # gets stock_id, article_content
     for row in CURSOR.fetchall():
-      stock_id, article_content = row["stock_id"], row["article_content"]
+      article_id, stock_id, article_content = row["id"], row["stock_id"], row["article_content"]
       CURSOR.execute(queries.SELECT_STOCK_WITH_ID, (stock_id,))
       row = CURSOR.fetchone()
       stock_symbol, stock_category = row["symbol"], row["category"] # (ex) semiconductors
@@ -189,6 +192,14 @@ class SentAnalyzer():
       master_dict = self.create_master_dict()
       sentiment = self.bayes_calculation(cleaned_token_list, master_dict)
       self.update_database(freq_dist, stock_category, sentiment)
+      print("Symbol: " + stock_symbol + ", Category: " + stock_category)
+      print(sentiment)
+      CURSOR.execute(queries.UPDATE_ANALYZED_STATUS, (sentiment[0], article_id))
+      CONNECTION.commit()
+      # counter += 1
+      # if counter == 15:
+      #   break
+
       # self.decide_forecast # buy / sell
       # write to database containing just STOCKS and if we currently are buying, selling, or doing nothign?
   
@@ -197,7 +208,7 @@ class SentAnalyzer():
     CURSOR.execute(queries.EXISTS_NEWS_WITH_URL, (url,))
     url_in_db = CURSOR.fetchone()[0]
     if url_in_db == 1:
-      print("Can't train with this, it's already in database.")
+      print("Can't train with this, it's already in the database.")
       return
     AR = ArticleRetriever()
     article = AR.scrape_news_data(url) # returns Article object
@@ -209,7 +220,8 @@ class SentAnalyzer():
     CONNECTION.commit()
 
 SA = SentAnalyzer()
-SA.model_trainer(17, "Negative", "Software", "https://www.marketwatch.com/articles/thousands-of-businesses-hit-by-hack-of-microsoft-exchange-51615232254?mod=mw_quote_news_seemore")
+# SA.model_trainer(17, "Negative", "Software", "https://www.marketwatch.com/articles/thousands-of-businesses-hit-by-hack-of-microsoft-exchange-51615232254?mod=mw_quote_news_seemore")
+SA.analyze()
 
 # in terminal : 
 # $ sqlite3 stock-data.db

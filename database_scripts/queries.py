@@ -20,7 +20,7 @@ SELECT_POS_NUM_ARTICLES = """SELECT COUNT(*) FROM stock_news WHERE sentiment = '
 
 SELECT_NEG_NUM_ARTICLES = """SELECT COUNT(*) FROM stock_news WHERE sentiment = 'Negative'"""
 
-SELECT_UNANALYZED_ARTICLES = """SELECT stock_id, article_content FROM stock_news WHERE analyzed = 0"""
+SELECT_UNANALYZED_ARTICLES = """SELECT id, stock_id, article_content FROM stock_news WHERE real_analyzed = 0"""
 
 SELECT_LAST10_DECISIONS = """SELECT * FROM decisions DESC LIMIT 10"""
 
@@ -30,6 +30,8 @@ UPDATE_SENTIMENT = """UPDATE sentiment_data SET positive_freq = ?, negative_freq
 UPDATE_SENTIMENT_CATEGORY = """UPDATE sentiment_data SET category = ?"""
 
 UPDATE_DECISION = """UPDATE stock SET current_decision = ?, last_decision = ? WHERE symbol = ?"""
+
+UPDATE_ANALYZED_STATUS = """UPDATE stock_news SET real_analyzed = 1, sentiment = ? WHERE id = ?"""
 
 # For INSERTING into database 
 INSERT_STOCK = """INSERT INTO stock (symbol, category) VALUES (?, ?)"""
