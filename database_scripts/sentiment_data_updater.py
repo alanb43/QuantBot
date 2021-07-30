@@ -100,8 +100,8 @@ class SentAnalyzer():
       # LAST CHECKS FOR GENERALLY BAD TOKENS
       if token.isdigit() or len(token) > 12 or 'https' in token or token in self.__words_to_skip:
         continue
-      
-      cleaned_tokens_list.append(token)
+      if token != None:
+        cleaned_tokens_list.append(token)
 
     return cleaned_tokens_list
 
