@@ -29,7 +29,7 @@ html_top_content = webpage.DOCTYPE + webpage.HEAD + '''
         <th>Total P/L</th>
       </tr>
       {% for holding in holdings %}
-          <tr target="_blank" onclick="window.open('https://www.marketwatch.com/investing/stock/{{holding[0]}}', '_blank')" style="text-align:center; background-color: {{holding[9]}}; cursor: pointer" class="zoom">
+          <tr target="_blank" onclick="window.open('https://www.marketwatch.com/investing/stock/{{holding[0]}}', '_blank')" style="text-align:center; background-color: {{holding[9]}}; cursor: pointer">
             <td>{{holding[0]}}</td>
             <td style="color:{{holding[7]}}">{{holding[1]}}</td>
             <td>{{holding[2]}}</td>
