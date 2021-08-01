@@ -4,6 +4,70 @@ body {
     font-size: 20px;
 }
 
+
+div.scroll {
+  font-weight: 300;
+  margin: 0 auto;
+  margin-top: 250px;
+  height: 40vh;
+  width: 60%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  text-align:justify;
+}
+
+/* custom scrollbar */
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #454444;
+  border-radius: 0px;
+  border: 9px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a8bbbf;
+}
+
+table {
+  display: table;
+  border-collapse: separate;
+  box-sizing: border-box;
+  text-indent: initial;
+  border-spacing: 2px;
+  border-color: grey;
+  margin: 0px;
+  width: 100%;
+}
+
+th {
+  top: 0;
+  font-weight: 300;
+  padding: 30px;
+  font-size: 15px;
+  position: sticky;
+  background: black;
+  color: yellow;
+}
+
+td {
+  font-weight: 300;
+  padding: 30px;
+  font-size: 15px;
+}
+
+.holdings-table {
+  color: white;
+  font-weight: 300;
+}
+
 .us {
   color: yellow;
 }

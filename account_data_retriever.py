@@ -1,3 +1,4 @@
+from flask.scaffold import F
 from config import *
 from models.stock import Stock
 import operator
@@ -16,7 +17,7 @@ class AccountDataRetriever:
     self.account = self.api.get_account()
     self.positions = self.__get_account_positions()
     self.plpc_sorted_holdings = sorted(self.positions, key=operator.attrgetter('abs_intraday_plpc'), reverse=True)
-  
+    self.formatted_positions = self.format_positions()
 
   def __get_account_positions(self) -> list:
     '''
@@ -38,6 +39,42 @@ class AccountDataRetriever:
 
     return positions
 
+
+  def format_positions(self):
+    ''' FOR USE IN holdings.py TABLE'''
+    positions = self.__get_account_positions()
+    formatted_positions = []
+    for pos in positions[::-1]:
+      daily_plpc = "{:,.2f}".format(pos.intraday_plpc)
+      if pos.intraday_plpc < 0:
+        daily_color = '''#ad0017'''
+        daily_plpc = '-' + str(daily_plpc) + '%'
+      else:
+        daily_color = '''#008523'''
+        daily_plpc = str(daily_plpc) + '%'
+      pl = "${:,.2f}".format(pos.pl)
+      if pl[1] == '-':
+        pl = pl[1] + pl[0] + pl[2:]
+        pl_color = '''#ad0017'''
+      else:
+        pl_color = '''#008523'''
+      
+      formatted_positions.append(
+        [
+          pos.symbol,
+          daily_plpc,
+          '$' + str(pos.cost),
+          '$' + str(pos.current_price),
+          pos.qty,
+          '$' + str(pos.market_value),
+          pl,
+          daily_color,
+          pl_color
+        ]
+      )
+    
+    return formatted_positions
+    
 
   def get_stock_equity(self) -> float:
     '''

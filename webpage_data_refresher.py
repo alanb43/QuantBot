@@ -5,6 +5,7 @@ from models.webpage import get_decisions
 from datetime import datetime
 import os
 import random
+from models import holdings
 
 class WebpageDataRefresher(AccountDataRetriever):
   '''
@@ -144,3 +145,11 @@ class WebpageDataRefresher(AccountDataRetriever):
           html_file.write(line)
       html_file.write(webpage.NEWS)
       html_file.write(webpage.CONTACT)
+
+
+  def create_portfolio_page(self):
+    with open("templates/portfolio.html", "w") as html_file:
+      html_file.write(holdings.html_top_content)
+      
+
+

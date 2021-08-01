@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+  <head>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Ubuntu&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.typekit.net/oxi4xqh.css">
+    <title>QuantBot</title>
+    <link rel="shortcut icon" href="/static/favicon.ico">
+  </head>
+  <body>
+
+  
+  <div class="nav-bar">
+    <a href="/">
+      <video disableRemotePlayback autoplay muted loop id="myVideo">
+        <source src="/static/logo.mp4" type="video/mp4">
+      </video>
+    </a>
+    <ul class="nav-buttons">
+      <li class="button color"><a style = "text-decoration: none; color: white" href="#top">Portfolio</a></li>
+      <li class="button color "><a style = "text-decoration: none; color: inherit" href="#news">News</a></li>
+      <li class="button color"><a style = "text-decoration: none; color: inherit" href="#contact">Contact Us</a></li>
+    </ul>
+  </div>
+  <div class="scroll custom-scrollbar">
+    <table class="holdings-table" style="background-color:#050505; border-collapse:collapse;">
+      <tr style="text-align:center">
+        <th>Stock</th>
+        <th>Daily % Change</th>
+        <th>Avg Cost</th>
+        <th>Current Price</th>
+        <th>Shares Owned</th>
+        <th>Market Value</th>
+        <th>Total P/L</th>
+      </tr>
+      {% for holding in holdings %}
+      <tr style="text-align:center">
+        <td>{{holding[0]}}</td>
+        <td style="color:{{holding[7]}}">{{holding[1]}}</td>
+        <td>{{holding[2]}}</td>
+        <td>{{holding[3]}}</td>
+        <td>{{holding[4]}}</td>
+        <td>{{holding[5]}}</td>
+        <td style="color:{{holding[8]}}">{{holding[6]}}</td>
+      </tr>
+      {% endfor %}
+  </div>

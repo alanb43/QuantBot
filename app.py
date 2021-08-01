@@ -1,3 +1,4 @@
+from account_data_retriever import AccountDataRetriever
 from flask import Flask, render_template
 from webpage_data_refresher import WebpageDataRefresher
 from trader import Trader
@@ -29,11 +30,13 @@ def index():
   return render_template('index.html', stocks=stocks, plpc_sorted=sorted_by_plpc)
 
 
-@app.route("/OOGABOOGA")
-def ooga():
-  T = Trader()
-  data = T.create_market_order_data("AMD", 5, "buy", "market", "day")
-  T.place_order(data)
+@app.route("/portfolio")
+def generate_portfolio_page():
+  WDR = WebpageDataRefresher()
+  WDR.create_portfolio_page()
+  ADR = AccountDataRetriever()
+  holdings = ADR.formatted_positions
+  return render_template('portfolio.html', holdings=holdings)
 
 if __name__ == "__main__":
   app.run(host="localhost", debug=True)
