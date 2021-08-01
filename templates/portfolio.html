@@ -36,14 +36,14 @@
         <th>Total P/L</th>
       </tr>
       {% for holding in holdings %}
-      <tr style="text-align:center">
-        <td>{{holding[0]}}</td>
-        <td style="color:{{holding[7]}}">{{holding[1]}}</td>
-        <td>{{holding[2]}}</td>
-        <td>{{holding[3]}}</td>
-        <td>{{holding[4]}}</td>
-        <td>{{holding[5]}}</td>
-        <td style="color:{{holding[8]}}">{{holding[6]}}</td>
-      </tr>
+          <tr target="_blank" onclick="window.open('https://www.marketwatch.com/investing/stock/{{holding[0]}}', '_blank')" style="text-align:center; background-color: {{holding[9]}}; cursor: pointer" class="zoom">
+            <td>{{holding[0]}}</td>
+            <td style="color:{{holding[7]}}">{{holding[1]}}</td>
+            <td>{{holding[2]}}</td>
+            <td>{{holding[3]}}</td>
+            <td>{{holding[4]}}</td>
+            <td>{{holding[5]}}</td>
+            <td style="color:{{holding[8]}}">{{holding[6]}}</td>
+          </tr>
       {% endfor %}
   </div>
