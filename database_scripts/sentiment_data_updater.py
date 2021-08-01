@@ -100,8 +100,8 @@ class SentAnalyzer():
       # LAST CHECKS FOR GENERALLY BAD TOKENS
       if token.isdigit() or len(token) > 12 or 'https' in token or token in self.__words_to_skip:
         continue
-      
-      cleaned_tokens_list.append(token)
+      if token != None:
+        cleaned_tokens_list.append(token)
 
     return cleaned_tokens_list
 
@@ -220,8 +220,8 @@ class SentAnalyzer():
     CONNECTION.commit()
 
 SA = SentAnalyzer()
-# SA.model_trainer(17, "Negative", "Software", "https://www.marketwatch.com/articles/thousands-of-businesses-hit-by-hack-of-microsoft-exchange-51615232254?mod=mw_quote_news_seemore")
-SA.analyze()
+SA.model_trainer(24, "Positive", "Consumer_Digital_Services", "https://www.marketwatch.com/story/microsofts-quarterly-results-show-that-growth-is-nowhere-near-slowing-down-11627500080?mod=mw_quote_news")
+# SA.analyze()
 
 # in terminal : 
 # $ sqlite3 stock-data.db
