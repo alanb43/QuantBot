@@ -1,4 +1,3 @@
-from flask.scaffold import F
 from config import *
 from models.stock import Stock
 import operator
