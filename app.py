@@ -38,5 +38,10 @@ def generate_portfolio_page():
   holdings = ADR.formatted_positions
   return render_template('portfolio.html', holdings=holdings)
 
+
+@app.route("/contact")
+def generate_contact_page():
+  return render_template('contact.html')
+
 if __name__ == "__main__":
   app.run(host="localhost", debug=True)
