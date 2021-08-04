@@ -35,8 +35,9 @@ def generate_portfolio_page():
   WDR = WebpageDataRefresher()
   WDR.create_portfolio_page()
   ADR = AccountDataRetriever()
+  header = ["${:,.2f}".format(ADR.get_stock_equity())  ]
   holdings = ADR.formatted_positions
-  return render_template('portfolio.html', holdings=holdings)
+  return render_template('portfolio.html', header=header, holdings=holdings)
 
 if __name__ == "__main__":
   app.run(host="localhost", debug=True)

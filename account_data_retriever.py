@@ -43,7 +43,12 @@ class AccountDataRetriever:
     ''' FOR USE IN holdings.py TABLE'''
     positions = self.__get_account_positions()
     formatted_positions = []
+    i = 1
     for pos in positions[::-1]:
+      if i % 2 == 0:
+        back_color = "#0f0f0f"
+      else:
+        back_color = "#121212"
       daily_plpc = "{:,.2f}".format(pos.intraday_plpc)
       if pos.intraday_plpc < 0:
         daily_color = '''#ad0017'''
@@ -57,18 +62,19 @@ class AccountDataRetriever:
         pl_color = '''#ad0017'''
       else:
         pl_color = '''#008523'''
-      
+      i += 1
       formatted_positions.append(
         [
           pos.symbol,
           daily_plpc,
-          '$' + str(pos.cost),
-          '$' + str(pos.current_price),
+          '$' + "{:,.2f}".format(pos.cost),
+          '$' + "{:,.2f}".format(pos.current_price),
           pos.qty,
-          '$' + str(pos.market_value),
+          '$' + "{:,.2f}".format(pos.market_value),
           pl,
           daily_color,
-          pl_color
+          pl_color,
+          back_color
         ]
       )
     

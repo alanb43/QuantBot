@@ -4,12 +4,11 @@ body {
     font-size: 20px;
 }
 
-
 div.scroll {
   font-weight: 300;
   margin: 0 auto;
-  margin-top: 250px;
-  height: 40vh;
+  margin-top: px;
+  height: 56.5vh;
   width: 60%;
   overflow-x: hidden;
   overflow-y: auto;
@@ -307,3 +306,16 @@ h2 {
     left: 5%;
     top: 8%;
 }
+
+.row
+{
+    box-shadow: none;
+    z-index: 1;
+}
+.row:hover
+{
+    transform: scale(1.01);
+    box-shadow: 0px 2px 10px gray;
+    z-index: 1;
+}
+

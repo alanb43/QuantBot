@@ -1,0 +1,67 @@
+Why Moderna, Illumina, or China’s Meituan Could Be the Next Tesla 
+https://www.marketwatch.com/articles/baillie-gifford-tesla-moderna-illumina-meituan-51624044752?mod=mw_quote_news
+BGGSX
+ 
+                    +3.02%
+MRNA
+ 
+                    -1.78%
+TSLA
+ 
+                    +1.17%
+NIO
+ 
+                    -0.70%
+ILMN
+ 
+                    +0.51%
+3690
+ 
+                    +3.66%
+PDD
+ 
+                    -0.55%
+AMZN
+ 
+                    +0.21%
+LMND
+ 
+                    +4.61%
+TXG
+ 
+                    -2.20%
+RXRX
+ 
+                    +3.28%
+AFRM
+ 
+                    -1.73%
+ 
+Baillie Gifford, the Edinburgh-based money manager, has built a stellar investment record over more than 110 years by separating signal from noise. The firm invests in public and private companies with long-term growth potential, irrespective of macroeconomic variables and short-term market moves. Its long-term investment horizon and ready familiarity with new technologies made Tom Slater, head of U.S. equities and a portfolio manager of its U.S. equity and long-term global growth funds, a natural choice to join Barron’s recent Centennial Roundtable, whose members were charged with imagining the next 100 years.
+Consider the edited interview below a continuation of that conversation, but with a focus on companies that offer the most exciting investment opportunities now. Slater is joint manager, with Barron’s Roundtable member James Anderson, of Baillie Gifford’s 
+        Scottish Mortgage Investment Trust
+       (ticker: SMT.UK), with roughly 18 billion pounds sterling ($25 billion) under management, and co-manager of the $145 million 
+        Baillie Gifford U.S. Equity Growth
+       fund (BGGSX). Both carry five-star ratings from Morningstar. Scottish Mortgage shares rose 99% in the 12 months ended on March 31; U.S. Equity Growth’s total return was 73% in the year ended on June 15, placing it in the top percentile of Morningstar’s large-growth category. Barron’s: After a stellar 2020, growth stocks are facing challenges. Are you concerned? Tom Slater: We don’t focus on short-term movements in stock prices. We focus on interesting companies with long-term opportunities. Our average holding period is five to 10 years. It is only over that sort of time horizon that fundamentals drive the share price. Many people are focused on trying to predict economic variables. They are inherently extremely difficult, if not impossible, to predict. At the same time, there are a lot of predictable trends—in communications, computation, machine learning, energy generation and storage, gene sequencing, and synthetic biology. We focus on predictable trends and the opportunities they create. At our Centennial Roundtable, you observed that some technologies in the field of biology are on trajectories as good as, if not better than Moore’s Law. How can investors capitalize on this?  The cost curve of genetic sequencing has declined far more dramatically than the cost of computing power under Moore’s Law. Now, cost reductions are expanding into adjacent areas. Gene sequencing is generating huge volumes of healthcare data. The cost of processing and storing this data is falling rapidly, as is the cost of applying machine learning to the data. One adjunct is our ability to start printing [copying] DNA or RNA. 
+        Moderna
+       (MRNA) is printing RNA sequences. We’re talking about programming biology, only instead of coding with ones and zeroes, it’s Gs, Ts, As, and Cs [guanine, thymine, adenine, and cytosine—sequenced nucleobases that form the genome]. Moderna’s ability to produce a safe and effective vaccine based on messenger RNA should increase one’s conviction in the company’s ability to produce vaccines to treat other huge, unmet needs, such as HIV/AIDS. Ginkgo Bioworks, another synthetic biology company, is coming public through a merger with a SPAC [special purpose acquisition company]. It is writing strings of DNA code that can be used in biological manufacturing processes. Won’t Moderna’s success attract competitors? When a technology undergoes a radical change, not just the evolution of an existing paradigm, it is often difficult for incumbent companies to embrace that change. It is much more likely that this technology will empower new businesses and new business models. That has been the case in the automotive industry up until now with the development of electric vehicles, or EVs. Interestingly, drug companies with big vaccine franchises haven’t come up with effective Covid-19 vaccines.  Speaking of EVs, Baillie Gifford has trimmed its stake in 
+        Tesla
+ (TSLA) to less than 2% of the company’s shares from a peak of more than 7%. What prompted this? Tesla remains a large holding. Partly, the selling reflects the strength of the share price, and the company’s operational success in driving that. And partly, it’s just thinking through the probabilities for upside from here. What is the next Tesla, in EVs and more broadly? China is the world’s largest automotive market, and I would be surprised if there wasn’t a domestic Chinese challenger to Tesla. We’re an investor in 
+        NIO
+       (NIO), which has an opportunity to be that player.  What are the characteristics that make Tesla so interesting? There are 100 million-plus cars sold each year. It’s a vast market. They have approached it in a unique way, with a founder CEO with a significant component of his own wealth tied up in the company. Tesla has doggedly pursued a long-term vision, not worrying too much about what the stock market thinks. There have been 10 occasions during our period of ownership when the stock dropped by 30% or more. Moderna has a platform technology with a broad-enough application to be interesting. 
+        Illumina
+       (ILMN), which makes genomic sequencing machines, has a similar opportunity. Chinese companies such as 
+        Meituan
+       (3690.Hong Kong) in local services, and 
+        Pinduoduo
+       (PDD) in the grocery category, are fascinating, partly because of the scale of their ambition. They are increasingly changing the entire supply chain in their industries. Delivery of prepared foods in Western markets began as a replacement product for takeout. The scope is so much greater in China. There is more of a culture of eating prepared food. Kitchens designed in apartment blocks in China are getting smaller, and those apartment blocks are being designed with the service infrastructure for efficient food delivery. As you build a reliable rapid-delivery infrastructure, there are adjacent categories. ByteDance is also fascinating. TikTok [its social-media subsidiary] has generated controversy in the U.S., but ByteDance is 95% about China, and how rapidly the company has scaled the domestic advertising market. In China, very large businesses with founder leaders are taking advantage of the scale of the domestic market. Do you prefer to invest in companies led by founder CEOs? We want to invest in companies led by people who optimize for long-term outcomes. That is more common in founders, although that’s not to say you can’t get it in professional CEOs. Francis deSouza has been CEO of Illumina since 2016. The company has a large revenue base; it is very profitable, and growing in a predictable way. Last year, Illumina bid $8 billion for Grail, a pre-revenue developer of cancer blood tests, based on where it sees this market going in the next five to 10 years. The stock market didn’t like it, but this is exactly the type of move that founders make. Which private companies should investors watch? Privately held companies like ByteDance and SpaceX are valued in the tens of billions of dollars. SpaceX is trying to reduce the cost of access to space by several orders of magnitude, and is creating a new market: commercial access to space. We are also an investor in Relativity Space, which is using 3-D printing to build its rockets.  Recently, you’ve pared your holdings in 
+        Amazon.com
+       (AMZN). Why? We’ve been Amazon shareholders for 16 years. Prior to last year, any reductions made were in the interest of diversification within a fund. But Amazon remains a big holding for us. It still has some big opportunities ahead. Grocery is one; it is a huge category that is slowly moving online. On the other hand, Jeffrey Bezos stepping back from the CEO job is an important factor in our analysis of the company, together with the recent retirement of Jeff Wilke, who ran the consumer business. [Bezos will become executive chairman on July 5.] If you believe that Bezos’ vision and drive have been important in getting Amazon to this point, even a partial step back is a reason for more caution. What other investments excite you? 
+Lemonade
+       (LMND) began as a seller of renter’s insurance, which lends itself well to online distribution—specifically, mobile-device distribution. The company created a great consumer experience. It allows customers to nominate a charity to receive the excess float in their insurance pool. That creates an incentive not to overstate a claim. Renter’s insurance is usually the first insurance product someone will buy. If the experience is great, they’ll think about buying the same brand of pet or car or homeowner’s insurance. Lemonade is building a modern technology stack in an industry with large incumbent players still running on mainframes. We recently invested in 
+        10X Genomics
+       (TXG) and 
+        Recursion Pharmaceuticals
+       (RXRX). The common theme, again, is applying information technology much more efficiently than incumbent companies have done. 
+Affirm Holdings
+       (AFRM) also fits this theme. Point-of-sale lending traditionally has been a bad experience for consumers, with high interest rates and high penalties if you miss a payment. By using technology, Affirm has created a more consumer-friendly experience, which is driving greater adoption of the service. The model has a long runway. When does lack of profit become an investment deterrent? Whether a company is currently making a profit or not is almost tangential to how much value is being created. Take a software-as-a-service company. Signing up a new customer might cost a lot of money in year one. But the revenue stream generated by that sale could last decades. As an investor, I would want the company to sign up as many customers as possible, which means they’re going to lose a lot of money at the outset. But if they can hang on to those customers, the value creation could be massive. Thank you, Tom. Write to Lauren R. Rublin at lauren.rublin@dowjones.com
