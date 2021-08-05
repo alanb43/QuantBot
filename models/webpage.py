@@ -127,9 +127,9 @@ def get_winner(plpc):
   return f'''
     <li class="zoom" style="width: 25%; background-color: {color}; opacity: {opacity}; color: white; list-style: none; margin-right: 15px; height: 80px;">
     <a style="color: white; text-decoration: none; width: 100%" href="https://www.marketwatch.com/investing/stock/{plpc.symbol}" target="_blank">
-      <ul class = "tile" style="list-style: none; position: relative; left: -5%; top: 5%">
-        <li style="display: flex; flex-direction: horizontal; margin-bottom: -25px"><p class="left-col">{plpc.symbol}</p><p class="right-col" style="position: absolute; right: 5%; margin-bottom: -65px">${"{:.2f}".format(plpc.current_price)}</p></li>
-        <li><p class="left-col">{str(round(plpc.intraday_plpc * 100, 2))}%</p><p class="right-col" style="position: absolute; right: 5%; top: 21px">${"{:.2f}".format(plpc.current_price * plpc.qty)}</p></li>
+      <ul class = "tile" style="list-style: none; position: relative; left: -10%; top: 5%">
+        <li style="display: flex; flex-direction: horizontal; margin-bottom: -25px"><p class="left-col">{plpc.symbol}</p><p class="right-col" style="position: absolute; right: 5%; margin-bottom: -65px; text-align: right">${"{:.2f}".format(plpc.current_price)}</p></li>
+        <li><p class="left-col">{str(round(plpc.intraday_plpc * 100, 2))}%</p></li>
       </ul>
     </a>
     </li>

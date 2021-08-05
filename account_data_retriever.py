@@ -48,7 +48,7 @@ class AccountDataRetriever:
       if i % 2 == 0:
         back_color = "#0f0f0f"
       else:
-        back_color = "#121212"
+        back_color = "#151515"
       daily_plpc = "{:,.2f}".format(pos.intraday_plpc)
       if pos.intraday_plpc < 0:
         daily_color = '''#ad0017'''
