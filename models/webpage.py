@@ -13,8 +13,112 @@ HEAD = '''
     <link rel="stylesheet" href="https://use.typekit.net/oxi4xqh.css">
     <title>QuantBot</title>
     <link rel="shortcut icon" href="/static/favicon.ico">
+    <script type="text/javascript">
+      window.onload = function () {
+        CanvasJS.addColorSet("yellowShades",
+        [
+          "#FFBF00",
+          "#E1C16E",
+          "#FFEA00",
+          "#FDDA0D",
+          "#FFFF8F",
+          "#DFFF00",
+          "#E4D00A",
+          "#8B8000",
+          "#FFD700",
+          "#FFC000",
+          "#DAA520",
+          "#FCF55F",
+          "#FAFA33",
+          "#F4BB44",
+          "#FBEC5D",
+          "#FFFFF0",
+          "#FFFAA0",
+          "	#F4C430",
+          "	#F3E5AB",
+          "#FFFF00",
+          "	#FFAA33",
+          "	#C4B454"
+        ]);
+        var chart = new CanvasJS.Chart("chartContainer",
+        {
+          colorSet: "yellowShades",
+          title:{
+            text:"Breakdown by Stock",
+            fontColor: "white",
+            margin: 10
+          },
+
+          theme: "dark2",
+          backgroundColor: "black",
+          height: 350,
+          width: 350,
+          toolTip:{
+            content: "{indexLabel}: {y}%",
+            enabled: true,       //disable here
+            animationEnabled: true //disable here
+          },
+          data: [
+          {
+            type: "pie",
+            indexLabelFontColor: "black",
+            indexLabelPlacement: "inside",
+            showInLegend: false,
+            legendText: "{indexLabel}",
+            dataPoints: [
+              {% for holding in holdings %}
+                {  y: {{holding[10]}}, indexLabel: "{{holding[0]}}" },
+              {% endfor %}
+              {y: 0, indexLabel: ""}
+            ]
+          }
+          ]
+        });
+        chart.render();
+
+        var chart2 = new CanvasJS.Chart("chartContainer2",
+        {
+          colorSet: "yellowShades",
+          title:{
+            text:"Breakdown by Category",
+            fontColor: "white",
+            margin: 10
+          },
+
+          theme: "dark2",
+          backgroundColor: "black",
+          height: 350,
+          width: 350,
+          toolTip:{
+            content: "{indexLabel}: {y}%",
+            enabled: true,       //disable here
+            animationEnabled: true //disable here
+          },
+          data: [
+          {
+            type: "pie",
+            indexLabelFontColor: "black",
+            indexLabelPlacement: "inside",
+            indexLabelFontSize: 12,
+            indexLabelMaxWidth: 200, 
+            showInLegend: false,
+            indexLabelWrap: false,
+            legendText: "{indexLabel}",
+            dataPoints: [
+              {% for key, value in cats.items() %}
+                {  y: {{value}}, indexLabel: "{{key}}" },
+              {% endfor %}
+              {y: 0, indexLabel: ""}
+            ]
+          }
+          ]
+        });
+        chart2.render();
+      }
+    </script>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
   </head>
-  <body>
+  <body style="overflow-x: hidden">
 '''
 
 NAVBAR = '''
@@ -86,7 +190,6 @@ TOPHALF = '''
     <ul class="outer-list" style="list-style: none; font-size: 15px;">
       <li>
         <ul class="inner-list" style="list-style: none; display: flex; flex-direction: horizontal">
-
 '''
 
 BOTTOMHALF = '''
@@ -101,7 +204,6 @@ ENDOFPLPC = '''
       </li>
     </ul>
   </div>
-
 '''
 
 
@@ -127,9 +229,9 @@ def get_winner(plpc):
   return f'''
     <li class="zoom" style="width: 25%; background-color: {color}; opacity: {opacity}; color: white; list-style: none; margin-right: 15px; height: 80px;">
     <a style="color: white; text-decoration: none; width: 100%" href="https://www.marketwatch.com/investing/stock/{plpc.symbol}" target="_blank">
-      <ul class = "tile" style="list-style: none; position: relative; left: -5%; top: 5%">
-        <li style="display: flex; flex-direction: horizontal; margin-bottom: -25px"><p class="left-col">{plpc.symbol}</p><p class="right-col" style="position: absolute; right: 5%; margin-bottom: -65px">${"{:.2f}".format(plpc.current_price)}</p></li>
-        <li><p class="left-col">{str(round(plpc.intraday_plpc * 100, 2))}%</p><p class="right-col" style="position: absolute; right: 5%; top: 21px">${"{:.2f}".format(plpc.current_price * plpc.qty)}</p></li>
+      <ul class = "tile" style="list-style: none; position: relative; left: -10%; top: 5%">
+        <li style="display: flex; flex-direction: horizontal; margin-bottom: -25px"><p class="left-col">{plpc.symbol}</p><p class="right-col" style="position: absolute; right: 5%; margin-bottom: -65px; text-align: right">${"{:.2f}".format(plpc.current_price)}</p></li>
+        <li><p class="left-col">{str(round(plpc.intraday_plpc * 100, 2))}%</p></li>
       </ul>
     </a>
     </li>

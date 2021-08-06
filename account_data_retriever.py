@@ -1,6 +1,8 @@
 from config import *
 from models.stock import Stock
 import operator
+import random
+import csv
 
 class AccountDataRetriever:
   '''
@@ -43,7 +45,13 @@ class AccountDataRetriever:
     ''' FOR USE IN holdings.py TABLE'''
     positions = self.__get_account_positions()
     formatted_positions = []
+    total = self.get_stock_equity()
+    i = 1
     for pos in positions[::-1]:
+      if i % 2 == 0:
+        back_color = "#0f0f0f"
+      else:
+        back_color = "#151515"
       daily_plpc = "{:,.2f}".format(pos.intraday_plpc)
       if pos.intraday_plpc < 0:
         daily_color = '''#ad0017'''
@@ -57,18 +65,23 @@ class AccountDataRetriever:
         pl_color = '''#ad0017'''
       else:
         pl_color = '''#008523'''
+      i += 1
       
+      pie_color = random.choices(range(256), k=3)      
       formatted_positions.append(
         [
           pos.symbol,
           daily_plpc,
-          '$' + str(pos.cost),
-          '$' + str(pos.current_price),
+          '$' + "{:,.2f}".format(pos.cost),
+          '$' + "{:,.2f}".format(pos.current_price),
           pos.qty,
-          '$' + str(pos.market_value),
+          '$' + "{:,.2f}".format(pos.market_value),
           pl,
           daily_color,
-          pl_color
+          pl_color,
+          back_color,
+          round(100 * (pos.market_value / total), 2),
+          pie_color
         ]
       )
     
@@ -136,3 +149,24 @@ class AccountDataRetriever:
     ''' for debugging, so you can see what you're handling '''
     for position in sorted(self.positions):
       print(position)
+
+  def get_cats(self):
+    company_industry = {}
+    with open('symbols.csv', 'r') as csvfile:
+      reader = csv.reader(csvfile)
+      for row in reader:
+        company_industry[row[1]] = row[2]
+    percents = {}
+
+    for pos in self.positions:
+      if company_industry[pos.symbol] in percents.keys():
+        percents[company_industry[pos.symbol]] += pos.market_value
+      else:
+        percents[company_industry[pos.symbol]] = pos.market_value
+    # add all the markets values together for each category in a dictionary
+
+    total = self.get_stock_equity()
+    for cat in percents.keys():
+      percents[cat] = round(100 * percents[cat] / total,2)
+    
+    return percents
