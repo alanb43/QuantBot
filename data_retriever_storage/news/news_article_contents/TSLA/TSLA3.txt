@@ -1,0 +1,130 @@
+Self-Driving Cars Are Closer Than You Think. The Stocks to Buy—and Ones to Avoid. 
+https://www.marketwatch.com/articles/self-driving-cars-stocks-51624032858?mod=mw_quote_news
+F
+ 
+                    -1.66%
+UBER
+ 
+                    +0.14%
+LYFT
+ 
+                    -0.15%
+TM
+ 
+                    -4.33%
+TSLA
+ 
+                    +1.17%
+SPX
+ 
+                    -1.13%
+APTV
+ 
+                    -2.45%
+005380
+ 
+                    -0.63%
+GOOGL
+ 
+                    -1.13%
+GM
+ 
+                    -2.16%
+TWTR
+ 
+                    +0.23%
+MS
+ 
+                    -4.20%
+INVZ
+ 
+                    +1.76%
+LAZR
+ 
+                    +0.69%
+OUST
+ 
+                    +5.50%
+VLDR
+ 
+                    -1.27%
+AEVA
+ 
+                    +4.30%
+CFAC
+MSFT
+ 
+                    -0.30%
+ 
+The sprint to develop a self-driving car has turned into a slog, one that leaves drivers no closer to buying one than they were five years ago, when 
+        Ford Motor
+       promised a car with no steering wheel by 2021. But amid the broken promises, a fully automated car is closer than investors might realize.
+If you’re looking to catch a cab from Las Vegas McCarran Airport and open the Lyft app, you’ll find, among the normal options, a choice for an autonomous taxi. When the car, a BMW 5 Series, pulls up, it doesn’t feel quite like the stuff of science fiction. There’s still a driver in the seat, talking to you as a cabbie would. But then you start to notice little things. The screen, like something out of 1982’s Tron, displaying pixelated jaywalkers, cars, and streetlights. The smoothness of the turns. The steering wheel moving—by itself. And when you pull up to your destination, you realize that it has been the lowest-key life-changing experience you’ve ever had.  Investors can be forgiven for having forgotten about the potential for autonomous vehicles, or AVs. 
+        Uber Technologies
+       (ticker: UBER) sold its self-driving car business in December with far less fanfare than it started it. 
+        Lyft
+       (LYFT) unloaded its AV unit to 
+        Toyota Motor
+       (TM) this year. And even 
+        Tesla
+       (TSLA) CEO Elon Musk’s promises about the looming arrival of fully autonomous driving have started to ring hollow. Stocks devoted to autonomous driving have dropped roughly 30% year to date, and 50% from 52-week highs, even as the 
+        S&P 500 index
+       hit new records.  Yet autonomous driving is closer to reality than ever before. In Las Vegas, some of the newest Lyft robotaxis, built by an 
+        Aptiv
+       (APTV)-
+        Hyundai Motor
+       (005380.Korea) joint venture called Motional, are autonomous, with no safety drivers. Lyft plans to add more cities to its AV fleet by 2023. 
+        Alphabet’s
+       (GOOGL) Waymo has fully driverless cars on the road in Arizona. And 
+        General Motors
+       (GM) is testing its self-driving taxis in San Francisco. The auto industry now has a credible path, backed by capital, to bring AVs to the masses. There are a lot of opportunities for investors, too, just not in the most obvious spots.
+A white BMW 540i, photographed in Troy, Mich. on June 15, that is similar to the self-driving vehicles that Motional operates on the Lyft network in Las Vegas. It has 21 sensors, including radar, cameras and lidar sensors.
+            Photographs by Roy Ritchie
+          
+Autonomous driving has come a long way from the original Defense Advanced Research Projects Agency, or Darpa, challenge in 2004. SAE International, formerly the Society of Automotive Engineers, defines five levels of autonomy. Levels 1 and 2 offer assistance such as lane-keeping and adaptive cruise control—which makes most new cars these days somewhat autonomous. But when most people think of truly self-driving vehicles, they are thinking about Levels 3, 4, and 5, when the car is really doing all the work. At Level 3, the driver’s seat needs to be occupied, but the occupant doesn’t have to pay that much attention until told to by the car. Level 4 requires no human intervention in some settings, such as cities. Level 5 is true autonomy.  The airport taxi in Las Vegas was Level 4. Lyft has completed more than 100,000 autonomous rides with a safety driver. The driver was there because AVs are new, and Lyft is allowed to operate them on public roads. Casinos are private property. Soon, Motional cabs will make their way through the city to over 3,500 destinations with no drivers at all.  The benefits were clear. The car is a very good driver. It’s patient, signals all lane changes, and doesn’t zip around cars waiting to make right or left turns. It obeys speed limits. The drive is smooth. The cost: $15 to $35, the same as a regular Lyft ride. AVs like Motional’s are enabled by a host of sensors to help them navigate city streets. There are cameras, which offer a 360° view of the road. Radar, a smaller version of those found in airport traffic-control towers, sees through bad weather and changing light. And then there’s lidar—short for laser-based radar—which is particularly good at seeing objects far off in the distance. All of that information is fed into advanced software in an onboard computer, which deciphers data and makes the ride possible. None of that is cheap. The Motional-built Hyundai Ioniqs, which will be deployed by Lyft in cities beyond Las Vegas by 2023, might cost $150,000, an amount out of reach for most people. And even if the cars are affordable, there remains the problem of checking and calibrating self-driving sensors and upgrading software. This generation of AVs is commercial vehicles, and they need to earn revenue to justify the cost, putting them in direct competition with the 370,000 drivers for ride-hailing companies, cabs, and chauffeured cars in the U.S. That’s just a fraction of the 270 million or so vehicles registered in America, however. But just as antilock brakes and airbags penetrated the industry a generation ago, automatic emergency braking and adaptive cruise control are becoming standard offerings on many cars today, and more self-driving features are coming.
+A Black BMW 540i with Aptiv’s Level 3 self-driving system on the road in Troy, Mich., on June 15. Aptiv was one of the first companies to put radar in a car. 
+            Photograph by Roy Ritchie
+          
+Don’t expect it to come from Tesla. Musk keeps telling investors—and his 
+        Twitter
+       followers—that the company is close to achieving full self-driving. That doesn’t seem to be the case, at least not by SAE standards. Tesla vehicles come with a basic driver-assistance function called Autopilot, which offers adaptive cruise control and lane-keeping assistance. For $10,000 more, drivers can upgrade to what the company calls full self-driving, or FSD, which helps in making highway lane changes and navigating exit ramps—still just Level 2. The kind of full self-driving that Musk touts, which could arrive by the end of 2021, will qualify as Level 3. But even then, drivers will need to be in the drivers’ seats, ready to take over.  There’s a reason for that. Tesla uses optical cameras—and only optical cameras, as of May—to manage the driver-assistance features. Everyone, save Musk, insists that lidar is required to reach Level 4 autonomy. Cost is thought to be one of the rationales for Musk’s cameras-only approach. Depending on the technology, lidar can cost $500 to $1,000 per sensor, doubling or tripling the cost of existing Level 2 systems available on passenger cars. “I think even if [lidar] was free, we wouldn’t put it on,” said Musk on his company’s third-quarter 2020 earnings conference call.  The problem for Tesla investors and the stock is the mismatch between expectations and reality. 
+        Morgan Stanley
+       analyst Adam Jonas, for instance, attributes roughly a third of his $900 stock price target, or $300 billion, to “network services” and “Tesla Mobility”—FSD software sales and robotaxis, respectively—even though he doesn’t see the company delivering Level 4 or 5 cars before 2030. ARK Invest’s Cathie Wood sees Tesla’s Level 4 robotaxis on the roads potentially by 2024 or 2025, which is one reason that her target price for Tesla stock for 2025 is $3,000 a share, giving it a market cap of roughly $2.9 trillion. AV confusion is one more thing that investors will have to wrestle with for the stock, which was trading at a recent price of $616.60, having lost about a quarter of its value since mid-January.
+Waymo currently has robotaxis on the streets of Arizona and plans to roll them out in other cities in coming years. Pictured above, Waymo's autonomously driven Jaguar I-Pace electric SUV.
+            Courtesy of Waymo
+          
+Not that Musk is wrong about lidar. It is very expensive. And for that reason alone, the six lidar companies that came public in 2020 and 2021 might find the sales targets they set hard to hit. Together, 
+        Innoviz Technologies
+       (INVZ), 
+        Luminar Technologies
+       (LAZR), 
+        Ouster
+       (OUST), 
+        Velodyne Lidar
+       (VLDR), 
+        Aeva Technologies
+       (AEVA), and 
+        AEye
+       (CFAC) project sales of $4.8 billion by about 2025. The discrepancies between individual company projections are particularly wide. Ouster projects sales of $1.6 billion by 2025. AEye projects just $290 million. Both are targeting similar customers and end markets. Both believe they have leading technology and software. Both can’t be right.  The same six companies expect earnings before interest, taxes, depreciation, and amortization, or Ebitda, of $1.7 billion. That’s an average profit margin of about 34%. The average profit margin for auto-parts suppliers is less than 10%. New technologies can offer superior margins because of the proprietary nature of their technology, or because the importance of the features makes customers insensitive to product pricing. Neither looks to be the case for lidar. Instead, lidar sensors are destined to be commodities, leaving investors betting implicitly on each company’s integration software. What’s more, car companies are sensitive to feature pricing. An advanced safety system that enables Level 2 or 2-plus autonomy can cost up to $1,200. Car companies are unlikely to adopt lidar, which can cost that much per sensor, as long as prices are that high. History suggests that it could take a while. “It took 15 years to get radar into cars, years for optical cameras,” says AEye CEO Blair LaCorte. “Lidar will be in cars in five-to-seven years.” The stocks poised to benefit from the shift to autonomous driving are General Motors, majority owner of self-driving car company Cruise, and Aptiv, the auto-parts supplier that has partnered with Hyundai in Motional. 
+ 
+The Pure Plays 
+Valuations differ wildly for the six lidar companies that have gone public during the past year.*
+E=estimate.  *AEye is in the process of going public via a special purpose acquisition company and will trade under the ticker LIDR.  **Financial estimates for 2024.
+Sources: FactSet; company reports
+Aptiv began life as Delphi Automative Systems, which was spun out of GM in 1999 and went bankrupt in 2005. Former CEO Rodney O’Neal started the transformation from a low-margin struggling supplier of commodity parts to a higher-margin, higher-growth business, one that now focuses on vehicle electrification and software for autonomous driving. 
+Kevin Clark, Aptiv's president and CEO, in a driverless test vehicle outside Motional’s Boston headquarters, its autonomous driving joint venture with Hyundai,  on June 11.
+            Photograph by Tony Luong
+          
+These days, Aptiv has the products and software capabilities to integrate all of the data coming from the sensors located all over the car. It can sell auto makers a complete Level 2 autonomous-driving system or just the components for one. Today, roughly 25% of sales come from “advanced safety systems,” industry jargon for autonomous-driving features. The balance comes from power and signal products. But there is a natural synergy between both divisions. The more complicated that cars get with sensors and data, the more sophisticated the power equipment they will need. Aptiv was one of the first companies to put radar in a car, in 1999. The systems cost $3,000 each and were the size of a tissue box. Today’s sensors are smaller and cost in the tens of dollars. Aptiv stock isn’t quite flying under the radar. The stock has returned about 23% a year for the past five years and trades for 29 times estimated 2022 earnings of $5.10 a share, a premium to the S&P 500’s 20 times, and an even larger premium to the auto-supplier group’s 11 times. But sales are expected to rise about 11% a year on average for the next two years. Sales at large auto suppliers, by comparison, are expected to grow about 7% a year on average.  And none of this takes into account Aptiv’s half of Motional. “If this thing really works, the Motional JV stake...just your share of it, could be worth more than all of Aptiv,” said Morgan Stanley’s Jonas on the company’s fourth-quarter 2020 earnings conference call. He may be right. GM’s Cruise, for instance, is worth $30 billion, based on a 
+        Microsoft
+       (MSFT) investment made earlier this year. Kevin Clark, CEO of Aptiv, says Motional doesn’t want to operate a taxi fleet as Cruise might, but that doesn’t mean it can’t. Motional is the hidden asset that represents a cherry on top of a great business. By Jonas’ math, Aptiv could be worth $205, up 30% from recent levels. General Motors is another option for investors, thanks to its Cruise business. GM owns an estimated two-thirds of the company, making its stake worth roughly $20 billion. That would be nearly a quarter of GM’s $87 billion market capitalization. It also means that the company’s auto business is trading at about seven times 2022 earnings estimates of $6.78 a share. 
+The operations center for Alphabet’s Waymo, which has fully driverless cars on the road in Arizona. 
+            Courtesy of Waymo
+          
+Most analysts don’t give GM credit for its Cruise business, however. The autonomous-driving business profits are still theoretical, and for now Cruise is consuming, not earning, capital. Still, 90% of analysts covering GM stock rate it Buy. Their average price target is about $71 a share, up about 15% from recent levels. Adding Cruise could boost the target price to about $85 a share, up 41% from Thursday’s close of $60.08. Still, the big reason to be optimistic about GM stock is that the base car business is getting better. Like Aptiv, the hidden AV asset is a bonus on top of an improving business. Cruise was recently approved by the California Public Utilities Commission—the entity that regulates ride-hailing companies—to carry passengers in the state. “Cruise is making great, great progress,” says GM Chief Financial Officer Paul Jacobson.  Missing from the list is Waymo’s parent, Alphabet. Waymo just completed a $2.5 billion round of investment and operates its own ride-hailing network, with robotaxis on the streets of Arizona and plans to roll them out in other cities in coming years. It’s probably worth more than both Cruise and Motional. But even with a $50 billion valuation, it’s still just 3% of Alphabet’s market cap. Alphabet has its reasons for investing in Waymo—Google, in the past, has functioned like a technology incubator—but for now, at least, Waymo is just too small to move the needle.  Self-driving cars are the future—they’re just not the future of Alphabet’s business. 
+ 
+Ready for the Road
+These four companies are helping make self-driving cars a reality.  
+*Value of the company's share of the AV unit.
+Sources: FactSet; Barron's calculations
+Write to Al Root at allen.root@dowjones.com
