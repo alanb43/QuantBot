@@ -131,7 +131,7 @@ NAVBAR = '''
       <ul class="nav-buttons">
         <li class="button color"><a style = "text-decoration: none; color: inherit" href="/portfolio">Portfolio</a></li>
         <li class="button color "><a style = "text-decoration: none; color: inherit" href="#news">News</a></li>
-        <li class="button color"><a style = "text-decoration: none; color: inherit" href="#contact">Contact Us</a></li>
+        <li class="button color"><a style = "text-decoration: none; color: inherit" href="/contact">Contact Us</a></li>
       </ul>
     </div>
 '''
