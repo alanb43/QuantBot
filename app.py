@@ -27,7 +27,9 @@ def index():
   WDR.create_site_html()
   stocks = WDR.positions
   sorted_by_plpc = WDR.plpc_sorted_holdings
-  return render_template('index.html', stocks=stocks, plpc_sorted=sorted_by_plpc)
+  ADR = AccountDataRetriever()
+  cats = ADR.get_cats()
+  return render_template('index.html', stocks=stocks, plpc_sorted=sorted_by_plpc, cats=cats)
 
 
 @app.route("/portfolio")
@@ -35,8 +37,10 @@ def generate_portfolio_page():
   WDR = WebpageDataRefresher()
   WDR.create_portfolio_page()
   ADR = AccountDataRetriever()
+  header = ["${:,.2f}".format(ADR.get_stock_equity())  ]
   holdings = ADR.formatted_positions
-  return render_template('portfolio.html', holdings=holdings)
+  cats = ADR.get_cats()
+  return render_template('portfolio.html', header=header, holdings=holdings, cats=cats)
 
 
 @app.route("/contact")

@@ -8,8 +8,112 @@
     <link rel="stylesheet" href="https://use.typekit.net/oxi4xqh.css">
     <title>QuantBot</title>
     <link rel="shortcut icon" href="/static/favicon.ico">
+    <script type="text/javascript">
+      window.onload = function () {
+        CanvasJS.addColorSet("yellowShades",
+        [
+          "#FFBF00",
+          "#E1C16E",
+          "#FFEA00",
+          "#FDDA0D",
+          "#FFFF8F",
+          "#DFFF00",
+          "#E4D00A",
+          "#8B8000",
+          "#FFD700",
+          "#FFC000",
+          "#DAA520",
+          "#FCF55F",
+          "#FAFA33",
+          "#F4BB44",
+          "#FBEC5D",
+          "#FFFFF0",
+          "#FFFAA0",
+          "	#F4C430",
+          "	#F3E5AB",
+          "#FFFF00",
+          "	#FFAA33",
+          "	#C4B454"
+        ]);
+        var chart = new CanvasJS.Chart("chartContainer",
+        {
+          colorSet: "yellowShades",
+          title:{
+            text:"Breakdown by Stock",
+            fontColor: "white",
+            margin: 10
+          },
+
+          theme: "dark2",
+          backgroundColor: "black",
+          height: 350,
+          width: 350,
+          toolTip:{
+            content: "{indexLabel}: {y}%",
+            enabled: true,       //disable here
+            animationEnabled: true //disable here
+          },
+          data: [
+          {
+            type: "pie",
+            indexLabelFontColor: "black",
+            indexLabelPlacement: "inside",
+            showInLegend: false,
+            legendText: "{indexLabel}",
+            dataPoints: [
+              {% for holding in holdings %}
+                {  y: {{holding[10]}}, indexLabel: "{{holding[0]}}" },
+              {% endfor %}
+              {y: 0, indexLabel: ""}
+            ]
+          }
+          ]
+        });
+        chart.render();
+
+        var chart2 = new CanvasJS.Chart("chartContainer2",
+        {
+          colorSet: "yellowShades",
+          title:{
+            text:"Breakdown by Category",
+            fontColor: "white",
+            margin: 10
+          },
+
+          theme: "dark2",
+          backgroundColor: "black",
+          height: 350,
+          width: 350,
+          toolTip:{
+            content: "{indexLabel}: {y}%",
+            enabled: true,       //disable here
+            animationEnabled: true //disable here
+          },
+          data: [
+          {
+            type: "pie",
+            indexLabelFontColor: "black",
+            indexLabelPlacement: "inside",
+            indexLabelFontSize: 12,
+            indexLabelMaxWidth: 200, 
+            showInLegend: false,
+            indexLabelWrap: false,
+            legendText: "{indexLabel}",
+            dataPoints: [
+              {% for key, value in cats.items() %}
+                {  y: {{value}}, indexLabel: "{{key}}" },
+              {% endfor %}
+              {y: 0, indexLabel: ""}
+            ]
+          }
+          ]
+        });
+        chart2.render();
+      }
+    </script>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
   </head>
-  <body>
+  <body style="overflow-x: hidden">
 
   
   <div class="nav-bar">
@@ -24,9 +128,14 @@
       <li class="button color"><a style = "text-decoration: none; color: inherit" href="#contact">Contact Us</a></li>
     </ul>
   </div>
-  <div class="scroll custom-scrollbar">
+  <div class="header" style="text-align: center; width: 60%; margin: 0 auto">
+    <p class="header-p" style="font-size: 50px; margin-bottom: 0; margin-top: 100px; color: white" >{{header[0]}}</p>
+    <p class="header-p" style="font-size: 12px; color: yellow;">Total Portfolio Value</p>
+    <p style="font-size: 13px; text-align: left; color: white; margin-bottom: 35px">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel tincidunt nibh, a lobortis enim. Curabitur eu dui velit. Donec imperdiet augue in aliquam scelerisque. Suspendisse fermentum neque dui, eget blandit nibh aliquet vitae. Sed non augue id lorem viverra gravida. Nullam pharetra magna sed augue commodo, a iaculis enim porta. Quisque feugiat magna quis arcu interdum pulvinar at at purus. Cras ipsum dui, sodales sit amet convallis nec, venenatis id est. Sed pharetra justo magna, sed pharetra felis vehicula ut. Proin ut orci mi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent rutrum mauris et risus mattis pulvinar. Nulla at ante sapien. Ut euismod vitae dui gravida malesuada.</p>
+  </div>
+  <div class="scroll custom-scrollbar" style="margin-top: 0">
     <table class="holdings-table" style="background-color:#050505; border-collapse:collapse;">
-      <tr style="text-align:center">
+      <tr style="text-align:center; border-bottom: 1px solid gray">
         <th>Stock</th>
         <th>Daily % Change</th>
         <th>Avg Cost</th>
@@ -36,7 +145,7 @@
         <th>Total P/L</th>
       </tr>
       {% for holding in holdings %}
-          <tr target="_blank" onclick="window.open('https://www.marketwatch.com/investing/stock/{{holding[0]}}', '_blank')" style="text-align:center; background-color: {{holding[9]}}; cursor: pointer" class="zoom">
+          <tr class="row" target="_blank" onclick="window.open('https://www.marketwatch.com/investing/stock/{{holding[0]}}', '_blank')" style="text-align:center; background-color: {{holding[9]}}; cursor: pointer; z-index: 1">
             <td>{{holding[0]}}</td>
             <td style="color:{{holding[7]}}">{{holding[1]}}</td>
             <td>{{holding[2]}}</td>
@@ -46,4 +155,12 @@
             <td style="color:{{holding[8]}}">{{holding[6]}}</td>
           </tr>
       {% endfor %}
+    </table>
   </div>
+  <ul style="list-style: none; display: flex; flex-direction: horizontal; width: 100%; margin-left: 25%; margin-top: 125px; margin-bottom: 50px">
+    <li style="margin-right: 25%"><div id="chartContainer"></div></li>
+    <li><div id="chartContainer2"></div></li>
+  </ul>
+  <div style="height: 500px"></div>
+  
+</body>

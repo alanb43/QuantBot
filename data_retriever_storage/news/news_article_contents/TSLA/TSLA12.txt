@@ -1,0 +1,47 @@
+Luminar Lays Out a New Vision for Self-Driving Cars 
+https://www.marketwatch.com/articles/luminar-lays-out-a-new-vision-for-self-driving-cars-51623770402?mod=mw_quote_news
+TSLA
+ 
+                    +1.15%
+OUST
+ 
+                    +5.68%
+VLDR
+ 
+                    -1.33%
+AEVA
+ 
+                    +4.30%
+INVZ
+ 
+                    +1.76%
+CFAC
+SPX
+ 
+                    -1.14%
+DJIA
+ 
+                    -1.39%
+ 
+Luminar unveiled its "Blade" self-driving sensor architecture.
+            Courtesy of Luminar
+          
+Autonomous-driving technology company Luminar Technologies unveiled its “Blade” self-driving sensor architecture Tuesday morning—a blueprint that vehicle makers can follow for integrating lidar sensors, according to the company.  Luminar (ticker: LAZR) has new ideas about integrating self-driving sensors into passenger and commercial vehicles. Its advancing plans are part of the process, which will, it hopes, make self-driving vehicles ubiquitous in the coming generation.
+Lidar sensors might be common on military helicopters, but they aren’t on many cars yet. Luminar wants to make the process as easy as possible. Lidar, short for “laser-based radar,” is believed by most automotive executives to be a key enabling technology for autonomous vehicles, or AVs. Lidar is particularly good at identifying objects a long way off in the distance, regardless of the level of light or the weather. 
+With Blade, the company’s Iris lidar sensors and technology are integrated in the roofline of the vehicle, creating a little halo around the top of commercial and passenger vehicles.  “While some AV companies focus on trucks or robotaxis, our focus is building the technology foundation for autonomy across all types of vehicles,” said CEO Austin Russell in the company’s news release. “The automotive industry demands not only great technology, but also great design. Iris and the Blade design concept we’ve unveiled today demonstrate just how far we’ve come toward delivering a safe, ubiquitous future of autonomy.” AVs have the potential to completely reshape the automotive industry. “An autonomous car is arguably worth five to 10 times more than a car that is not autonomous,” said 
+        Tesla
+       (TSLA) CEO Elon Musk on a podcast in April 2019. He said that self-driving cars can make money for their owners by leaving the driveway and becoming taxis until needed. That’s one way AVs can reshape car ownership. To be sure, truly self-driving passenger cars are years away. And investors are still working out how to play AV trends.  Luminar is the most valuable publicly traded lidar company. The others are 
+        Ouster
+       (OUST), 
+        Velodyne Lidar
+       (VLDR), 
+        Aeva Technologies
+       (AEVA), 
+        Innoviz Technologies
+       (INVZ), and AEye which is merging with special purpose acquisition company 
+        CF Finance Acquisition Corp III
+       (CFAC).  Still, Luminar stock is down about 30% year to date, trailing comparable gains of the 
+        S&P 500
+       and 
+        Dow Jones Industrial Average.
+       The stock is roughly flat, at $23.97, in recent trading. Shares started their decline from almost $36 a share in February, around the time inflation fears grew and bond yields rose. Rising bond yields hurt richly valued, tech companies more than other. Higher rates makes financing start-ups such as Luminar more expensive. Higher rates also reduce the present value of future cash flows. And start-ups generate most of their cash far in the future.  Write to Al Root at allen.root@dowjones.com  
