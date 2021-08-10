@@ -307,6 +307,7 @@ h2 {
     top: 8%;
 }
 
+
 .row
 {
     box-shadow: none;
@@ -318,3 +319,69 @@ h2 {
     box-shadow: 0px 2px 10px gray;
     z-index: 1;
 }
+
+.top-div {
+  color: white;
+  text-align: center;
+  margin-top: 12vh;
+  margin-left: 22.5vw;
+  width: 55vw;
+}
+
+#title {
+  font-size: 48px;
+  font-weight: 500;
+}
+
+#short-blurb {
+  font-size: 19px;
+  font-weight: 400;
+}
+
+.pictures {
+  margin-left: 23.5vw;
+  margin-top: 7vh;
+  width: 53vw;
+}
+
+.contact-images {
+  height: 17vw;
+  width: 17vw;
+  margin-left: 2vw;
+  margin-right: 2vw;
+  -webkit-box-shadow: 0px 15px 51px 10px rgb(39, 39, 39);
+  -moz-box-shadow: 0px 15px 51px 10px rgba(39,39,39,1);
+  box-shadow: 0px 15px 51px 10px rgba(39,39,39,1);
+  
+}
+
+.names {
+  text-align: center;
+  color: white;
+  font-size: 28px;
+  font-weight: 500;
+  margin: 0 auto;
+  margin-top: 15px; 
+}
+
+.social-bar {
+  display: flex;
+  flex-direction: horizontal;
+  margin: 0 auto;
+  margin-left: 4.4vw;
+  list-style-type: none;
+}
+
+.image {
+  width: 35px;
+  height: 35px;
+  margin: 1vh;
+
+}
+
+.resume {
+  width: 30px; 
+  height: 30px;
+  margin-top: 11px;
+}
+

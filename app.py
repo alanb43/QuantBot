@@ -42,5 +42,10 @@ def generate_portfolio_page():
   cats = ADR.get_cats()
   return render_template('portfolio.html', header=header, holdings=holdings, cats=cats)
 
+
+@app.route("/contact")
+def generate_contact_page():
+  return render_template('contact.html')
+
 if __name__ == "__main__":
   app.run(host="localhost", debug=True)
